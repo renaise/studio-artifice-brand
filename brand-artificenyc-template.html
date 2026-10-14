@@ -1,0 +1,906 @@
+<!doctype html>
+<!--
+  TEMPLATE: Artifice NYC brand site (brand.artificenyc.org), ported 2026-10-14.
+  Use as the structural pattern for brand.studioartifice.com (repo: renaise/studio-artifice-brand).
+  All CSS and JS are inline. Images are external references under assets/ (see README.md).
+  Content is Artifice NYC (nonprofit) — swap copy, marks, and assets for Studio Artifice (SAFX) before publishing.
+-->
+
+<!--
+  ARTIFICE Media Kit
+  Live:    https://brand.artificenyc.org/
+  Project: Cloudflare Pages `afxbrand` (see wrangler.toml)
+  Deploy:  npx wrangler pages deploy . --project-name=afxbrand --branch=main
+  Source:  Websites/afxbrand.pages.dev/ in the afxhq vault
+
+  noindex is deliberate. The kit is shared by link with press and partners; it is
+  not meant to rank for the organization's name over artificenyc.org.
+
+  2026-08-21 revision. Removed: the artifact-lifecycle diagram (the model is still
+  contested. Atlas was dropped and Profiles became Enter within four days, and
+  CLAUDE.md still lists five registries), the design-token tables (17 rows no
+  collaborator can act on, and the --mono row had already gone stale), the
+  mission/vision/point-of-view trio (three restatements of the statement above
+  them), hover lifts and scroll reveals. Added: minimum sizes, incorrect use shown
+  on the real mark, and the 28 production files that were on disk but unreachable.
+
+  2026-09-11. Spacing and tracking moved onto tokens. The page had five trackings
+  for one job (uppercase micro-type ran at -0.01, 0.02, 0.06, 0.08 and 0.1em) and
+  claimed in section 04 that everything was tracked -1%, which its own caps
+  specimen contradicted. There are now three tracking jobs (display, reading,
+  label) plus the documented control exception, and section 04 states what the CSS
+  actually does. Spacing ran on ad-hoc numbers with seven headings carrying an
+  inline margin-top:34px; it is now --sp-1..6 on one rule -- a block after prose
+  opens at --sp-5, a block after a label at --sp-4 -- with .card > h4 declaring the
+  heading margin once. The Redaction @font-face was removed: nothing on this page
+  ever set it. Copy: the two UK spellings, the process-history clause in 08, and
+  the two closing flourishes.
+
+  2026-09-30. Reframed as a media kit / brand book for press, partners and
+  collaborators. New 01 About: fact list and the three approved boilerplates
+  (verbatim from vault 06_Brand/01_Introduction/boilerplate.md, copyable). Logo
+  downloads moved up to 03. Photography gained press-image downloads. Removed:
+  08 Controls and a same-day 09 Tokens section. Button specs and CSS variables are
+  internal build material, not brand-book content. Raw greys, washes and the
+  incorrect-use red moved onto tokens (--text-4, --ctl-wash, --err, --err-edge).
+  Section 05 copy cut by two thirds. Mobile: .wrap now stretches when the rail
+  stacks, so the page no longer scrolls sideways.
+
+  2026-10-11 sweep. Rebuilt from the live page: the local index.html was the
+  09-11 build and the 09-30 media kit existed only on Cloudflare (emails restored
+  from Cloudflare's obfuscation). Voice example rewritten: it said "150 practitioners
+  came to ONX in October" -- the Onassis ONX event was 2026-04-11, "ONX" alone
+  breaks their first-mention rule, the 150 had no source, and its stacked fragments
+  broke the section's own Don't list. Print became Save PDF and now prints the dark
+  ground (browsers drop backgrounds by default, which left chalk type on white
+  paper); cards may split across pages instead of leaving half-blank ones. Copy
+  buttons only say Copied when the clipboard write succeeded. Removed dead CSS:
+  the old .files table, seven unused tokens, and a .rung override that inline
+  styles always beat. Stale section numbers in comments corrected.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>ARTIFICE Media Kit</title>
+<meta property="og:title" content="ARTIFICE Media Kit" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/favicon.png" />
+<meta property="og:description" content="Media kit and brand book for Artifice NYC: boilerplate, logos, images and usage." />
+<style>
+  /* Redaction is a brand face but this page never sets one, so it is not loaded
+     here. The woff2 is at assets/fonts/ for the surface that needs a display title. */
+  :root {
+    /* Canon: mirrored from index.artificenyc.org (Pages project es-artifice). */
+    --bg:#0e0e0e;
+    --surface:#151515;
+    --border:#262626;
+    --border-2:#3a3a3a;
+    --text:#fcfaf5;
+    --text-2:#b4b4b4;
+    --text-3:#8f8f8f;
+    --text-4:#5a5a5a;
+    --cobalt:#0000ee;
+    --cobalt-2:#5a6cff;
+    /* Incorrect-use and before/after marking. Warning only, never brand color. */
+    --err:#e0736a;
+    --err-edge:#3a2020;
+    --sans:"Helvetica Now Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+    /* Tracking has three jobs and only three. Controls are the one documented
+       exception, at +0.02em, canon from index.artificenyc.org. */
+    --tr-display:-0.022em;
+    --tr-read:-0.01em;
+    --tr-label:0.08em;
+    --tr-ctl:0.02em;
+
+    /* Spacing. Two rhythms carry the page: a block after prose opens at --sp-5,
+       a block after a label at --sp-4. Everything below that is a gap inside an
+       object. Tune here; no component invents its own number. */
+    --sp-1:6px;
+    --sp-2:10px;
+    --sp-3:12px;
+    --sp-4:14px;
+    --sp-5:22px;
+    --sp-6:34px;
+    /* Padding inside a bordered cell. Not a rhythm step: it is the inset that
+       keeps artwork off the frame, so it is named for the job, not numbered. */
+    --pad-cell:18px;
+
+    /* Hover wash for outline controls. */
+    --ctl-wash:rgba(252,250,245,.05);
+    --r-xs:3px;
+
+    --ink:var(--bg);
+    --line:var(--border);
+    --panel:var(--surface);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  :where([id]) { scroll-margin-top:1.25rem; }
+  body { background:var(--ink); color:var(--text-2); font-family:var(--sans);
+         font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; letter-spacing:var(--tr-read); }
+  a { color:inherit; }
+  strong { color:var(--text); font-weight:500; }
+  :focus-visible { outline:2px solid var(--cobalt-2); outline-offset:2px; }
+
+  .app { display:flex; align-items:flex-start; }
+
+  /* ---- sidebar ---- */
+  /* The rail is off the spacing scale on purpose: it has to fit nine links plus
+     the controls inside 100vh, so its density is set by that, not by the page. */
+  .side { position:sticky; top:0; height:100vh; width:224px; flex-shrink:0;
+          border-right:1px solid var(--line); padding:20px 18px; display:flex;
+          flex-direction:column; gap:18px; background:var(--ink); z-index:10; }
+  .side .brand { display:flex; align-items:center; gap:var(--sp-2); text-decoration:none; }
+  .side .brand img { height:26px; width:auto; filter:brightness(0) invert(1); }
+  .side .brand .t { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); }
+  .toc { display:flex; flex-direction:column; }
+  .toc a { font-size:12px; letter-spacing:var(--tr-read); color:var(--text-3); text-decoration:none;
+           padding:7px 0; border-bottom:1px solid var(--line); transition:color .15s; }
+  .toc a:first-child { border-top:1px solid var(--line); }
+  .toc a:hover, .toc a.active { color:var(--text); }
+  .toc .n { color:var(--text-4); margin-right:8px; font-variant-numeric:tabular-nums; }
+  .acts { margin-top:auto; display:flex; gap:var(--sp-1); }
+  /* The caption register the rail already speaks, one step quieter than the TOC
+     numbers, so it reads as a signature under the controls rather than a link
+     competing with them. */
+  .credit { display:block; margin-top:var(--sp-4); font-size:10px; letter-spacing:var(--tr-label);
+            text-transform:uppercase; line-height:1.4; color:var(--text-4);
+            text-decoration:none; transition:color .12s; }
+  .credit:hover { color:var(--text-2); }
+  /* The sidebar pair, the jump row, the download chips and the copy chips are one
+     utility control. They were four near-identical hand-rolled boxes at 2px with
+     three different trackings; three near-identical styles is the bug. */
+  .btn, .jump a, .dlmark, .cpbtn {
+         font-family:var(--sans); font-size:10px; letter-spacing:var(--tr-ctl); text-transform:uppercase;
+         font-weight:400; line-height:1; color:var(--text-3); background:transparent;
+         border:1px solid var(--border); border-radius:var(--r-xs); cursor:pointer;
+         text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
+         min-height:28px; padding:0 10px;
+         transition-property:color,background-color,border-color; transition-duration:.12s; }
+  .btn:hover, .jump a:hover, .dlmark:hover, .cpbtn:hover {
+         color:var(--text); border-color:var(--text); background:var(--ctl-wash); }
+  .btn { flex:1; color:var(--text); border-color:var(--border-2); white-space:nowrap; }
+
+  /* ---- content ---- */
+  .wrap { flex:1; min-width:0; max-width:1080px; margin:0 auto;
+          padding:0 clamp(18px,3vw,44px) var(--sp-5); display:flex; flex-direction:column; min-height:100vh; }
+  .card { border-top:1px solid var(--line); padding:clamp(34px,4.4vw,60px) 0; }
+  .card:first-child { border-top:0; padding-top:0; }
+
+  .lab { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3);
+         display:flex; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+  .lab .n { color:var(--text-4); font-variant-numeric:tabular-nums; }
+  h2 { font-size:clamp(20px,2.3vw,27px); line-height:1.12; letter-spacing:var(--tr-display);
+       font-weight:400; color:var(--text); max-width:32ch; }
+  h3 { font-size:15px; font-weight:500; color:var(--text); letter-spacing:var(--tr-read); }
+  h4 { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3);
+       font-weight:400; margin-bottom:var(--sp-2); }
+  /* A subsection label opens a new rhythm inside a card. Declared once, so no
+     heading carries an inline margin. Nested h4 (the Do/Don't columns) is exempt. */
+  .card > h4 { margin-top:var(--sp-6); }
+  .sub { color:var(--text-2); font-size:15px; line-height:1.5; max-width:62ch; margin-top:var(--sp-2); }
+  .note { color:var(--text-3); font-size:13px; line-height:1.5; max-width:62ch; margin-top:var(--sp-3); }
+  h4 + .note { margin-top:0; }
+
+  /* ---- opening plate ---- */
+  .cover { padding:0; }
+  .cover img { width:100%; height:auto; display:block; }
+  .cover figcaption { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase;
+                      color:var(--text-3); margin-top:var(--sp-2); }
+  .lede { border-top:1px solid var(--line); padding:clamp(28px,3.4vw,44px) 0; }
+  .lede p.statement { font-size:clamp(17px,1.9vw,21px); line-height:1.42; color:var(--text);
+                      max-width:44ch; letter-spacing:var(--tr-display); }
+  .lede p.sub { margin-top:var(--sp-4); }
+  .jump { display:flex; flex-wrap:wrap; gap:var(--sp-1); margin-top:var(--sp-5); }
+  /* A jump chip is the utility control, lifted to chalk so the
+     lede row reads. It keeps the 28px height; a second utility size would put the
+     page in breach of its own spec. */
+  .jump a { color:var(--text); border-color:var(--border-2); }
+
+  /* ---- marks ---- */
+  .marks { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:var(--sp-4); margin-top:var(--sp-5); }
+  .mark { display:flex; flex-direction:column; gap:var(--sp-2); }
+  .tile { border:0.5px solid var(--line); height:132px; display:flex; align-items:center;
+          justify-content:center; padding:var(--pad-cell); background:var(--panel); }
+  .tile img { max-height:72%; max-width:78%; width:auto; height:auto; object-fit:contain;
+              filter:brightness(0) invert(1); }
+  .cap { font-size:11px; color:var(--text-2); }
+  .cap span { color:var(--text-3); }
+  .dlrow { display:flex; gap:var(--sp-1); }
+  .dlmark { flex:1; }
+
+  /* minimum sizes, drawn at the size they describe */
+  .mins { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:var(--sp-4); margin-top:var(--sp-4); }
+  .min { border:0.5px solid var(--line); padding:var(--pad-cell); display:flex; flex-direction:column; gap:var(--sp-3); }
+  .min .shown { display:flex; align-items:flex-end; min-height:46px; }
+  .min .shown img { filter:brightness(0) invert(1); display:block; }
+  .min .d { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); }
+  .min .d b { color:var(--text); font-weight:500; }
+
+  /* incorrect use, shown on the real mark */
+  .wrongs { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:var(--sp-4); margin-top:var(--sp-4); }
+  .wrong figure { margin:0; }
+  .wrong .tile { border-color:var(--err-edge); }
+  .wrong figcaption { font-size:11px; color:var(--text-3); margin-top:var(--sp-2); }
+  .wrong .x { color:var(--err); margin-right:5px; }
+  .w-stretch img { transform:scaleX(1.45); }
+  .w-rotate  img { transform:rotate(-13deg); }
+  .w-glow    img { filter:brightness(0) invert(1) drop-shadow(0 0 9px rgba(255,255,255,.85)); }
+  .w-color   img { filter:brightness(0) invert(38%) sepia(96%) saturate(3000%) hue-rotate(200deg); }
+
+  /* ---- formats ---- */
+  .duo { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); margin-top:var(--sp-5); }
+  .box { margin:0; border:0.5px solid var(--line); }
+  .box img { width:100%; aspect-ratio:16/10; object-fit:cover; display:block; }
+  .box figcaption { padding:var(--pad-cell); }
+  .box h3 { margin-bottom:var(--sp-1); }
+  .box p { font-size:13.5px; line-height:1.5; color:var(--text-2); }
+  .box .role { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase;
+               color:var(--text-3); display:block; margin-bottom:var(--sp-2); }
+
+  /* ---- color ---- */
+  .swatches { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:var(--sp-4); margin-top:var(--sp-5); }
+  .sw .chip { height:96px; border:0.5px solid var(--line); }
+  .sw .nm { font-size:15px; color:var(--text); margin-top:var(--sp-3); }
+  .sw .rl { font-size:13px; color:var(--text-3); margin-top:var(--sp-1); line-height:1.45; }
+  .cprow { display:flex; gap:var(--sp-1); margin-top:var(--sp-2); }
+  .cpbtn { color:var(--text-2); font-variant-numeric:tabular-nums; text-transform:none;
+           letter-spacing:var(--tr-ctl); font-size:11px; }
+
+  .ramp { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:var(--sp-1); margin-top:var(--sp-4); }
+  .rstep { border:0.5px solid var(--line); background:transparent; padding:0; cursor:pointer;
+           text-align:left; transition:border-color .12s; }
+  .rstep:hover { border-color:var(--text); }
+  .rsw { display:block; height:56px; background:var(--text); }
+  .rl2 { display:block; font-size:11px; color:var(--text-3); padding:var(--sp-2);
+         font-variant-numeric:tabular-nums; }
+  .grad { margin-top:var(--sp-4); }
+  .gswatch { height:96px; border:0.5px solid var(--line);
+             background:linear-gradient(180deg,#0e0e0e 0%,#414141 100%); }
+  .grad .cprow { margin-top:var(--sp-2); }
+
+  /* ---- type ---- */
+  .faces { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); margin-top:var(--sp-5); }
+  .face { border:0.5px solid var(--line); padding:var(--pad-cell); }
+  .face .big { font-size:52px; line-height:1; letter-spacing:var(--tr-display); color:var(--text); }
+  .face.caps .big { font-size:34px; letter-spacing:var(--tr-label); }
+  .face .nm { font-size:13px; color:var(--text); margin-top:var(--sp-4); }
+  .face .ds { font-size:12.5px; color:var(--text-3); line-height:1.45; margin-top:var(--sp-1); }
+  .ladder { border-top:1px solid var(--line); margin-top:var(--sp-5); }
+  .rung { display:flex; align-items:baseline; gap:var(--sp-5); padding:var(--sp-3) 0; border-bottom:1px solid var(--line); }
+  .rung .s { flex:1; min-width:0; line-height:1.05; letter-spacing:var(--tr-display); color:var(--text);
+             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .rung .meta { font-size:11.5px; color:var(--text-3); white-space:nowrap; text-align:right;
+                font-variant-numeric:tabular-nums; }
+
+  /* ---- photography ---- */
+  .photogrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:var(--sp-4); margin-top:var(--sp-5); }
+  .photogrid figure { margin:0; }
+  .photogrid img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block;
+                   box-shadow:inset 0 0 0 1px rgba(255,255,255,0.10); }
+  .photogrid figcaption { font-size:11.5px; color:var(--text-3); margin-top:var(--sp-2); line-height:1.4; }
+
+  /* ---- programs ---- */
+  .progrow { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4); margin-top:var(--sp-5); }
+  .prog { border:0.5px solid var(--line); padding:var(--pad-cell); display:flex; flex-direction:column; gap:var(--sp-3); }
+  .prog img, .prog .plogo-text { height:34px; width:auto; align-self:flex-start; }
+  .prog img { filter:brightness(0) invert(1); }
+  .plogo-text { font-size:24px; color:var(--text); line-height:1; }
+  .pn { font-size:16px; color:var(--text); }
+  .pf { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); }
+  .pd { font-size:13.5px; line-height:1.5; color:var(--text-2); }
+
+  .srcbox { border:0.5px solid var(--line); background:var(--panel); margin-top:var(--sp-5); }
+  .srchead { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3);
+             padding:var(--sp-2) var(--sp-4); border-bottom:0.5px solid var(--line); }
+  .srchead .t { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); }
+  .srcbox pre { margin:0; padding:var(--sp-4); overflow-x:auto; font-family:var(--sans);
+                font-size:12px; line-height:1.65; color:var(--text-2); letter-spacing:0; }
+
+  /* ---- rules columns ---- */
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4) 40px; margin-top:var(--sp-5); }
+  .cols ul { list-style:none; }
+  .cols li { font-size:13.5px; line-height:1.45; color:var(--text-2);
+             padding:var(--sp-2) 0; border-bottom:1px solid var(--line); }
+
+  /* ---- voice example ---- */
+  .ba { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); margin-top:var(--sp-5); }
+  .ba > div { border:0.5px solid var(--line); padding:var(--pad-cell); }
+  .ba .t { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; margin-bottom:var(--sp-2); }
+  .ba .before .t { color:var(--err); }
+  .ba .after .t { color:var(--text-3); }
+  .ba p { font-size:14px; line-height:1.5; }
+  .ba .before p { color:var(--text-3); }
+  .ba .after p { color:var(--text); }
+
+  /* ---- files: the same card the marks grid uses, with the download chips kept ---- */
+  .fgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(208px,1fr)); gap:var(--sp-4); margin-top:var(--sp-5); }
+  .fcard { margin:0; display:flex; flex-direction:column; gap:var(--sp-2); }
+  .fcard .tile { height:108px; padding:var(--pad-cell); }
+  .fname { font-size:13px; color:var(--text); }
+  .fsets { display:flex; flex-direction:column; gap:var(--sp-1); margin-top:var(--sp-1); }
+  .fset { display:flex; align-items:center; gap:var(--sp-1); }
+  .fk { flex:0 0 40px; font-size:10px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); }
+  .fset .dlmark { flex:0 0 auto; min-width:54px; }
+  .fna { font-size:10px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-4); }
+
+  footer { border-top:1px solid var(--line); margin-top:auto; padding:var(--sp-5) 0 0;
+           font-size:12px; color:var(--text-3); }
+  footer a { color:var(--text-2); }
+
+
+  /* 01 About: facts as a two-column definition grid; boilerplate reuses .srcbox. */
+  .facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:var(--sp-5);
+           border-top:1px solid var(--line); column-gap:var(--sp-6); }
+  .facts div { display:grid; grid-template-columns:7rem minmax(0,1fr); gap:var(--sp-3);
+               padding:var(--sp-2) 0; border-bottom:1px solid var(--line); font-size:13px; }
+  .facts dt { color:var(--text-3); font-size:10px; letter-spacing:var(--tr-label); text-transform:uppercase; padding-top:2px; }
+  .facts dd { color:var(--text); }
+  .facts a { text-decoration-color:var(--border-2); text-underline-offset:3px; }
+  .srcbox.bp { margin-top:var(--sp-3); }
+  .srcbox.bp p { padding:var(--sp-4); color:var(--text); font-size:15px; line-height:1.55; max-width:72ch; }
+  /* 07 press images: same tile and chip as the logo grid. */
+  .presses { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-3); margin-top:var(--sp-4); }
+  .press img { display:block; width:100%; aspect-ratio:16/10; object-fit:cover; border:1px solid var(--line); }
+  .press figcaption { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-2);
+                      margin-top:var(--sp-2); font-size:13px; color:var(--text-2); }
+  .press .dlmark { flex:none; min-width:54px; }
+  @media (max-width:900px) {
+    .app { flex-direction:column; }
+    .side { position:static; width:100%; height:auto; border-right:0;
+            border-bottom:1px solid var(--line); flex-direction:row; align-items:center;
+            justify-content:space-between; gap:14px; padding:12px 16px; }
+    .toc { display:none; }
+    .acts { margin-top:0; }
+    .side { flex-wrap:wrap; }
+    .credit { flex-basis:100%; margin-top:2px; }
+    /* .app aligns flex-start for the sticky rail; stacked, that shrink-wraps the
+       column to its widest content and the page scrolls sideways. Stretch it (the
+       auto margins would cancel the stretch, so they go too). */
+    .wrap { max-width:none; align-self:stretch; margin:0; }
+  }
+  @media (max-width:680px) {
+    .duo, .faces, .cols, .ba, .progrow, .facts, .presses { grid-template-columns:1fr; }
+    .facts div { grid-template-columns:5.5rem minmax(0,1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    * { transition:none !important; animation:none !important; }
+  }
+  /* Browsers drop backgrounds when printing by default, which leaves chalk type
+     and white-inverted marks on white paper. Force the carbon ground through.
+     Cards are taller than a page, so only the objects inside them stay whole. */
+  @media print {
+    html, body { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .side { display:none; } .app { display:block; } .wrap { max-width:none; padding:0; }
+    figure, .tile, .srcbox, .min, .prog, .sw, .face, .ba > div { break-inside:avoid; }
+    h2, h4, .lab { break-after:avoid; }
+  }
+</style>
+</head>
+<body>
+ <div class="app">
+  <aside class="side">
+    <a class="brand" href="https://artificenyc.org" target="_blank" rel="noopener">
+      <img src="assets/lockup.svg" alt="Artifice" />
+      <span class="t">Media Kit</span>
+    </a>
+    <nav class="toc">
+      <a href="#about"><span class="n">01</span>About</a>
+      <a href="#identity"><span class="n">02</span>Logos</a>
+      <a href="#files"><span class="n">03</span>Downloads</a>
+      <a href="#formats"><span class="n">04</span>Formats</a>
+      <a href="#color"><span class="n">05</span>Color</a>
+      <a href="#type"><span class="n">06</span>Typography</a>
+      <a href="#photo"><span class="n">07</span>Photography</a>
+      <a href="#programs"><span class="n">08</span>Programs</a>
+      <a href="#voice"><span class="n">09</span>Voice</a>
+    </nav>
+    <div class="acts">
+      <button class="btn" id="printBtn" title="Opens the print dialog; choose Save as PDF">Save PDF</button>
+      <button class="btn" id="copyBtn">Copy link</button>
+    </div>
+    <!-- Colophon, not a third button. Studio Artifice is the LLC and Artifice NYC
+         is the 501(c)(3); this is attribution for work one did for the other, which
+         is the only thing that crosses that wall on this page. Sits below the
+         button pair rather than beside it so it is never mistaken for an action. -->
+    <a class="credit" href="https://studioartifice.com" target="_blank" rel="noopener">Designed by Studio&nbsp;Artifice</a>
+  </aside>
+
+  <main class="wrap">
+
+    <figure class="card cover">
+      <img src="assets/cover-lab.png" alt="The two Artifice formats as objects: an open cube bored through on every face, and a cube with a shaft on every face, with the lockup between them" />
+      <figcaption>WHITEBOX and BLACKBOX</figcaption>
+    </figure>
+
+    <section class="lede">
+      <p class="statement">Artifice is the organization for experimental discipline: a curatorial research nonprofit in New York.</p>
+      <p class="sub">Media kit and brand book. Boilerplate, logos, images and how to use them.</p>
+      <div class="jump">
+        <a href="#about">Boilerplate</a>
+        <a href="#files">Logos</a>
+        <a href="#photo">Images</a>
+        <a href="/cdn-cgi/l/email-protection#90f9fef6ffd0f1e2e4f9f6f9f3f5fee9f3beffe2f7"><span class="__cf_email__" data-cfemail="573e393138173625233e313e3432392e3479382530">[email&#160;protected]</span></a>
+      </div>
+    </section>
+
+    <!-- 01 · ABOUT -->
+    <section class="card" id="about">
+      <div class="lab"><span class="n">01</span> About</div>
+      <h2>Name, facts and boilerplate</h2>
+      <p class="sub">Use the name Artifice in running text. Use Artifice NYC, Inc. for legal lines and credits.</p>
+      <dl class="facts">
+        <div><dt>Legal name</dt><dd>Artifice NYC, Inc.</dd></div>
+        <div><dt>Status</dt><dd>501(c)(3) nonprofit</dd></div>
+        <div><dt>Founded</dt><dd>2024, New York</dd></div>
+        <div><dt>Director</dt><dd>Renaise Kim, Executive &amp; Creative Director</dd></div>
+        <div><dt>Web</dt><dd><a href="https://artificenyc.org" target="_blank" rel="noopener">artificenyc.org</a></dd></div>
+        <div><dt>Archive</dt><dd><a href="https://index.artificenyc.org" target="_blank" rel="noopener">index.artificenyc.org</a></dd></div>
+        <div><dt>Social</dt><dd><a href="https://instagram.com/artifice.nyc" target="_blank" rel="noopener">@artifice.nyc</a></dd></div>
+        <div><dt>Contact</dt><dd><a href="/cdn-cgi/l/email-protection#ed84838b82ad8c9f99848b848e8883948ec3829f8a"><span class="__cf_email__" data-cfemail="264f484049664754524f404f4543485f4508495441">[email&#160;protected]</span></a></dd></div>
+      </dl>
+
+      <h4>Boilerplate</h4>
+      <p class="note">Use as written. For anything longer or different, ask.</p>
+      <div class="srcbox bp">
+        <div class="srchead">
+          <span class="t">Short</span>
+          <button type="button" class="cpbtn copysrc" data-src="bp-short">Copy</button>
+        </div>
+        <p id="bp-short">Artifice is the organization for experimental discipline &mdash; a curatorial research nonprofit that gives experimental work a public stage and keeps the record of its making open.</p>
+      </div>
+      <div class="srcbox bp">
+        <div class="srchead">
+          <span class="t">Standard</span>
+          <button type="button" class="cpbtn copysrc" data-src="bp-std">Copy</button>
+        </div>
+        <p id="bp-std">Artifice is the organization for experimental discipline. A curatorial research nonprofit founded in 2024, it helps artists working with technology and science fiction make new work, show it, and keep a public record of how it was made. Its work runs in two modes: WHITEBOX, the lab, and BLACKBOX, the stage.</p>
+      </div>
+      <div class="srcbox bp">
+        <div class="srchead">
+          <span class="t">Extended</span>
+          <button type="button" class="cpbtn copysrc" data-src="bp-ext">Copy</button>
+        </div>
+        <p id="bp-ext">Artifice is the organization for experimental discipline. A curatorial research nonprofit founded in 2024, it supports emerging artists, researchers, and creative technologists working in creative science, installation, new media, and performance &mdash; through curatorial research, production environments, and a public archive. Two modes run through everything: WHITEBOX, the lab, where process is visible and materials are labeled; and BLACKBOX, the stage, where the same work is rendered as experience. Programs span public showcases (Chapters), research demos (nodes:), and editorial dispatches <span style="white-space:nowrap">([ ENTER ])</span>. Underneath sits open creative infrastructure &mdash; a public record of how the work was made, kept open for anyone to read.</p>
+      </div>
+    </section>
+
+    <!-- 02 · IDENTITY -->
+    <section class="card" id="identity">
+      <div class="lab"><span class="n">02</span> Logos</div>
+      <h2>Marks and minimum sizes</h2>
+      <p class="sub">The lockup is the parent mark. The hexagon stands for WHITEBOX, the asterisk for BLACKBOX. The cursive wordmark is fixed art. No live font matches it, so it is never re-set.</p>
+
+      <div class="marks">
+        <div class="mark">
+          <div class="tile"><img src="assets/mark-lockup.png" alt="Artifice lockup: hexagon and asterisk above the cursive wordmark" /></div>
+          <div class="cap">Lockup <span>· parent mark</span></div>
+          <div class="dlrow"><a class="dlmark" href="assets/mark-lockup.svg" download>SVG</a><a class="dlmark" href="assets/mark-lockup.png" download>PNG</a></div>
+        </div>
+        <div class="mark">
+          <div class="tile"><img src="assets/artifice-wordmark.png" alt="ARTIFICE cursive wordmark" /></div>
+          <div class="cap">Wordmark <span>· fixed art</span></div>
+          <div class="dlrow"><a class="dlmark" href="assets/artifice-wordmark.svg" download>SVG</a><a class="dlmark" href="assets/artifice-wordmark.png" download>PNG</a></div>
+        </div>
+        <div class="mark">
+          <div class="tile"><img src="assets/wb-icon.svg" alt="WHITEBOX hexagon mark" /></div>
+          <div class="cap">Hexagon <span>· WHITEBOX</span></div>
+          <div class="dlrow"><a class="dlmark" href="assets/wb-icon.svg" download>SVG</a><a class="dlmark" href="assets/wb-mark.png" download>PNG</a></div>
+        </div>
+        <div class="mark">
+          <div class="tile"><img src="assets/bb-icon.svg" alt="BLACKBOX asterisk mark" /></div>
+          <div class="cap">Asterisk <span>· BLACKBOX</span></div>
+          <div class="dlrow"><a class="dlmark" href="assets/bb-icon.svg" download>SVG</a><a class="dlmark" href="assets/bb-mark.png" download>PNG</a></div>
+        </div>
+      </div>
+
+      <h4>Minimum sizes, shown actual size</h4>
+      <div class="mins">
+        <div class="min">
+          <div class="shown"><img src="assets/mark-lockup.png" alt="" width="96" /></div>
+          <div class="d"><b>96px</b> wide · lockup</div>
+        </div>
+        <div class="min">
+          <div class="shown"><img src="assets/artifice-wordmark.png" alt="" width="120" /></div>
+          <div class="d"><b>120px</b> wide · wordmark</div>
+        </div>
+        <div class="min">
+          <div class="shown"><img src="assets/wb-icon.svg" alt="" height="24" /></div>
+          <div class="d"><b>24px</b> tall · hexagon, asterisk</div>
+        </div>
+      </div>
+      <p class="note">Below these the cursive closes up and the hexagon reads as a blob. In print, treat the same numbers as millimeters at 300dpi. Clear space on every side is the height of the hexagon.</p>
+
+      <h4>Incorrect use</h4>
+      <div class="wrongs">
+        <div class="wrong w-stretch"><figure><div class="tile"><img src="assets/mark-lockup.png" alt="The lockup stretched horizontally, which is not permitted" /></div><figcaption><span class="x">✕</span>Stretched</figcaption></figure></div>
+        <div class="wrong w-rotate"><figure><div class="tile"><img src="assets/mark-lockup.png" alt="The lockup rotated, which is not permitted" /></div><figcaption><span class="x">✕</span>Rotated</figcaption></figure></div>
+        <div class="wrong w-glow"><figure><div class="tile"><img src="assets/mark-lockup.png" alt="The lockup with a glow applied, which is not permitted" /></div><figcaption><span class="x">✕</span>Glow or shadow</figcaption></figure></div>
+        <div class="wrong w-color"><figure><div class="tile"><img src="assets/mark-lockup.png" alt="The lockup recolored outside the palette, which is not permitted" /></div><figcaption><span class="x">✕</span>Recolored</figcaption></figure></div>
+      </div>
+      <p class="note">Use the supplied files. The mark is black or white, nothing else. Put it on near-black or on white, never on a mid-tone or over a busy part of a photograph.</p>
+    </section>
+    <!-- 03 · DOWNLOADS -->
+    <section class="card" id="files">
+      <div class="lab"><span class="n">03</span> Downloads</div>
+      <h2>Logo files</h2>
+      <p class="sub">Every approved logo, in black and in white. Use SVG where you can and PNG where you can&rsquo;t. Don&rsquo;t modify the files. If the version you need isn&rsquo;t here, ask.</p>
+      <!-- A grid, not a table. Eight rows of three columns where two of the columns
+           held nothing but four identical chips is a spreadsheet of the same word;
+           as cards each asset shows the thing you are downloading above the file you
+           get, which is the question this section actually answers. Same tile and
+           same chips as the marks grid in section 02, so it is one component. -->
+      <div class="fgrid">
+        <figure class="fcard">
+          <div class="tile"><img src="assets/logos/ArtificeNYC_Horizontal_Lockup_White.svg" alt="Horizontal lockup" loading="lazy"></div>
+          <figcaption>
+            <div class="fname">Horizontal lockup</div>
+            <div class="fsets">
+              <div class="fset"><span class="fk">Black</span><a class="dlmark" href="assets/logos/ArtificeNYC_Horizontal_Lockup_Black.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_Horizontal_Lockup_Black.png" download>PNG</a></div>
+              <div class="fset"><span class="fk">White</span><a class="dlmark" href="assets/logos/ArtificeNYC_Horizontal_Lockup_White.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_Horizontal_Lockup_White.png" download>PNG</a></div>
+            </div>
+          </figcaption>
+        </figure>
+        <figure class="fcard">
+          <div class="tile"><img src="assets/logos/ArtificeNYC_Stacked_Lockup_White.svg" alt="Stacked lockup" loading="lazy"></div>
+          <figcaption>
+            <div class="fname">Stacked lockup</div>
+            <div class="fsets">
+              <div class="fset"><span class="fk">Black</span><a class="dlmark" href="assets/logos/ArtificeNYC_Stacked_Lockup_Black.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_Stacked_Lockup_Black.png" download>PNG</a></div>
+              <div class="fset"><span class="fk">White</span><a class="dlmark" href="assets/logos/ArtificeNYC_Stacked_Lockup_White.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_Stacked_Lockup_White.png" download>PNG</a></div>
+            </div>
+          </figcaption>
+        </figure>
+        <figure class="fcard">
+          <div class="tile"><img src="assets/logos/ArtificeNYC_LogoType_White.svg" alt="Wordmark only" loading="lazy"></div>
+          <figcaption>
+            <div class="fname">Wordmark only</div>
+            <div class="fsets">
+              <div class="fset"><span class="fk">Black</span><a class="dlmark" href="assets/logos/ArtificeNYC_LogoType_Black.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_LogoType_Black.png" download>PNG</a></div>
+              <div class="fset"><span class="fk">White</span><a class="dlmark" href="assets/logos/ArtificeNYC_LogoType_White.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_LogoType_White.png" download>PNG</a></div>
+            </div>
+          </figcaption>
+        </figure>
+        <figure class="fcard">
+          <div class="tile"><img src="assets/logos/ArtificeNYC_Horizontal_Stacked_LogoMark_White.svg" alt="Marks only" loading="lazy"></div>
+          <figcaption>
+            <div class="fname">Marks only</div>
+            <div class="fsets">
+              <div class="fset"><span class="fk">Black</span><a class="dlmark" href="assets/logos/ArtificeNYC_Horizontal_Stacked_LogoMark_Black.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_Horizontal_Stacked_LogoMark_Black.png" download>PNG</a></div>
+              <div class="fset"><span class="fk">White</span><a class="dlmark" href="assets/logos/ArtificeNYC_Horizontal_Stacked_LogoMark_White.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_Horizontal_Stacked_LogoMark_White.png" download>PNG</a></div>
+            </div>
+          </figcaption>
+        </figure>
+        <figure class="fcard">
+          <div class="tile"><img src="assets/logos/ArtificeNYC_WhiteBox_LogoMark_White.svg" alt="WHITEBOX hexagon" loading="lazy"></div>
+          <figcaption>
+            <div class="fname">WHITEBOX hexagon</div>
+            <div class="fsets">
+              <div class="fset"><span class="fk">Black</span><a class="dlmark" href="assets/logos/ArtificeNYC_WhiteBox_LogoMark_Black.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_WhiteBox_LogoMark_Black.png" download>PNG</a></div>
+              <div class="fset"><span class="fk">White</span><a class="dlmark" href="assets/logos/ArtificeNYC_WhiteBox_LogoMark_White.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_WhiteBox_LogoMark_White.png" download>PNG</a></div>
+            </div>
+          </figcaption>
+        </figure>
+        <figure class="fcard">
+          <div class="tile"><img src="assets/logos/ArtificeNYC_BlackBox_LogoMark_White.svg" alt="BLACKBOX asterisk" loading="lazy"></div>
+          <figcaption>
+            <div class="fname">BLACKBOX asterisk</div>
+            <div class="fsets">
+              <div class="fset"><span class="fk">Black</span><a class="dlmark" href="assets/logos/ArtificeNYC_BlackBox_LogoMark_Black.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_BlackBox_LogoMark_Black.png" download>PNG</a></div>
+              <div class="fset"><span class="fk">White</span><a class="dlmark" href="assets/logos/ArtificeNYC_BlackBox_LogoMark_White.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_BlackBox_LogoMark_White.png" download>PNG</a></div>
+            </div>
+          </figcaption>
+        </figure>
+        <figure class="fcard">
+          <div class="tile"><img src="assets/logos/ArtificeNYC_BlackBox_LogoType_White.svg" alt="BLACKBOX wordmark" loading="lazy"></div>
+          <figcaption>
+            <div class="fname">BLACKBOX wordmark</div>
+            <div class="fsets">
+              <div class="fset"><span class="fk">Black</span><a class="dlmark" href="assets/logos/ArtificeNYC_BlackBox_LogoType_Black.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_BlackBox_LogoType_Black.png" download>PNG</a></div>
+              <div class="fset"><span class="fk">White</span><a class="dlmark" href="assets/logos/ArtificeNYC_BlackBox_LogoType_White.svg" download>SVG</a><a class="dlmark" href="assets/logos/ArtificeNYC_BlackBox_LogoType_White.png" download>PNG</a></div>
+            </div>
+          </figcaption>
+        </figure>
+        <figure class="fcard">
+          <div class="tile"><img src="assets/chapters-mark.png" alt="Program marks: CHAPTERS and NODES" loading="lazy"></div>
+          <figcaption>
+            <div class="fname">Program marks</div>
+            <div class="fsets">
+              <div class="fset"><span class="fk">Black</span><a class="dlmark" href="assets/chapters-mark.png" download>CHAPTERS</a><a class="dlmark" href="assets/nodes-mark.png" download>NODES</a></div>
+              <div class="fset"><span class="fk">White</span><span class="fna">Not produced</span></div>
+            </div>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="note">Black artwork is for light backgrounds, white for dark.</p>
+    </section>
+    <!-- 04 · FORMATS -->
+    <section class="card" id="formats">
+      <div class="lab"><span class="n">04</span> Formats</div>
+      <h2>WHITEBOX and BLACKBOX</h2>
+      <p class="sub">Every Artifice presentation is one or the other. WHITEBOX is the lab, BLACKBOX is the stage. The split is about what an audience is shown, not about medium or venue.</p>
+      <div class="duo">
+        <figure class="box">
+          <img src="assets/wb-cover.jpg" alt="A WHITEBOX lab bench: labeled vials, flasks and samples under even working light" loading="lazy" />
+          <figcaption>
+            <span class="role">Lab</span>
+            <h3>WHITEBOX</h3>
+            <p>Work in development, shown while it is still being made. Rigs stay visible, materials stay labeled, and the maker is usually in the room. Even light, no blackout.</p>
+          </figcaption>
+        </figure>
+        <figure class="box">
+          <img src="assets/bb-cover.jpg" alt="A BLACKBOX audience in silhouette against a projected wall" loading="lazy" />
+          <figcaption>
+            <span class="role">Stage</span>
+            <h3>BLACKBOX</h3>
+            <p>Finished work on a schedule. Performance, film and installation, run for an audience that arrives at a set time. Blackout, sound, projection.</p>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="note">A work can move from one to the other between programs. It is filed under whichever format it was presented in, one at a time.</p>
+    </section>
+    <!-- 05 · COLOR -->
+    <section class="card" id="color">
+      <div class="lab"><span class="n">05</span> Color</div>
+      <h2>Two grounds, one accent</h2>
+      <p class="sub">Carbon and chalk carry every surface. Cobalt is the only accent: links and focus, never decoration.</p>
+      <div class="swatches">
+        <div class="sw">
+          <div class="chip" style="background:#0e0e0e"></div>
+          <div class="nm">Carbon</div>
+          <div class="rl">The ground. Never pure #000.</div>
+          <div class="cprow"><button class="cpbtn" data-copy="#0E0E0E">#0E0E0E</button></div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#fcfaf5"></div>
+          <div class="nm">Chalk</div>
+          <div class="rl">Text, and the light ground.</div>
+          <div class="cprow"><button class="cpbtn" data-copy="#FCFAF5">#FCFAF5</button></div>
+        </div>
+        <div class="sw">
+          <div class="chip" style="background:#0000ee"></div>
+          <div class="nm">Cobalt</div>
+          <div class="rl">Links and focus only. #5A6CFF on carbon.</div>
+          <div class="cprow"><button class="cpbtn" data-copy="#0000EE">#0000EE</button><button class="cpbtn" data-copy="#5A6CFF">#5A6CFF</button></div>
+        </div>
+      </div>
+
+      <h4>Grayscale</h4>
+      <p class="note">Chalk at reduced opacity. The only grays.</p>
+      <div class="ramp">
+        <button class="rstep" data-copy="rgba(252,250,245,1)"><span class="rsw" style="opacity:1"></span><span class="rl2">100% Text</span></button>
+        <button class="rstep" data-copy="rgba(252,250,245,0.72)"><span class="rsw" style="opacity:.72"></span><span class="rl2">72% Heading</span></button>
+        <button class="rstep" data-copy="rgba(252,250,245,0.55)"><span class="rsw" style="opacity:.55"></span><span class="rl2">55% Body</span></button>
+        <button class="rstep" data-copy="rgba(252,250,245,0.4)"><span class="rsw" style="opacity:.4"></span><span class="rl2">40% Muted</span></button>
+        <button class="rstep" data-copy="rgba(252,250,245,0.2)"><span class="rsw" style="opacity:.2"></span><span class="rl2">20% Faint</span></button>
+        <button class="rstep" data-copy="rgba(252,250,245,0.12)"><span class="rsw" style="opacity:.12"></span><span class="rl2">12% Rule</span></button>
+      </div>
+
+      <h4>Gradient</h4>
+      <p class="note">Grounds only. Never behind text.</p>
+      <div class="grad">
+        <div class="gswatch"></div>
+        <div class="cprow"><button class="cpbtn" data-copy="linear-gradient(180deg, #0E0E0E 0%, #414141 100%)">linear-gradient(180deg, #0E0E0E, #414141)</button></div>
+      </div>
+    </section>
+    <!-- 06 · TYPOGRAPHY -->
+    <section class="card" id="type">
+      <div class="lab"><span class="n">06</span> Typography</div>
+      <h2>One typeface: Helvetica Now Display</h2>
+      <p class="sub">One family sets everything. Scale and case carry the hierarchy: sentence case for headings and body, uppercase for captions and labels. Body and headings are tracked &minus;1%, display &minus;2%, uppercase labels &plus;8%. Never a weight swap to make a heading, never a second family. Redaction appears only where a title is set as display art.</p>
+
+      <div class="faces">
+        <div class="face">
+          <div class="big">Aa</div>
+          <div class="nm">Helvetica Now Display</div>
+          <div class="ds">Headings and body. Sentence case, tracked &minus;1%.</div>
+        </div>
+        <div class="face caps">
+          <div class="big">AA</div>
+          <div class="nm">Helvetica Now Display, uppercase</div>
+          <div class="ds">Captions and labels. Uppercase, tracked &plus;8%.</div>
+        </div>
+      </div>
+
+      <div class="ladder">
+        <div class="rung"><span class="s" style="font-size:clamp(26px,4.4vw,44px)">Display</span><span class="meta">40–96px</span></div>
+        <div class="rung"><span class="s" style="font-size:clamp(22px,3.4vw,34px)">Heading</span><span class="meta">34–64px</span></div>
+        <div class="rung"><span class="s" style="font-size:clamp(18px,2.6vw,26px)">Subhead</span><span class="meta">24–48px</span></div>
+        <div class="rung"><span class="s" style="font-size:16px">Body copy sits at a readable 15–18px.</span><span class="meta">15–18px</span></div>
+        <div class="rung"><span class="s" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase">Caption / label</span><span class="meta">11px uppercase</span></div>
+      </div>
+
+      <div class="cols">
+        <div><h4>Do</h4><ul>
+          <li>Change size to change hierarchy.</li>
+          <li>Keep lines to 45–75 characters, captions to 30–50.</li>
+          <li>Rebreak a line rather than leave one word alone at the end.</li>
+        </ul></div>
+        <div><h4>Don't</h4><ul>
+          <li>Set the cursive wordmark in a live font. It is art, not type.</li>
+          <li>Add a bold weight to make something look important.</li>
+          <li>Introduce a second family for captions or code.</li>
+        </ul></div>
+      </div>
+    </section>
+    <!-- 07 · PHOTOGRAPHY -->
+    <section class="card" id="photo">
+      <div class="lab"><span class="n">07</span> Photography</div>
+      <h2>Document the work and the room</h2>
+      <p class="sub">Photograph what happened, in the light that was there. These are records first, so the rig, the cabling and the half-built version stay in frame.</p>
+      <div class="photogrid">
+        <figure>
+          <img src="assets/photo-wb.png" alt="A sheet of WHITEBOX documentation frames: benches, rigs and work in progress" loading="lazy" />
+          <figcaption>WHITEBOX. Benches and rigs, nothing tidied.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/photo-bb.png" alt="A sheet of BLACKBOX documentation frames: performance, projection and audience" loading="lazy" />
+          <figcaption>BLACKBOX. Performance and projection, audience in frame.</figcaption>
+        </figure>
+      </div>
+      <h4>Press images</h4>
+      <div class="presses">
+        <figure class="press"><img src="assets/cover-lab.png" alt="The two Artifice formats as objects, with the lockup between them" loading="lazy" /><figcaption><span>WHITEBOX and BLACKBOX</span><a class="dlmark" href="assets/cover-lab.png" download>PNG</a></figcaption></figure>
+        <figure class="press"><img src="assets/wb-cover.jpg" alt="A WHITEBOX lab bench: labeled vials, flasks and samples" loading="lazy" /><figcaption><span>WHITEBOX, the lab</span><a class="dlmark" href="assets/wb-cover.jpg" download>JPG</a></figcaption></figure>
+        <figure class="press"><img src="assets/bb-cover.jpg" alt="A BLACKBOX audience in silhouette against a projected wall" loading="lazy" /><figcaption><span>BLACKBOX, the stage</span><a class="dlmark" href="assets/bb-cover.jpg" download>JPG</a></figcaption></figure>
+      </div>
+      <p class="note">Web resolution. For print files, write to <a href="/cdn-cgi/l/email-protection#3e575058517e5f4c4a5758575d5b50475d10514c59"><span class="__cf_email__" data-cfemail="94fdfaf2fbd4f5e6e0fdf2fdf7f1faedf7bafbe6f3">[email&#160;protected]</span></a>. Credit: Courtesy of Artifice NYC.</p>
+
+      <div class="cols">
+        <div><h4>Do</h4><ul>
+          <li>Shoot it as you found it, mess included.</li>
+          <li>Use available light; let the blacks stay black.</li>
+          <li>Run one image full-bleed rather than three small.</li>
+        </ul></div>
+        <div><h4>Don't</h4><ul>
+          <li>Stock photography, or a room staged to look busy.</li>
+          <li>Heavy grading, HDR, or pushed saturation.</li>
+          <li>Collages that compete with the type on the page.</li>
+        </ul></div>
+      </div>
+    </section>
+    <!-- 08 · PROGRAMS -->
+    <section class="card" id="programs">
+      <div class="lab"><span class="n">08</span> Programs</div>
+      <h2>Chapters, nodes, [ ENTER ]</h2>
+      <p class="sub">Three active formats. Same marks, color and type across all three. What changes is who is in the room.</p>
+      <div class="progrow">
+        <div class="prog">
+          <img src="assets/chapters-mark.png" alt="Chapters mark" />
+          <span class="pn">Chapters</span>
+          <span class="pf">Public</span>
+          <span class="pd">A numbered public program of performance and installation. Chapter 006 is in production for winter 2027.</span>
+        </div>
+        <div class="prog">
+          <img src="assets/nodes-mark.png" alt="nodes mark" />
+          <span class="pn">nodes:</span>
+          <span class="pf">Practitioners</span>
+          <span class="pd">Development and demo nights for people building the work. Always lowercase, colon, roman numeral: nodes:ii.</span>
+        </div>
+        <div class="prog">
+          <span class="plogo-text">[ ]</span>
+          <span class="pn">[ ENTER ]</span>
+          <span class="pf">Editorial</span>
+          <span class="pd">A written dispatch on one artifact and its maker. Spaces inside the brackets.</span>
+        </div>
+      </div>
+      <div class="cols">
+        <div><h4>Brackets</h4><ul>
+          <li>Named platforms and publications: [ ENTER ].</li>
+          <li>Named works, exhibitions and episodes.</li>
+        </ul></div>
+        <div><h4>No brackets</h4><ul>
+          <li>Generic nouns: artifact, program, chapter.</li>
+          <li>The organization's name, or anyone's name.</li>
+          <li>WHITEBOX and BLACKBOX. The uppercase already does it.</li>
+        </ul></div>
+      </div>
+    </section>
+    <!-- 09 · VOICE -->
+    <section class="card" id="voice">
+      <div class="lab"><span class="n">09</span> Voice</div>
+      <h2>Describe the work rather than praise it</h2>
+      <p class="sub">Write as though the reader knows the field. Name the material, the place, the number. The warmth is in what you noticed, not in adjectives.</p>
+
+      <div class="ba">
+        <div class="before">
+          <div class="t">Instead of</div>
+          <p>We're excited to announce a groundbreaking immersive experience at the intersection of art and technology.</p>
+        </div>
+        <div class="after">
+          <div class="t">Write</div>
+          <p>nodes:ii ran on April 11, 2026, in the studio space of Onassis ONX in New York. Each work was shown mid-build, with its maker at the bench.</p>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div><h4>Do</h4><ul>
+          <li>Lead with the material: koji in a lab, resin priced against rare earths.</li>
+          <li>Give the number, the date and the room.</li>
+          <li>State it once, plainly, and stop.</li>
+        </ul></div>
+        <div><h4>Don't</h4><ul>
+          <li>"Excited to announce," "groundbreaking," exclamation points.</li>
+          <li>Short declarations stacked to sound like a manifesto.</li>
+          <li>Investor language: "spatial intelligence," "the future of."</li>
+          <li>A second metaphor to explain the first.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <footer>
+      Artifice NYC, Inc. · 501(c)(3) · New York · <a href="/cdn-cgi/l/email-protection#167f787079567764627f707f7573786f7538796471"><span class="__cf_email__" data-cfemail="71181f171e3110030518171812141f08125f1e0316">[email&#160;protected]</span></a>
+    </footer>
+
+  </main>
+ </div>
+
+  <script>
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    const copyBtn = document.getElementById('copyBtn');
+    // Say Copied only when the write landed. The old handlers swallowed the
+    // error and claimed success anyway (e.g. a non-secure context or a denied
+    // permission), which tells a press contact they have text they don't.
+    async function copyTo(el, text, ms) {
+      if (el.dataset.busy) return;
+      let ok = true;
+      try { await navigator.clipboard.writeText(text); } catch (e) { ok = false; }
+      const t = el.textContent;
+      el.dataset.busy = '1';
+      el.textContent = ok ? 'Copied' : 'Copy failed';
+      setTimeout(() => { el.textContent = t; delete el.dataset.busy; }, ms);
+    }
+    copyBtn.addEventListener('click', () => copyTo(copyBtn, location.href, 1400));
+
+    // copy a boilerplate block (section 01). Runs before the color handler so
+    // the .cpbtn buttons that carry data-src are not also treated as swatches.
+    document.querySelectorAll('.copysrc').forEach((el) => {
+      el.addEventListener('click', () => {
+        const src = document.getElementById(el.dataset.src);
+        if (src) copyTo(el, src.textContent.replace(/\s+/g, ' ').trim(), 1100);
+      });
+    });
+
+    // copy a color value
+    document.querySelectorAll('.cpbtn:not(.copysrc), .rstep').forEach((el) => {
+      el.addEventListener('click', () => copyTo(el.matches('.rstep') ? el.querySelector('.rl2') : el, el.dataset.copy, 1100));
+    });
+
+    // scroll-spy: highlight the section in view. Reaching the bottom of the
+    // document means the last section, whatever the observer band says.
+    (function () {
+      const links = new Map();
+      document.querySelectorAll('.toc a[href^="#"]').forEach((a) => links.set(a.getAttribute('href').slice(1), a));
+      const sections = [...links.keys()].map((id) => document.getElementById(id)).filter(Boolean);
+      if (!sections.length) return;
+      let active = null;
+      const setActive = (id) => {
+        if (id === active) return;
+        active = id;
+        links.forEach((a, key) => a.classList.toggle('active', key === id));
+      };
+      const lastId = sections[sections.length - 1].id;
+      const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      const io = new IntersectionObserver((entries) => {
+        if (atBottom()) { setActive(lastId); return; }
+        const vis = entries.filter((e) => e.isIntersecting)
+          .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top);
+        if (vis.length) { setActive(vis[0].target.id); return; }
+        let last = sections[0].id;
+        for (const s of sections) { if (s.getBoundingClientRect().top < 120) last = s.id; }
+        setActive(last);
+      }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+      sections.forEach((s) => io.observe(s));
+      const syncEnd = () => { if (atBottom()) setActive(lastId); };
+      window.addEventListener('scroll', syncEnd, { passive: true });
+      window.addEventListener('resize', syncEnd);
+      syncEnd();
+    })();
+  </script>
+</body>
+</html>
