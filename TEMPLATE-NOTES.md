@@ -1,5 +1,7 @@
 # Brand Site Template — ported from brand.artificenyc.org
 
+> **Status, 2026-10-16:** the template has been adapted for Studio Artifice and lives at `index.html`. It used to be `brand-artificenyc-template.html`; the original port is preserved in commit 8ba7c0f (`git show 8ba7c0f:brand-artificenyc-template.html`). The `assets/` paths below describe the original ArtificeNYC kit. The SAFX assets are in `assets/marks/`, plus `assets/cover.png`, `assets/clearspace.png` and `assets/favicon.png`. The marks are interim exports from Figma until Artifice's SVG masters replace them. The change log at the top of `index.html` is the current record.
+
 **Source:** https://brand.artificenyc.org/ (title: "ARTIFICE Media Kit")
 **Fetched:** 2026-10-14
 **File:** `brand-artificenyc-template.html` (56 KB, single file)
