@@ -43,7 +43,7 @@ Entity separation applies: this template is Artifice NYC (nonprofit) content bei
 
 1. **Swap all copy.** Replace AFX boilerplate, program names (WHITEBOX/BLACKBOX/Chapters/ENTER), and voice examples with the Studio Artifice Brand Story (Drive: "Studio Artifice — Brand Story", 2026-10-14, 04_Brand).
 2. **Swap the marks.** ArtificeNYC lockups out; Studio Artifice device + wordmark + Ⓐ monogram SVGs in (masters live with the Brand Story files).
-3. **Retune the tokens.** Keep the structure (grounds, surface, one accent) but set SAFX values from the Brand Story: ink `#0E0E0E`, paper `#F4F1EA`, linen `#FCFAF5`, panel `#171717`, line `#242424`, cobalt `#0000EE`, plus the four phase colors (Strategy `#D2FF1E`, Identity `#FF1BD1`, Application `#00EBEF`, Activation `#0009FF`) which the AFX template has no equivalent for.
+3. **Retune the tokens.** Keep the structure (grounds, surface, one accent) but set SAFX values from the Brand Story: ink `#0E0E0E`, paper `#F4F1EA`, linen `#FCFAF5`, panel `#171717`, line `#242424`, cobalt `#0000EE`, plus the four phase colors (Strategy `#D2FF1E`, Identity `#FF1BD1`, Application `#00EBEF`, Production `#0009FF`) which the AFX template has no equivalent for.
 4. **Replace the program sections.** WHITEBOX/BLACKBOX and Chapters/Nodes sections become the four phases (Strategy, Identity, Applications, Production) and the worldsite concept.
 5. **Produce an `assets/` folder** with SAFX images at the same relative paths so the template runs unmodified.
 6. Deploy target: Cloudflare Pages at **brand.studioartifice.com** from repo `renaise/studio-artifice-brand`.
