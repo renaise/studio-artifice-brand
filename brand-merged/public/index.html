@@ -35,7 +35,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
 <title>Studio Artifice Brand</title>
-<meta name="color-scheme" content="dark" />
+<meta name="color-scheme" content="dark light" />
+<script>try{var t=localStorage.getItem("safx-rnd-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <meta name="description" content="Studio Artifice is a strategic visual studio in New York, designing durable artifacts for AI companies, cultural institutions, and consumer brands." />
 <meta property="og:title" content="Studio Artifice Brand" />
 <meta property="og:description" content="Studio Artifice is a strategic visual studio in New York, designing durable artifacts for AI companies, cultural institutions, and consumer brands." />
@@ -92,11 +93,26 @@
     --dur:.2s;
     --fw-display:300;
     --ctl-wash:rgba(244,241,234,.05);
+    --plate:#0b0b0b;
+    --scale-grey:linear-gradient(180deg,#555,#111);
+    color-scheme:dark;
   }
+  /* Light mode: the same system on linen. Ink becomes the text; brand surface values
+     in the swatches and tokens stay literal. */
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+    --bg:#fcfaf5; --panel:#f4f1ea; --line:#dedad0; --border-2:#c4bfb3; --text:#0e0e0e;
+    --text-2:#3e3e3e; --text-3:#5c5c5c; --text-4:#6a6a6a; --err:#b3412f; --err-edge:#ebcfc9;
+    --ctl-wash:rgba(14,14,14,.05); --plate:#f4f1ea; --scale-grey:linear-gradient(180deg,#b8b8b8,#f4f1ea);
+    color-scheme:light; } }
+  :root[data-theme="light"] {
+    --bg:#fcfaf5; --panel:#f4f1ea; --line:#dedad0; --border-2:#c4bfb3; --text:#0e0e0e;
+    --text-2:#3e3e3e; --text-3:#5c5c5c; --text-4:#6a6a6a; --err:#b3412f; --err-edge:#ebcfc9;
+    --ctl-wash:rgba(14,14,14,.05); --plate:#f4f1ea; --scale-grey:linear-gradient(180deg,#b8b8b8,#f4f1ea);
+    color-scheme:light; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html { scroll-behavior:smooth; }
   :where([id]) { scroll-margin-top:1.25rem; }
-  body { background:var(--ink); color:var(--text-2); font-family:var(--sans);
+  body { background:var(--bg); color:var(--text-2); font-family:var(--sans);
          font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; letter-spacing:var(--tr-read); }
   a { color:inherit; }
   strong { color:var(--text); font-weight:500; }
@@ -108,7 +124,7 @@
   /* ---- sidebar ---- */
   .side { position:sticky; top:0; height:100vh; width:224px; flex-shrink:0;
           border-right:var(--hairline) solid var(--line); padding:20px 18px; display:flex;
-          flex-direction:column; gap:18px; background:var(--ink); z-index:10; }
+          flex-direction:column; gap:18px; background:var(--bg); z-index:10; }
   .side .brand { display:flex; align-items:center; text-decoration:none; }
   .side .brand img { height:22px; width:auto; display:block; }
   .toc { display:flex; flex-direction:column; }
@@ -117,7 +133,10 @@
   .toc a:first-child { border-top:var(--hairline) solid var(--line); }
   .toc a:hover, .toc a.active { color:var(--text); }
   .toc .n { color:var(--text-4); margin-right:8px; font-variant-numeric:tabular-nums; }
-  .acts { margin-top:auto; display:flex; gap:var(--sp-1); }
+  .theme { margin-top:auto; display:inline-flex; align-items:center; gap:8px; background:none; border:0; padding:0; cursor:pointer; font-family:var(--sans); font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); transition:color var(--dur) var(--ease); }
+  .theme:hover { color:var(--text); }
+  .theme i { width:8px; height:8px; border-radius:50%; border:1px solid currentColor; background:var(--text); }
+  .acts { display:flex; gap:var(--sp-1); }
   .credit { display:block; margin-top:var(--sp-4); font-size:11px; letter-spacing:var(--tr-label);
             text-transform:uppercase; line-height:1.4; color:var(--text-4);
             text-decoration:none; transition:color var(--dur) var(--ease); }
@@ -325,17 +344,17 @@
   .cov i { position:absolute; inset:0 auto 0 0; background:var(--text-2); }
 
   .fieldwrap { display:grid; grid-template-columns:minmax(0,1fr) 200px; gap:var(--sp-4); margin-top:var(--sp-5); }
-  .fieldplate { position:relative; background:#0b0b0b; border:var(--hairline) solid var(--line); aspect-ratio:16/10; touch-action:none; cursor:crosshair; overflow:hidden; }
+  .fieldplate { position:relative; background:var(--plate); border:var(--hairline) solid var(--line); aspect-ratio:16/10; touch-action:none; cursor:crosshair; overflow:hidden; }
   .fieldplate canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
   .fieldplate .hint { position:absolute; left:12px; top:10px; font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-4); pointer-events:none; }
   .scale { border:var(--hairline) solid var(--line); background:var(--panel); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-2); font-size:12px; }
   .scalebar { display:grid; grid-template-rows:repeat(4,1fr) 2.2fr; height:200px; border:1px solid var(--register); }
   .scalebar i { border-top:1px solid var(--register); }
   .scalebar i:first-child { border-top:0; }
-  .scalebar i.grey { background:linear-gradient(180deg,#555,#111); }
+  .scalebar i.grey { background:var(--scale-grey); }
   .scalekey { display:grid; gap:3px; color:var(--text-2); font-variant-numeric:tabular-nums; }
   .scalekey span { display:flex; justify-content:space-between; }
-  .scale input { width:100%; accent-color:var(--paper); }
+  .scale input { width:100%; accent-color:var(--text); }
   .film { position:relative; height:48px; border:var(--hairline) solid var(--line); background:var(--film); margin-top:var(--sp-4); }
   .film .mk { position:absolute; top:-5px; bottom:-5px; width:1px; background:var(--text); }
   .film .mk span { position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%); font-size:11px; white-space:nowrap; color:var(--text-2); display:flex; align-items:center; gap:4px; font-variant-numeric:tabular-nums; }
@@ -346,7 +365,7 @@
   .vcard { border:var(--hairline) solid var(--line); background:var(--panel); text-decoration:none; display:flex; flex-direction:column;
            transition:border-color var(--dur) var(--ease); }
   a.vcard:hover { border-color:var(--text-3); }
-  .vcard .img { aspect-ratio:4/3; background:#0b0b0b; overflow:hidden; display:grid; place-items:center; border-bottom:var(--hairline) solid var(--line); }
+  .vcard .img { aspect-ratio:4/3; background:var(--plate); overflow:hidden; display:grid; place-items:center; border-bottom:var(--hairline) solid var(--line); }
   .vcard .img img { width:100%; height:100%; object-fit:cover; display:block; }
   .vcard .img.paper { background:#f6f6f6; }
   .vcard .img.paper img { object-fit:contain; width:84%; height:auto; }
@@ -363,7 +382,7 @@
            cursor:pointer; padding:0 0 var(--sp-3); min-height:124px; font-family:var(--sans); transition:border-color var(--dur) var(--ease); }
   .tcard:hover { border-color:var(--text-3); }
   .tsw { display:block; height:52px; border-bottom:var(--hairline) solid var(--line); }
-  .tsw.glyph, .tsw.type { display:flex; align-items:center; justify-content:center; background:var(--ink); color:var(--text); }
+  .tsw.glyph, .tsw.type { display:flex; align-items:center; justify-content:center; background:var(--bg); color:var(--text); }
   .tsw.glyph svg { width:30px; height:30px; }
   .tsw.type { font-size:24px; }
   .tbody { display:flex; flex-direction:column; gap:3px; padding:var(--sp-2) var(--sp-3) 0; }
@@ -448,6 +467,7 @@
       <a href="#tokens"><span class="n">14</span>Tokens</a>
       <a href="#refs"><span class="n">15</span>References</a>
     </nav>
+    <button class="theme" id="theme" type="button"><i></i><span>Dark mode</span></button>
     <div class="acts">
       <button class="btn" id="printBtn" title="Opens the print dialog; choose Save as PDF">Save PDF</button>
       <button class="btn" id="copyBtn">Copy link</button>
@@ -691,31 +711,31 @@
       <h3 class="sh">Surfaces</h3>
       <div class="swatches">
         <div class="sw">
-          <div class="chip" style="background:var(--ink)"></div>
+          <div class="chip" style="background:#0E0E0E"></div>
           <div class="nm">Ink</div>
           <div class="rl">the ground</div>
           <div class="cprow"><button type="button" class="cpbtn" data-copy="#0E0E0E">#0E0E0E</button></div>
         </div>
         <div class="sw">
-          <div class="chip" style="background:var(--paper)"></div>
+          <div class="chip" style="background:#F4F1EA"></div>
           <div class="nm">Paper</div>
           <div class="rl">the text on it</div>
           <div class="cprow"><button type="button" class="cpbtn" data-copy="#F4F1EA">#F4F1EA</button></div>
         </div>
         <div class="sw">
-          <div class="chip" style="background:var(--linen)"></div>
+          <div class="chip" style="background:#FCFAF5"></div>
           <div class="nm">Linen</div>
           <div class="rl">the light sections</div>
           <div class="cprow"><button type="button" class="cpbtn" data-copy="#FCFAF5">#FCFAF5</button></div>
         </div>
         <div class="sw">
-          <div class="chip" style="background:var(--panel)"></div>
+          <div class="chip" style="background:#171717"></div>
           <div class="nm">Panel</div>
           <div class="rl">the raised surface</div>
           <div class="cprow"><button type="button" class="cpbtn" data-copy="#171717">#171717</button></div>
         </div>
         <div class="sw">
-          <div class="chip" style="background:var(--line)"></div>
+          <div class="chip" style="background:#242424"></div>
           <div class="nm">Line</div>
           <div class="rl">the hairline</div>
           <div class="cprow"><button type="button" class="cpbtn" data-copy="#242424">#242424</button></div>
@@ -934,6 +954,19 @@
  </div>
   <script>
     document.getElementById('printBtn').addEventListener('click', () => window.print());
+    // Theme: system by default; the toggle overrides and is remembered. Marks swap to their black files on light.
+    (() => {
+      const root = document.documentElement, tb = document.getElementById('theme');
+      const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : !matchMedia('(prefers-color-scheme: light)').matches;
+      const sync = () => {
+        const d = isDark(); tb.lastElementChild.textContent = d ? 'Dark mode' : 'Light mode';
+        document.querySelectorAll('img[src*="assets/marks/"]').forEach((im) => { const src = im.getAttribute('src'), n = d ? src.replace('-black.', '-white.') : src.replace('-white.', '-black.'); if (n !== src) im.setAttribute('src', n); });
+        dispatchEvent(new Event('resize'));
+      };
+      tb.addEventListener('click', () => { root.dataset.theme = isDark() ? 'light' : 'dark'; try { localStorage.setItem('safx-rnd-theme', root.dataset.theme); } catch (e) {} sync(); });
+      matchMedia('(prefers-color-scheme: light)').addEventListener('change', sync);
+      sync();
+    })();
 
     const copyBtn = document.getElementById('copyBtn');
     // Say Copied only when the write landed: a non-secure context or a denied
@@ -1093,7 +1126,8 @@
       // the field (12)
       const cv = $('#field'), plate = $('#fieldplate'), ctx = cv.getContext('2d');
       const G = {}; for (const k of ['square', 'screw', 'cross', 'mono']) G[k] = new Path2D(dPath(k));
-      const STEPS = [0, .09, .19, .48, .67], HEAT = ['#0009FF', '#00EBEF', '#FF1BD1', '#D2FF1E'], TONES = ['', '#5e5e5e', '#8f8f8f', '#b4b4b4', '#F4F1EA'];
+      const STEPS = [0, .09, .19, .48, .67], HEAT = ['#0009FF', '#00EBEF', '#FF1BD1', '#D2FF1E'], TONES_D = ['', '#5e5e5e', '#8f8f8f', '#b4b4b4', '#F4F1EA'], TONES_L = ['', '#b4b0a6', '#85827a', '#4e4c47', '#0E0E0E'];
+      let TONES = TONES_D;
       let W = 0, H = 0, cols = 0, rows = 0, cell = 22, heat = new Float32Array(0), dpr = 1, iso = .55;
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
       $('#iso').oninput = (e) => { iso = +e.target.value; $('#isoval').textContent = 'iso ' + iso.toFixed(2); if (still) draw(0); };
@@ -1108,7 +1142,7 @@
       plate.addEventListener('pointerleave', () => { ptr.on = false; });
       plate.addEventListener('pointerdown', (e) => { const [x, y] = at(e); addHeat(x, y, .9, 120); if (still) draw(0); });
       function draw(t) {
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = '#0b0b0b'; ctx.fillRect(0, 0, W, H);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); TONES = getComputedStyle(document.documentElement).colorScheme === 'light' ? TONES_L : TONES_D; ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--plate').trim() || '#0b0b0b'; ctx.fillRect(0, 0, W, H);
         const s = cell * .8, z = t * .00012, by = [[], [], [], [], []], hot = [];
         for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
           const i = y * cols + x, n = noise(x * .09 + noise(x * .03, y * .03, z) * 2, y * .09, z * 2);
