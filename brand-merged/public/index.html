@@ -626,8 +626,7 @@
           <tbody>
             <tr><td>Lockup master</td><td>Draw the three-part master (device, wordmark, Ⓐ), or keep the two-part one as drawn.</td></tr>
             <tr><td>Minimum sizes</td><td>Not yet set for the device or the lockup (see above).</td></tr>
-            <tr><td>Row order</td><td>Which phase owns which color is fixed. The order of the row is open (see Color).</td></tr>
-          </tbody>
+                      </tbody>
         </table></div>
       </div>
     </section>
@@ -727,25 +726,24 @@
       <div><span class="tbd">Grayscale tints TBD · Artifice to supply</span></div>
       <div class="rndbox" id="phase-colors">
         <h3 class="sh">Phase colors <span class="rnd">R&amp;D</span></h3>
-        <p class="sub">Four colors, one per phase, in the Figma order. They never fill a surface: the surfaces above stay monochrome, and a phase color appears only as a reading on its scale.</p>
+        <p class="sub">Four colors, each locked to one phase, in the Figma order: lime is Strategy, magenta is Identity, cyan is Applications, blue is Production. Renaise decided on Oct 20 that the pairs and the order are final. The colors never fill a surface: the surfaces above stay monochrome, and a phase color appears only as a reading on its scale.</p>
         <div class="phases">
-          <div class="phase"><div class="chip" style="background:var(--strategy)"></div><div class="nm">Strategy</div><div class="rl">L* 94 · hue 72° · film 308 nm</div><div class="cprow"><button type="button" class="cpbtn" data-copy="#D2FF1E">#D2FF1E</button></div></div>
-          <div class="phase"><div class="chip" style="background:var(--identity)"></div><div class="nm">Identity</div><div class="rl">L* 59 · hue 312° · film 398 nm</div><div class="cprow"><button type="button" class="cpbtn" data-copy="#FF1BD1">#FF1BD1</button></div></div>
-          <div class="phase"><div class="chip" style="background:var(--application)"></div><div class="nm">Applications</div><div class="rl">L* 85 · hue 181° · film 275 nm</div><div class="cprow"><button type="button" class="cpbtn" data-copy="#00EBEF">#00EBEF</button></div></div>
-          <div class="phase"><div class="chip" style="background:var(--production)"></div><div class="nm">Production</div><div class="rl">L* 33 · hue 238° · film 222 nm</div><div class="cprow"><button type="button" class="cpbtn" data-copy="#0009FF">#0009FF</button></div></div>
+          <div class="phase"><div class="chip" style="background:var(--strategy)"></div><div class="nm">Strategy</div><div class="rl">L* 94 · hue 72°</div><div class="cprow"><button type="button" class="cpbtn" data-copy="#D2FF1E">#D2FF1E</button></div></div>
+          <div class="phase"><div class="chip" style="background:var(--identity)"></div><div class="nm">Identity</div><div class="rl">L* 59 · hue 312°</div><div class="cprow"><button type="button" class="cpbtn" data-copy="#FF1BD1">#FF1BD1</button></div></div>
+          <div class="phase"><div class="chip" style="background:var(--application)"></div><div class="nm">Applications</div><div class="rl">L* 85 · hue 181°</div><div class="cprow"><button type="button" class="cpbtn" data-copy="#00EBEF">#00EBEF</button></div></div>
+          <div class="phase"><div class="chip" style="background:var(--production)"></div><div class="nm">Production</div><div class="rl">L* 33 · hue 238°</div><div class="cprow"><button type="button" class="cpbtn" data-copy="#0009FF">#0009FF</button></div></div>
         </div>
         <p class="note">Measured, they span both media: three sit near print's process inks, one near the screen's blue primary. Mixed as light at 41 : 23 : 10 : 26 they balance to a neutral grey near L* 76, so the monochrome system is their balanced sum.</p>
-        <h3 class="sh">Orders</h3>
+        <h3 class="sh">Pairs</h3>
         <div class="orders">
           <span class="legend4"><i style="background:var(--strategy)"></i><i style="background:var(--identity)"></i><i style="background:var(--application)"></i><i style="background:var(--production)"></i></span>
-          <span class="t"><b>Figma order · canonical</b>Strategy, Identity, Applications, Production. In grey, four keys that dip and recover.</span>
-          <span class="legend4"><i style="background:var(--production)"></i><i style="background:var(--application)"></i><i style="background:var(--strategy)"></i><i style="background:var(--identity)"></i></span>
-          <span class="t"><b>Film order · proposed</b>Production, Applications, Strategy, Identity: the order a thin film passes through as it thickens, and the heat order of the thermal mannequin.</span>
+          <span class="t"><b>Figma order · final</b>Strategy, Identity, Applications, Production. A color always names its phase, and the row always runs in this order. The film order proposed in the R&amp;D is retired.</span>
         </div>
         <h3 class="sh">Proposed usage</h3>
         <div class="tbl"><table>
           <thead><tr><th>Rule</th><th>Why</th></tr></thead>
           <tbody>
+            <tr><td>A phase color always names its phase.</td><td>The pairs are fixed, so a color is read as its phase wherever it appears.</td></tr>
             <tr><td>A phase color never appears without its scale.</td><td>Thermal color only means something next to its scale bar.</td></tr>
             <tr><td>Exact hexes only in bands, isotherms and readings.</td><td>Photography is the picture; the hexes are the measurement.</td></tr>
             <tr><td>Iridescence never fills a surface.</td><td>Film color appears only where two layers meet, and its hue reports the gap.</td></tr>
@@ -850,7 +848,7 @@
       <p class="sub" style="margin-top:var(--sp-5)">Imaging it, thermal when the figure is the hero, X-ray grayscale on applications, is observational drawing carried into the studio's own instruments: the same subject, looked at harder. On applications the figure stays strictly grayscale. Photography elsewhere is dark, filmic, and shot in available light; no stock, no heavy grades.</p>
       <div class="rndbox">
         <h3 class="sh">Reading the thermal figure <span class="rnd">R&amp;D</span></h3>
-        <p class="sub">The thermal image ranks the four colors by heat: blue, cyan, lime, magenta. That is the film order, so the figure already uses the proposed order. On the brand vectorscope its colors sit 0% on target, because the image is softened. Proposed: the photograph stays the picture, and exact phase hexes appear only in bands and isotherms drawn from it.</p>
+        <p class="sub">The thermal image ranks its colors by heat: blue, cyan, lime, magenta. That is not the phase order, so its colors stay part of the picture and are never read as phases. On the brand vectorscope its colors sit 0% on target, because the image is softened. Proposed: the photograph stays the picture, and exact phase hexes appear only in bands and isotherms drawn from it.</p>
       </div>
     </section>
 
@@ -881,13 +879,13 @@
       <h2>The reading</h2>
       <p class="sub">The idea every study tests. The field stays monochrome. Color appears only where a value crosses a declared threshold, and the scale it is read against is always on screen.</p>
       <h3 class="sh">Heat on the field</h3>
-      <p class="sub">The primitives as a field, with the pointer as a heat source. Brightness drifts on noise and picks a shape from the ramp; heat lifts cells up the ramp and cools on a known curve. Only cells past the isotherm take a phase color, banded in heat order.</p>
+      <p class="sub">The primitives as a field, with the pointer as a heat source. Brightness drifts on noise and picks a shape from the ramp; heat lifts cells up the ramp and cools on a known curve. Only cells past the isotherm take a phase color, banded in the Figma order: Production at the isotherm, Strategy at the hottest.</p>
       <div class="fieldwrap">
         <div class="fieldplate" id="fieldplate"><canvas id="field" aria-label="Field of brand primitives with pointer heat and phase isotherms"></canvas><span class="hint">Move to add heat · press to pulse</span></div>
         <div class="scale">
-          <span class="sh" style="margin:0">Scale · heat order</span>
-          <div class="scalebar" aria-hidden="true"><i style="background:var(--identity)"></i><i style="background:var(--strategy)"></i><i style="background:var(--application)"></i><i style="background:var(--production)"></i><i class="grey"></i></div>
-          <div class="scalekey"><span><span>Identity</span><span>hottest</span></span><span><span>Strategy</span><span></span></span><span><span>Applications</span><span></span></span><span><span>Production</span><span id="isoval">iso 0.55</span></span></div>
+          <span class="sh" style="margin:0">Scale · Figma order</span>
+          <div class="scalebar" aria-hidden="true"><i style="background:var(--strategy)"></i><i style="background:var(--identity)"></i><i style="background:var(--application)"></i><i style="background:var(--production)"></i><i class="grey"></i></div>
+          <div class="scalekey"><span><span>Strategy</span><span>hottest</span></span><span><span>Identity</span><span></span></span><span><span>Applications</span><span></span></span><span><span>Production</span><span id="isoval">iso 0.55</span></span></div>
           <label class="sh" for="iso" style="margin:6px 0 0">Isotherm</label>
           <input id="iso" type="range" min="0.25" max="0.9" step="0.01" value="0.55">
         </div>
@@ -902,22 +900,13 @@
           <tr><td>Registration</td><td>Where a plate landed against its target</td><td>Per proof</td><td>Four plates on one mark; in register they close to black</td></tr>
         </tbody>
       </table></div>
-      <h3 class="sh">Film spectrum</h3>
-      <p class="sub">Thin-film color from 0 to 1000 nm, fitted as 47 stops. All four phase colors are second-order colors of one film, which gives them a physical order. A candidate gradient, used only where it reports a gap or a thickness.</p>
-      <div class="film" role="img" aria-label="Film spectrum from 0 to 1000 nanometres with the four phase colors marked">
-        <span class="mk" style="left:22.2%"><span><i style="background:var(--production)"></i>222</span></span>
-        <span class="mk" style="left:27.5%"><span><i style="background:var(--application)"></i>275</span></span>
-        <span class="mk" style="left:30.8%"><span><i style="background:var(--strategy)"></i>308</span></span>
-        <span class="mk" style="left:39.8%"><span><i style="background:var(--identity)"></i>398</span></span>
-      </div>
-      <div class="filmaxis"><span>0 nm · black</span><span>500 nm</span><span>1000 nm · pale wash</span></div>
     </section>
 
     <!-- 13 · STUDIES (R&D) -->
     <section class="card" id="studies">
       <div class="lab"><span class="n">13</span><span>R&amp;D</span></div>
       <h2>Studies</h2>
-      <p class="sub">Every live study, by label. Each opens full screen and runs in Figma order or film order. The <a href="rnd.html">R&amp;D index</a> holds the research notes in full.</p>
+      <p class="sub">Every live study, by label. Each opens full screen and runs in the Figma order. Some still offer the retired film order as a toggle. The <a href="rnd.html">R&amp;D index</a> holds the research notes in full.</p>
       <div id="studygroups"></div>
     </section>
 
@@ -1061,8 +1050,7 @@
       const T = (nm, tk, val, kind, sw) => ({ nm, tk, val, kind, sw: sw || val });
       const TOK = [
         ['Surfaces', 'From the base. Hierarchy from value and scale, never hue.', [T('The ground.', '--ink', '#0E0E0E'), T('The text on it.', '--paper', '#F4F1EA'), T('The light sections.', '--linen', '#FCFAF5'), T('The raised surface.', '--panel', '#171717'), T('The hairline.', '--line', '#242424')]],
-        ['Phase', 'Figma order, canonical. One color per phase.', [T('Strategy', '--strategy', '#D2FF1E'), T('Identity', '--identity', '#FF1BD1'), T('Applications', '--application', '#00EBEF'), T('Production', '--production', '#0009FF')]],
-        ['Film order', 'Proposed. The same four by thickness and by heat.', [T('222 nm. Coolest.', '--production', '#0009FF'), T('275 nm', '--application', '#00EBEF'), T('308 nm', '--strategy', '#D2FF1E'), T('398 nm. Hottest.', '--identity', '#FF1BD1'), T('0 to 1000 nm, 47 stops.', '--film', 'Gradient', null, 'var(--film)')]],
+        ['Phase', 'Figma order, final. Each color locked to its phase.', [T('Strategy', '--strategy', '#D2FF1E'), T('Identity', '--identity', '#FF1BD1'), T('Applications', '--application', '#00EBEF'), T('Production', '--production', '#0009FF')]],
         ['Lines', 'Structure.', [T('Legend and register border.', '--register', '#9A9A9A')]],
         ['Ramp', 'Brand 5. Ink coverage of each step in its cell.', [T('Blank', '--ramp-0', '0%', 'g:'), T('Plus at 72%', '--ramp-1', '9%', 'g:cross'), T('Ⓐ monogram', '--ramp-2', '19%', 'g:mono'), T('Circle with plus', '--ramp-3', '48%', 'g:screw'), T('Square', '--ramp-4', '67%', 'g:square')]],
         ['Type and motion', 'One family; one curve.', [T('Everything. Regular.', '--sans', 'Helvetica Now Display', 't:400'), T('Display. Light.', '--fw-display', '300', 't:300'), T('The one curve.', '--ease', 'cubic-bezier(.22,1,.36,1)', 'x'), T('Around 0.2s.', '--dur', '.2s', 'x')]],
@@ -1090,7 +1078,7 @@
       const ramp = (() => { const seq = ['', 'cross', 'mono', 'screw', 'square']; let s = '<svg viewBox="0 0 240 180" aria-hidden="true">'; for (let y = 0; y < 9; y++) for (let x = 0; x < 12; x++) { const v = (Math.sin(x * .45 + y * .3) + Math.cos(y * .6 - x * .2) + 2) / 4; const k = seq[Math.min(4, Math.floor(v * 5))]; if (k) s += `<use href="#g-${k}" fill="#F4F1EA" transform="translate(${10 + x * 20} ${10 + y * 20}) scale(${k === 'cross' ? 10 : 14})"/>`; } return s + '</svg>'; })();
       const REFS = [
         ['img/ref-thermal.jpg', 'Thermal imaging', 'False color · isotherms', 'A palette stretched across a declared temperature window, meaningless without its scale bar. Isotherms color only what crosses a threshold.'],
-        ['img/ref-film.jpg', 'Thin-film interference', 'Soap film · temper colors', 'Color that is a distance, not a pigment. The four phase colors are second-order colors of one film, 222 to 398 nm.'],
+        ['img/ref-film.jpg', 'Thin-film interference', 'Soap film · temper colors', 'Color that is a distance, not a pigment. Its bands report a gap or a thickness.'],
         ['img/ref-bars.jpg', 'SMPTE color bars', 'Broadcast reference', 'Known values sent ahead of the signal so everything after can be checked. In grey they step down a staircase.'],
         ['img/ref-marks.png', 'Registration marks', 'Print · control strip', 'A circle and a crosshair printed on every plate. In register the plates stack to one black mark; drift splits it into colored ghosts.', true],
         [scope, 'Vectorscope', 'Broadcast · color targets', 'Every pixel plotted by hue and saturation against target boxes. The circle is the graticule, the plus the axes.'],
@@ -1105,7 +1093,7 @@
       // the field (12)
       const cv = $('#field'), plate = $('#fieldplate'), ctx = cv.getContext('2d');
       const G = {}; for (const k of ['square', 'screw', 'cross', 'mono']) G[k] = new Path2D(dPath(k));
-      const STEPS = [0, .09, .19, .48, .67], HEAT = ['#0009FF', '#00EBEF', '#D2FF1E', '#FF1BD1'], TONES = ['', '#5e5e5e', '#8f8f8f', '#b4b4b4', '#F4F1EA'];
+      const STEPS = [0, .09, .19, .48, .67], HEAT = ['#0009FF', '#00EBEF', '#FF1BD1', '#D2FF1E'], TONES = ['', '#5e5e5e', '#8f8f8f', '#b4b4b4', '#F4F1EA'];
       let W = 0, H = 0, cols = 0, rows = 0, cell = 22, heat = new Float32Array(0), dpr = 1, iso = .55;
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
       $('#iso').oninput = (e) => { iso = +e.target.value; $('#isoval').textContent = 'iso ' + iso.toFixed(2); if (still) draw(0); };
