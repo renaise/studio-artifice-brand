@@ -1,0 +1,497 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Iridescence Prototypes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one instrument stage per prototype, controls and legend docked under it like a readout panel. */
+:root {
+  --ink: #0E0E0E;       /* ground */
+  --panel: #171717;     /* raised surface */
+  --line: #242424;      /* hairline */
+  --paper: #F4F1EA;     /* text on ink */
+  --linen: #FCFAF5;     /* light stage ground */
+  --muted: #7A7871;     /* warm grey 06 */
+  --sans: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --label: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ease: cubic-bezier(.22,1,.36,1);
+  color-scheme: dark;
+}
+html, body { background: var(--ink); color: var(--paper); }
+body { font: 300 15px/1.5 var(--sans); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; }
+h1 { font: 300 clamp(26px, 4vw, 40px)/1.05 var(--sans); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.lbl { font: 11px/1.4 var(--label); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.tabs { display: flex; gap: 0; border: 1px solid var(--line); border-radius: 2px; }
+.tabs button { font: 11px var(--label); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); background: transparent; border: 0; padding: 10px 14px; cursor: pointer; }
+.tabs button[aria-selected="true"] { color: var(--ink); background: var(--paper); }
+.tabs button:focus-visible, .ctl button:focus-visible, .ctl select:focus-visible, .ctl input:focus-visible { outline: 1px solid var(--paper); outline-offset: 2px; }
+.stage { position: relative; height: min(68vh, 620px); min-height: 360px; border: 1px solid var(--line); border-radius: 2px; overflow: hidden; background: var(--ink); touch-action: none; }
+.stage.light { background: var(--linen); }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hint { position: absolute; left: 14px; top: 12px; pointer-events: none; }
+.stage.light .hint { color: #8a877f; }
+.dock { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 28px; }
+@media (max-width: 760px) { .dock { grid-template-columns: minmax(0, 1fr); } }
+.ctl { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
+.ctl label { display: flex; flex-direction: column; gap: 5px; }
+.ctl select, .ctl button { font: 12px var(--label); color: var(--paper); background: var(--panel); border: 1px solid var(--line); border-radius: 2px; padding: 7px 9px; cursor: pointer; }
+.ctl button:hover, .ctl select:hover { border-color: var(--muted); }
+.ctl input[type=range] { width: 140px; accent-color: var(--paper); }
+.legend { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.bar { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.bar i { display: block; height: 26px; border-radius: 2px; }
+.bar span { font: 10.5px/1.3 var(--label); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; overflow-wrap: anywhere; }
+.settings { font: 11px/1.5 var(--label); color: var(--paper); text-transform: uppercase; letter-spacing: .06em; border-top: 1px solid var(--line); padding-top: 8px; overflow-wrap: anywhere; }
+.note { max-width: 66ch; color: #b9b5ab; margin: 0; }
+.note b { font-weight: 500; color: var(--paper); }
+.note a { color: var(--paper); }
+.scrub { display: flex; align-items: center; gap: 10px; }
+.scrub input { width: 200px; }
+.scrub output { font: 11px var(--label); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 4.5ch; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="lbl">Studio Artifice · iridescence explorations</div>
+      <h1>Iridescence prototypes</h1>
+    </div>
+    <div class="tabs" role="tablist">
+      <button id="tab-temper" role="tab" aria-selected="true" aria-controls="p-temper">Temper record</button>
+      <button id="tab-register" role="tab" aria-selected="false" aria-controls="p-register">Register test</button>
+    </div>
+  </header>
+
+  <section id="p-temper" role="tabpanel" aria-labelledby="tab-temper">
+    <div class="wrap">
+      <div class="stage" id="stage-t"><canvas id="cv-t"></canvas><div class="hint lbl" id="hint-t">Drag to heat · hold still to heat longer</div></div>
+      <div class="dock">
+        <div class="ctl">
+          <label class="lbl">Order<select id="t-order"><option value="figma">Figma</option><option value="film">Film</option></select></label>
+          <label class="lbl">Colour<select id="t-colour"><option value="blocks">Four blocks</option><option value="physical">Physical film</option></select></label>
+          <label class="lbl">View<select id="t-view"><option value="patch">Patches</option><option value="film">Film (blurred)</option></select></label>
+          <label class="lbl">Cooling time <span id="t-tau-v">1.2 s</span><input type="range" id="t-tau" min="0.4" max="4" step="0.1" value="1.2"></label>
+          <button id="t-reset">Cool and clear</button>
+        </div>
+        <div class="legend">
+          <div class="bars" id="t-bars"></div>
+          <div class="settings" id="t-settings"></div>
+        </div>
+      </div>
+      <p class="note"><b>Reading it.</b> The pointer is a heat source. Glyphs show heat on the Brand 5 ramp and fade as the field cools. Where heat stays above the threshold, an oxide grows and keeps its colour after cooling, so the field records where work was done. Thin film reads blue, then cyan, yellow-green and magenta as it thickens. In Figma order the same four positions take the Figma colours.</p>
+    </div>
+  </section>
+
+  <section id="p-register" role="tabpanel" aria-labelledby="tab-register" hidden>
+    <div class="wrap">
+      <div class="stage light" id="stage-r"><canvas id="cv-r"></canvas><div class="hint lbl">Logo sting · the mark comes into register</div></div>
+      <div class="dock">
+        <div class="ctl">
+          <button id="r-play">Pause</button>
+          <div class="scrub lbl"><span>Time</span><input type="range" id="r-time" min="0" max="1" step="0.001" value="0" aria-label="Time"><output id="r-time-v">0.00 s</output></div>
+          <label class="lbl">Order<select id="r-order"><option value="figma">Figma</option><option value="film">Film</option></select></label>
+          <label class="lbl">Colour<select id="r-colour"><option value="blocks">Four blocks</option><option value="physical">Physical film</option></select></label>
+        </div>
+        <div class="legend">
+          <div class="bars" id="r-bars"></div>
+          <div class="settings" id="r-settings"></div>
+        </div>
+      </div>
+      <p class="note"><b>Reading it.</b> The circle is an optical flat over the mark. Its fringes map the gap to the master, one fringe per half wavelength. As the gap closes the rings widen and thin, and at contact the circle goes black. The square arrives as two misregistered layers whose seam carries film colour until they align. The plus knocks out last, at contact.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+"use strict";
+const $ = id => document.getElementById(id);
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ---------- Brand colours (Figma phase blocks) ----------
+const PHASE = {
+  Strategy:    [0xD2, 0xFF, 0x1E],
+  Identity:    [0xFF, 0x1B, 0xD1],
+  Application: [0x00, 0xEB, 0xEF],
+  Production:  [0x00, 0x09, 0xFF],
+};
+const FIGMA_ORDER = ["Strategy", "Identity", "Application", "Production"];
+const FILM_ORDER  = ["Production", "Application", "Strategy", "Identity"];
+// Soap-film thickness (nm, n 1.33) where each brand hue occurs, in film order.
+const FILM_NM = [222, 275, 308, 398];
+const hex = c => "#" + c.map(v => v.toString(16).padStart(2, "0")).join("").toUpperCase();
+
+// ---------- Thin-film colour (soap film n 1.33 in air, normal incidence) ----------
+// CIE 1931 analytic fit (Wyman, Sloan, Shirley 2013), equal-energy light, sRGB out.
+const LUT_MAX = 1200;
+const FILM_LUT = (() => {
+  const g = (x, m, a, b) => { const s = x < m ? a : b; const t = (x - m) / s; return Math.exp(-0.5 * t * t); };
+  const L = [], X = [], Y = [], Z = [];
+  for (let l = 380; l <= 780; l += 4) {
+    L.push(l);
+    X.push(1.056 * g(l, 599.8, 37.9, 31.0) + 0.362 * g(l, 442.0, 16.0, 26.7) - 0.065 * g(l, 501.1, 20.4, 26.2));
+    Y.push(0.821 * g(l, 568.8, 46.9, 40.5) + 0.286 * g(l, 530.9, 16.3, 31.1));
+    Z.push(1.217 * g(l, 437.0, 11.8, 36.0) + 0.681 * g(l, 459.0, 26.0, 13.8));
+  }
+  const n = 1.33, r1 = (1 - n) / (1 + n), r2 = (n - 1) / (n + 1);
+  const Yw = Y.reduce((a, b) => a + b, 0);
+  const raw = [];
+  for (let d = 0; d <= LUT_MAX; d++) {
+    let x = 0, y = 0, z = 0;
+    for (let i = 0; i < L.length; i++) {
+      const ph = 4 * Math.PI * n * d / L[i], c = Math.cos(ph), s = Math.sin(ph);
+      // r = (r1 + r2 e^{iφ}) / (1 + r1 r2 e^{iφ})
+      const nr = r1 + r2 * c, ni = r2 * s, dr = 1 + r1 * r2 * c, di = r1 * r2 * s;
+      const R = (nr * nr + ni * ni) / (dr * dr + di * di);
+      x += R * X[i]; y += R * Y[i]; z += R * Z[i];
+    }
+    x /= Yw; y /= Yw; z /= Yw;
+    raw.push([3.2406 * x - 1.5372 * y - 0.4986 * z, -0.9689 * x + 1.8758 * y + 0.0415 * z, 0.0557 * x - 0.2040 * y + 1.0570 * z]);
+  }
+  const peaks = raw.map(c => Math.max(...c)).sort((a, b) => a - b);
+  const norm = peaks[Math.floor(peaks.length * 0.98)];
+  const enc = v => { v = Math.min(1, Math.max(0, v / norm)); return Math.round(255 * (v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055)); };
+  return raw.map(c => c.map(enc));
+})();
+const physical = d => FILM_LUT[Math.max(0, Math.min(LUT_MAX, Math.round(d)))];
+
+// Four-block film: the brand colours placed at their film thicknesses, blended between,
+// repeating each order (~200 nm), black near zero and washing to grey when thick.
+const mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+const INK = [14, 14, 14], GREY = [176, 172, 164];
+function blocks(d, order) {
+  const names = order === "film" ? FILM_ORDER : FIGMA_ORDER;
+  const cols = names.map(k => PHASE[k]);
+  // position within an order: 200 nm → 400 nm, wrapping
+  const p = (((d - 200) % 200) + 200) % 200 + 200;
+  const pos = [...FILM_NM, FILM_NM[0] + 200], cc = [...cols, cols[0]];
+  let c;
+  if (p < pos[0]) { const t = (p - (pos[3] - 200)) / (pos[0] - (pos[3] - 200)); c = mix(cols[3], cols[0], t); }
+  else { let i = 0; while (i < 3 && p > pos[i + 1]) i++; c = mix(cc[i], cc[i + 1], (p - pos[i]) / (pos[i + 1] - pos[i])); }
+  if (d < 200) c = mix(INK, c, Math.pow(Math.max(0, (d - 40) / 160), 1.4));
+  if (d > 650) c = mix(c, GREY, Math.min(0.85, (d - 650) / 600));
+  return c.map(Math.round);
+}
+const filmColour = (d, mode, order) => mode === "physical" ? physical(d) : blocks(d, order);
+
+function renderBars(el, order, extra) {
+  const names = order === "film" ? FILM_ORDER : FIGMA_ORDER;
+  el.innerHTML = names.map(k => {
+    const nm = FILM_NM[names.indexOf(k)];
+    return `<div class="bar"><i style="background:${hex(PHASE[k])}"></i><span>${k}<br>${hex(PHASE[k])} · ${nm} nm</span></div>`;
+  }).join("");
+}
+
+// ---------- Canvas helper ----------
+function fit(canvas) {
+  const r = canvas.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
+  const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  return { w, h, dpr, cw: r.width, ch: r.height };
+}
+
+// ---------- Glyphs (Shape Field, unit box) ----------
+const ARM = 9.927 / 68.639, SCREW_CROSS = 68.639 / 128.698;
+const COV_CROSS = 2 * ARM - ARM * ARM, COV_MONO = 0.2777;
+const CROSS_SCALE = Math.sqrt((COV_MONO / 2) / COV_CROSS);
+const G = {
+  cross: new Path2D("M-0.07231 -0.5L0.07231 -0.5L0.07231 -0.07231L0.5 -0.07231L0.5 0.07231L0.07231 0.07231L0.07231 0.5L-0.07231 0.5L-0.07231 0.07231L-0.5 0.07231L-0.5 -0.07231L-0.07231 -0.07231Z"),
+  mono: new Path2D("M0 -0.5C0.27614 -0.5 0.5 -0.27615 0.5 0L0.49984 0.0129C0.493 0.28308 0.27182 0.5 0 0.5L-0.0129 0.49984C-0.28308 0.493 -0.5 0.27182 -0.5 0C-0.5 -0.27614 -0.27614 -0.5 0 -0.5ZM0 -0.43228C-0.23874 -0.43227 -0.43227 -0.23874 -0.43228 0C-0.43228 0.23873 -0.23874 0.43227 0 0.43228C0.23873 0.43228 0.43228 0.23873 0.43228 0C0.43227 -0.23874 0.23873 -0.43228 0 -0.43228ZM0.24338 0.22766L0.17857 0.22766L0.11813 0.07691L-0.11781 0.07691L-0.17753 0.22766L-0.24161 0.22766L-0.03479 -0.29083L0.03365 -0.29083ZM-0.0013 -0.22457C-0.03188 -0.14301 -0.06271 -0.06291 -0.09378 0.01574L-0.09597 0.02157L0.09628 0.02157L0.09337 0.01502C0.07007 -0.04275 0.03851 -0.12262 -0.0013 -0.22457Z"),
+  screw: new Path2D("M0 -0.5C0.27614 -0.5 0.5 -0.27614 0.5 0C0.5 0.27614 0.27614 0.5 0 0.5C-0.27614 0.5 -0.5 0.27614 -0.5 0C-0.5 -0.27614 -0.27614 -0.5 0 -0.5ZM-0.03857 -0.26667L-0.03857 -0.03857L-0.26667 -0.03857L-0.26667 0.03857L-0.03857 0.03857L-0.03857 0.26667L0.03857 0.26667L0.03857 0.03857L0.26667 0.03857L0.26667 -0.03857L0.03857 -0.03857L0.03857 -0.26667Z"),
+  square: new Path2D("M-0.5 -0.5L0.5 -0.5L0.5 0.5L-0.5 0.5Z"),
+};
+// Brand 5 ramp: blank, cross, monogram, screw, square
+const RAMP = [null, "cross", "mono", "screw", "square"];
+
+// =====================================================================
+// 1. Temper record
+// =====================================================================
+const T = (() => {
+  const cv = $("cv-t"), ctx = cv.getContext("2d");
+  const off = document.createElement("canvas"), octx = off.getContext("2d");
+  const st = { order: "figma", colour: "blocks", view: "patch", tau: 1.2 };
+  const THRESH = 0.6, FILM_MIN = 190, FILM_SPAN = 220; // film 0..1 → 190..410 nm
+  let cols = 0, rows = 0, cell = 22, heat, film, W, H, dpr = 1;
+  let ptr = null, lastPtr = null, lastInput = -1e9, autoT = 0, time = 0;
+
+  function resize() {
+    const f = fit(cv); W = f.w; H = f.h; dpr = f.dpr;
+    cell = (f.cw < 560 ? 17 : 22) * dpr;
+    const nc = Math.ceil(W / cell), nr = Math.ceil(H / cell);
+    if (nc !== cols || nr !== rows) {
+      const oh = heat, of = film, oc = cols, or = rows;
+      cols = nc; rows = nr; heat = new Float32Array(cols * rows); film = new Float32Array(cols * rows);
+      if (oh) for (let y = 0; y < Math.min(or, rows); y++) for (let x = 0; x < Math.min(oc, cols); x++) { heat[y * cols + x] = oh[y * oc + x]; film[y * cols + x] = of[y * oc + x]; }
+      off.width = cols; off.height = rows;
+    }
+  }
+
+  // Deposit heat around a point (canvas px), Gaussian footprint ~3 cells.
+  function deposit(px, py, amount) {
+    const cx = px / cell, cy = py / cell, R = 3.4, s2 = 2 * 1.5 * 1.5;
+    for (let y = Math.max(0, Math.floor(cy - R)); y <= Math.min(rows - 1, Math.ceil(cy + R)); y++)
+      for (let x = Math.max(0, Math.floor(cx - R)); x <= Math.min(cols - 1, Math.ceil(cx + R)); x++) {
+        const dx = x + 0.5 - cx, dy = y + 0.5 - cy, d2 = dx * dx + dy * dy;
+        if (d2 > R * R) continue;
+        const i = y * cols + x; heat[i] = Math.min(1.6, heat[i] + amount * Math.exp(-d2 / s2));
+      }
+  }
+  function strokeTo(p, dt) {
+    if (lastPtr) {
+      const dx = p.x - lastPtr.x, dy = p.y - lastPtr.y, dist = Math.hypot(dx, dy);
+      const steps = Math.max(1, Math.ceil(dist / (cell * 0.5)));
+      for (let k = 1; k <= steps; k++) deposit(lastPtr.x + dx * k / steps, lastPtr.y + dy * k / steps, Math.min(0.5, 0.012 * dist / dpr / steps + 0.02));
+    }
+    deposit(p.x, p.y, 1.1 * dt); // dwelling keeps heating
+    lastPtr = p;
+  }
+
+  // slow drifting noise for the idle field (value noise)
+  const hash = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
+  const sm = t => t * t * (3 - 2 * t);
+  function vnoise(x, y) {
+    const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+    const a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+    const u = sm(xf), v = sm(yf);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  }
+
+  function step(dt) {
+    time += dt;
+    const k = Math.exp(-dt / st.tau);
+    for (let i = 0; i < heat.length; i++) {
+      const h = heat[i];
+      if (h > THRESH) film[i] = Math.min(1, film[i] + 0.34 * (h - THRESH) * dt);
+      heat[i] = h * k;
+    }
+    // autopilot when idle: a slow Lissajous so the field is never empty
+    if (performance.now() - lastInput > 4000 && !ptr) {
+      autoT += dt;
+      const p = { x: W * (0.5 + 0.34 * Math.sin(autoT * 0.53)), y: H * (0.5 + 0.3 * Math.sin(autoT * 0.79 + 1.1)) };
+      strokeTo(p, dt);
+    } else if (ptr) strokeTo(ptr, dt);
+  }
+
+  function draw() {
+    ctx.fillStyle = "#0E0E0E"; ctx.fillRect(0, 0, W, H);
+    // temper layer
+    if (st.view === "film") {
+      const img = octx.createImageData(cols, rows);
+      for (let i = 0; i < film.length; i++) {
+        const f = film[i]; if (f <= 0.002) continue;
+        const c = filmColour(FILM_MIN + f * FILM_SPAN, st.colour, st.order), o = i * 4;
+        img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = Math.min(255, f * 2200);
+      }
+      octx.putImageData(img, 0, 0);
+      ctx.save(); ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+      if ("filter" in ctx) ctx.filter = `blur(${Math.round(cell * 0.7)}px)`;
+      ctx.drawImage(off, 0, 0, cols * cell, rows * cell);
+      ctx.restore();
+    } else {
+      for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+        const f = film[y * cols + x]; if (f <= 0.002) continue;
+        const c = filmColour(FILM_MIN + f * FILM_SPAN, st.colour, st.order);
+        const s = cell * (0.42 + 0.4 * Math.min(1, f * 6));
+        ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
+        ctx.fillRect(x * cell + (cell - s) / 2, y * cell + (cell - s) / 2, s, s);
+      }
+    }
+    // heat glyphs on the Brand 5 ramp
+    const t = time * 0.05;
+    const byGlyph = { cross: [], mono: [], screw: [], square: [] };
+    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+      const n = vnoise(x * 0.13 + t, y * 0.13 - t * 0.7);
+      const base = Math.max(0, (n - 0.64) * 0.55);
+      const lv = Math.max(base, heat[y * cols + x]);
+      const gi = lv < 0.12 ? 0 : lv < 0.3 ? 1 : lv < 0.5 ? 2 : lv < 0.72 ? 3 : 4;
+      if (gi) byGlyph[RAMP[gi]].push(x, y, lv);
+    }
+    for (const name of ["cross", "mono", "screw", "square"]) {
+      const a = byGlyph[name], scale = name === "cross" ? CROSS_SCALE : 1;
+      for (let i = 0; i < a.length; i += 3) {
+        const lv = Math.min(1, a[i + 2]);
+        const v = Math.round(110 + 134 * lv);
+        ctx.fillStyle = `rgb(${v},${Math.round(v * 0.99)},${Math.round(v * 0.96)})`;
+        const s = cell * 0.78 * scale;
+        ctx.setTransform(s, 0, 0, s, (a[i] + 0.5) * cell, (a[i + 1] + 0.5) * cell);
+        ctx.fill(G[name]);
+      }
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  function settings() {
+    $("t-settings").textContent = `cooling ${st.tau.toFixed(1)} s · threshold ${THRESH.toFixed(2)} · film ${FILM_MIN}–${FILM_MIN + FILM_SPAN} nm · n 1.33 · angle 0° · order ${st.order} · ${st.colour === "physical" ? "physical film" : "four blocks"}`;
+    renderBars($("t-bars"), st.order);
+  }
+
+  const pos = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr }; };
+  cv.addEventListener("pointerdown", e => { cv.setPointerCapture(e.pointerId); ptr = pos(e); lastPtr = ptr; lastInput = performance.now(); $("hint-t").hidden = true; });
+  cv.addEventListener("pointermove", e => { if (e.pointerType === "mouse" || ptr) { ptr = pos(e); lastInput = performance.now(); } });
+  cv.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") { ptr = null; lastPtr = null; } });
+  cv.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") { ptr = null; lastPtr = null; } });
+  $("t-order").onchange = e => { st.order = e.target.value; settings(); };
+  $("t-colour").onchange = e => { st.colour = e.target.value; settings(); };
+  $("t-view").onchange = e => { st.view = e.target.value; };
+  $("t-tau").oninput = e => { st.tau = +e.target.value; $("t-tau-v").textContent = st.tau.toFixed(1) + " s"; settings(); };
+  $("t-reset").onclick = () => { heat.fill(0); film.fill(0); };
+
+  resize(); settings();
+  // pre-warm so the first frame already shows a record
+  for (let i = 0; i < 360; i++) step(1 / 60);
+  return { resize, frame(dt) { step(dt); draw(); }, still() { draw(); } };
+})();
+
+// =====================================================================
+// 2. Register test (logo sting)
+// =====================================================================
+const R = (() => {
+  const cv = $("cv-r"), ctx = cv.getContext("2d");
+  const st = { order: "figma", colour: "blocks", playing: !reduced, t: reduced ? 2.9 : 0 };
+  const DUR = 3.9, HOLD = 1.4;
+  // Device master (262 × 129): square 121.407 × 128.698, circle r 64.349 at (197.454, 64.349), plus arm half-width 4.9635
+  const SQ = { w: 121.407, h: 128.698 }, CIR = { x: 197.454, y: 64.349, r: 64.349 }, PLUS = { a: 4.9635, l: 34.32 };
+  const LOCKUP = new Path2D(["M52.9722 165.145C36.8658 165.145 24.0403 161.507 14.4958 154.229C4.95123 146.832 0.119307 135.498 0 120.226H15.5695C15.9275 141.105 28.395 151.544 52.9722 151.544C63.2326 151.544 71.1665 149.516 76.7739 145.46C82.3813 141.403 85.185 135.498 85.185 127.743C85.185 121.658 82.8585 116.945 78.2056 113.605C73.5526 110.145 65.6801 107.582 54.346 105.076L43.0715 102.571C30.7829 99.8269 21.2384 95.7108 14.4379 90.2227C7.7567 84.6153 4.41611 76.4428 4.41611 65.7052C4.41611 55.5641 8.35323 47.5109 16.2275 41.5455C24.1017 35.4609 34.6604 32.4186 47.9034 32.4186C56.9707 32.4186 64.7853 33.4923 71.3472 35.6399C77.9091 37.7874 83.0393 40.8297 86.7378 44.7668C90.4363 48.5846 93.1207 52.7604 94.791 57.294C96.5806 61.8277 97.535 66.8386 97.6543 72.3267H82.2638C81.5479 63.498 78.6249 56.9361 73.4947 52.6411C68.4838 48.2267 59.9534 46.0196 47.9034 46.0196C38.8361 46.0196 31.9163 47.8092 27.144 51.3884C22.3718 54.8482 19.9856 59.6205 19.9856 65.7052C19.9856 72.0284 22.0139 76.92 26.0703 80.3799C30.246 83.7205 38.1799 86.7032 49.872 89.3279L61.1465 91.8333C75.4633 94.9353 85.664 99.4093 91.7486 105.255C97.8333 111.101 100.755 120.225 100.755 129.65C100.755 141.103 96.5192 148.323 88.0484 155.124C79.6969 161.805 68.0048 165.145 52.9722 165.145Z", "M151.876 84.7923H132.906V144.744C132.906 149.993 136.426 152.618 143.465 152.618H151.876V164.609C147.939 164.966 144.539 165.145 141.675 165.145C126.285 165.145 118.59 158.762 118.59 145.997V84.7923H103.378V72.2651H118.59V46.1369H132.906V72.2651H151.876V84.7923Z", "M223.008 72.2651H237.325V164.609H223.724V150.829C216.805 161.447 207.141 166.756 194.733 166.756C184.472 166.756 176.479 163.952 170.752 158.345C165.025 152.738 162.162 144.863 162.162 134.722V72.2651H176.479V133.291C176.479 147.011 183.518 153.871 197.596 153.871C204.277 153.871 210.183 151.365 215.313 146.355C220.443 141.344 223.008 134.066 223.008 124.521V72.2651Z", "M321.492 37.1889H335.809V164.609H322.208V150.292C314.93 161.268 304.372 166.756 290.532 166.756C277.528 166.756 267.088 162.401 259.214 153.692C251.459 144.863 247.582 133.112 247.582 118.437C247.582 103.762 251.459 92.07 259.214 83.3606C267.088 74.5319 277.528 70.1176 290.532 70.1176C303.895 70.1176 314.215 75.2478 321.492 85.5082V37.1889ZM270.668 144.744C276.036 150.829 283.255 153.871 292.322 153.871C301.389 153.871 308.607 150.769 313.976 144.565C319.345 138.242 322.029 129.532 322.029 118.437C322.029 107.341 319.345 98.6916 313.976 92.4876C308.607 86.1643 301.389 83.0027 292.322 83.0027C283.374 83.0027 276.156 86.2836 270.668 92.8455C265.299 99.2881 262.614 108.057 262.614 119.153C262.614 130.129 265.299 138.659 270.668 144.744Z", "M351.883 58.3062V43.3109H367.095V58.3062H351.883ZM352.42 164.609V72.2651H366.737V164.609H352.42Z", "M455.881 153.513C447.53 162.342 436.792 166.756 423.668 166.756C410.545 166.756 399.807 162.342 391.456 153.513C383.104 144.684 378.928 132.992 378.928 118.437C378.928 103.881 383.104 92.1893 391.456 83.3606C399.807 74.5319 410.545 70.1176 423.668 70.1176C436.792 70.1176 447.53 74.5319 455.881 83.3606C464.233 92.1893 468.408 103.881 468.408 118.437C468.408 132.992 464.233 144.684 455.881 153.513ZM402.014 144.565C407.383 150.769 414.601 153.871 423.668 153.871C432.736 153.871 439.954 150.769 445.323 144.565C450.691 138.242 453.376 129.532 453.376 118.437C453.376 107.341 450.691 98.6916 445.323 92.4876C439.954 86.1643 432.736 83.0027 423.668 83.0027C414.601 83.0027 407.383 86.1643 402.014 92.4876C396.645 98.6916 393.961 107.341 393.961 118.437C393.961 129.532 396.645 138.242 402.014 144.565Z", "M605.062 164.609L590.209 127.564H532.226L517.551 164.609H501.802L552.627 37.1889H569.449L620.99 164.609H605.062ZM537.594 113.963H584.84L584.124 112.352C578.397 98.1547 570.642 78.5287 560.859 53.4743C553.343 73.5178 545.767 93.2034 538.131 112.531L537.594 113.963Z", "M669.988 70.6324C673.215 70.3581 674.756 70.3581 677.616 70.5108V84.6665H674.059C664.693 84.6665 657.343 86.9966 652.008 91.6569C646.673 96.3172 644.005 103.069 644.005 111.911V164.609H629.778V72.1195H643.294V88.4305C649.577 76.6006 656.639 71.7672 669.988 70.6324Z", "M729.677 84.7923H710.707V144.744C710.707 149.993 714.227 152.618 721.266 152.618H729.677V164.609C725.74 164.966 722.339 165.145 719.476 165.145C704.085 165.145 696.39 158.762 696.39 145.997V84.7923H681.179V70.3581H696.39V46.1369H710.707V70.3581H729.677V84.7923Z", "M741.333 58.3062V42.6751H756.544V58.3062H741.333ZM741.87 164.609V72.2651H756.186V164.609H741.87Z", "M780.01 62.7802C780.01 45.4807 788.6 36.831 805.78 36.831C809.002 36.831 812.044 36.9503 814.907 37.1889V49.3582H806.675C798.443 49.3582 794.327 53.7129 794.327 62.4223V72.2651H814.013V84.7923H794.327V164.609H780.01V84.7923H764.799V72.2651H780.01V62.7802ZM825.886 42.6751H841.097V58.3062H825.886V42.6751ZM826.422 164.609V72.2651H840.739V164.609H826.422Z", "M895.625 166.756C882.859 166.756 872.54 162.401 864.665 153.692C856.791 144.863 852.854 133.112 852.854 118.437C852.854 103.643 856.731 91.8911 864.486 83.1817C872.361 74.4723 882.74 70.1176 895.625 70.1176C906.602 70.1176 915.609 73.1599 922.648 79.2445C929.687 85.2099 933.923 93.3228 935.355 103.583H920.501C919.308 96.9019 916.385 91.8314 911.732 88.3715C907.198 84.7923 901.829 83.0027 895.625 83.0027C887.393 83.0027 880.712 86.045 875.582 92.1297C870.452 98.095 867.887 106.864 867.887 118.437C867.887 130.01 870.452 138.838 875.582 144.923C880.831 150.888 887.512 153.871 895.625 153.871C901.829 153.871 907.258 152.081 911.911 148.502C916.564 144.923 919.487 139.733 920.68 132.933H935.355C933.804 143.432 929.389 151.723 922.112 157.808C914.953 163.773 906.124 166.756 895.625 166.756Z", "M1028.25 118.437V123.448H958.095C958.811 133.589 961.614 141.165 966.506 146.176C971.517 151.187 978.198 153.692 986.55 153.692C999.315 153.692 1007.49 147.965 1011.07 136.512H1025.92C1023.53 145.579 1018.94 152.916 1012.14 158.524C1005.46 164.012 996.81 166.756 986.192 166.756C973.426 166.756 963.046 162.401 955.052 153.692C947.178 144.983 943.241 133.231 943.241 118.437C943.241 103.881 947.119 92.1893 954.873 83.3606C962.748 74.5319 973.068 70.1176 985.834 70.1176C999.077 70.1176 1009.46 74.7109 1016.97 83.8975C1024.49 93.0841 1028.25 104.597 1028.25 118.437ZM985.834 83.1817C978.437 83.1817 972.292 85.5082 967.401 90.1611C962.628 94.8141 959.646 101.615 958.453 110.563H1012.86C1012.14 102.569 1009.4 96.0071 1004.62 90.877C999.971 85.7468 993.708 83.1817 985.834 83.1817Z", "M1106.05 0C1129.22 0 1148 18.783 1148 41.9531L1147.99 43.0361C1147.41 65.7061 1128.85 83.9072 1106.05 83.9072L1104.96 83.8936C1082.29 83.3194 1064.09 64.7615 1064.09 41.9531C1064.09 18.7832 1082.88 0.000247424 1106.05 0ZM1106.05 5.68262C1086.01 5.68286 1069.78 21.9218 1069.78 41.9531C1069.78 61.9847 1086.01 78.2244 1106.05 78.2246C1126.08 78.2246 1142.32 61.9848 1142.32 41.9531C1142.32 21.9216 1126.08 5.68262 1106.05 5.68262ZM1126.47 61.0557H1121.03L1115.96 48.4072H1096.16L1091.15 61.0557H1085.77L1103.13 17.5508H1108.87L1126.47 61.0557ZM1105.94 23.1104C1103.37 29.9538 1100.78 36.6754 1098.18 43.2744L1097.99 43.7637H1114.13L1113.88 43.2139C1111.93 38.3664 1109.28 31.6647 1105.94 23.1104Z"].join(" "));
+  let W, H, dpr, img = null;
+  const tmpCanvas = document.createElement("canvas");
+
+  // brand easing cubic-bezier(.22,1,.36,1)
+  function bez(x) {
+    const p1x = .22, p1y = 1, p2x = .36, p2y = 1;
+    const cx = 3 * p1x, bx = 3 * (p2x - p1x) - cx, ax = 1 - cx - bx;
+    const cy = 3 * p1y, by = 3 * (p2y - p1y) - cy, ay = 1 - cy - by;
+    let t = x; for (let i = 0; i < 8; i++) { const fx = ((ax * t + bx) * t + cx) * t - x, d = (3 * ax * t + 2 * bx) * t + cx; if (Math.abs(d) < 1e-6) break; t -= fx / d; }
+    t = Math.min(1, Math.max(0, t)); return ((ay * t + by) * t + cy) * t;
+  }
+  const clamp01 = v => Math.min(1, Math.max(0, v));
+
+  function resize() { const f = fit(cv); W = f.w; H = f.h; dpr = f.dpr; img = null; }
+
+  function draw() {
+    const t = st.t;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = "#FCFAF5"; ctx.fillRect(0, 0, W, H);
+    // layout: device centred, lockup under it
+    const scale = Math.min(W * 0.62 / 262, H * 0.42 / 129);
+    const ox = (W - 262 * scale) / 2, oy = H * 0.44 - 129 * scale / 2;
+    const gp = clamp01((t - 0.2) / 2.3), gap = 1 - gp * gp * (3 - 2 * gp);   // 1 → 0, the closing gap
+    const appear = clamp01(t / 0.35);
+    const contact = clamp01((t - 2.55) / 0.22);          // plus knocks out at contact
+    const lock = bez(clamp01((t - 2.75) / 0.8));
+
+    // ---- square: two print layers, misregistered, the seam carries film colour
+    const sx = ox, sy = oy, sw = SQ.w * scale, sh = SQ.h * scale;
+    const dx = gap * 16 * scale, dy = -gap * 9 * scale;
+    const seamD = 200 + gap * 620;
+    const sc = filmColour(seamD, st.colour, st.order);
+    ctx.globalAlpha = appear;
+    if (gap > 0.004) {
+      ctx.fillStyle = `rgb(${sc[0]},${sc[1]},${sc[2]})`;
+      ctx.fillRect(sx + dx, sy + dy, sw, sh);
+      ctx.fillRect(sx - dx * 0.4, sy - dy * 0.4, sw, sh);
+    }
+    ctx.fillStyle = "#0E0E0E";
+    const ix = Math.max(sx + dx, sx - dx * 0.4), iy = Math.max(sy + dy, sy - dy * 0.4);
+    const ax = Math.min(sx + dx, sx - dx * 0.4) + sw, ay = Math.min(sy + dy, sy - dy * 0.4) + sh;
+    ctx.fillRect(ix, iy, ax - ix, ay - iy);
+
+    // ---- circle: Newton's rings, gap d(r) = gap × (Dc + (De − Dc) r²)
+    const cx = ox + CIR.x * scale, cy = oy + CIR.y * scale, cr = CIR.r * scale;
+    const size = Math.ceil(cr * 2) + 2, x0 = Math.floor(cx - cr) - 1, y0 = Math.floor(cy - cr) - 1;
+    if (!img || img.width !== size) img = ctx.createImageData(size, size);
+    const data = img.data, Dc = 280, De = 1150;
+    const cache = new Map();
+    for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+      const px = x0 + x + 0.5 - cx, py = y0 + y + 0.5 - cy, rr = (px * px + py * py) / (cr * cr), o = (y * size + x) * 4;
+      if (rr > 1) { data[o + 3] = 0; continue; }
+      const d = Math.round(gap * (Dc + (De - Dc) * rr));
+      let c = cache.get(d); if (!c) { c = filmColour(d, st.colour, st.order); cache.set(d, c); }
+      const edge = clamp01((1 - Math.sqrt(rr)) * cr * 1.0);
+      data[o] = c[0]; data[o + 1] = c[1]; data[o + 2] = c[2]; data[o + 3] = 255 * appear * edge;
+    }
+    const tmp = tmpCanvas;
+    if (tmp.width !== size) { tmp.width = size; tmp.height = size; }
+    tmp.getContext("2d").putImageData(img, 0, 0);
+    ctx.drawImage(tmp, x0, y0);
+
+    // ---- plus knock-out at contact
+    if (contact > 0) {
+      const k = bez(contact), a = PLUS.a * scale, l = PLUS.l * scale * (0.6 + 0.4 * k);
+      ctx.globalAlpha = k; ctx.fillStyle = "#FCFAF5";
+      ctx.fillRect(cx - a, cy - l, 2 * a, 2 * l); ctx.fillRect(cx - l, cy - a, 2 * l, 2 * a);
+    }
+
+    // ---- lockup (wordmark + Ⓐ) settles in under the device
+    if (lock > 0) {
+      const ls = Math.min(W * 0.46 / 1148, H * 0.075 / 167);
+      const lx = (W - 1148 * ls) / 2, ly = oy + 129 * scale + H * 0.09 + (1 - lock) * 10 * dpr;
+      ctx.globalAlpha = lock; ctx.setTransform(ls, 0, 0, ls, lx, ly); ctx.fillStyle = "#0E0E0E"; ctx.fill(LOCKUP);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    ctx.globalAlpha = 1;
+
+    // ---- readout: current gap at the circle's edge, in fringes
+    const fringes = gap * De / (532 / 2 / 1.33);
+    ctx.font = `${11 * dpr}px "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif`;
+    ctx.fillStyle = "#8a877f"; ctx.textBaseline = "bottom";
+    const label = gap < 0.004 ? "CONTACT · 0 FRINGES · IN REGISTER" : `GAP AT RIM ${Math.round(gap * De)} NM · ≈ ${fringes.toFixed(1)} FRINGES (λ 532 NM)`;
+    ctx.fillText(label, 14 * dpr, H - 12 * dpr);
+  }
+
+  function settings() {
+    $("r-settings").textContent = `optical flat · λ/2 per fringe · gap 0–1150 nm · n 1.33 · order ${st.order} · ${st.colour === "physical" ? "physical film" : "four blocks"} · ease cubic-bezier(.22,1,.36,1)`;
+    renderBars($("r-bars"), st.order);
+  }
+  const syncUI = () => { $("r-time").value = st.t / DUR; $("r-time-v").textContent = st.t.toFixed(2) + " s"; $("r-play").textContent = st.playing ? "Pause" : "Play"; };
+  $("r-play").onclick = () => { if (!st.playing && st.t >= DUR) st.t = 0; st.playing = !st.playing; syncUI(); };
+  $("r-time").oninput = e => { st.t = +e.target.value * DUR; st.playing = false; syncUI(); draw(); };
+  $("r-order").onchange = e => { st.order = e.target.value; settings(); draw(); };
+  $("r-colour").onchange = e => { st.colour = e.target.value; settings(); draw(); };
+  let hold = 0;
+  resize(); settings(); syncUI();
+  return {
+    resize,
+    frame(dt) {
+      if (st.playing) {
+        if (st.t < DUR) st.t = Math.min(DUR, st.t + dt);
+        else { hold += dt; if (hold > HOLD) { hold = 0; st.t = 0; } }
+        syncUI();
+      }
+      draw();
+    },
+    still: draw,
+  };
+})();
+
+// ---------- tabs + loop ----------
+let active = "temper";
+function show(name) {
+  active = name;
+  $("tab-temper").setAttribute("aria-selected", name === "temper");
+  $("tab-register").setAttribute("aria-selected", name === "register");
+  $("p-temper").hidden = name !== "temper";
+  $("p-register").hidden = name !== "register";
+  (name === "temper" ? T : R).resize();
+  (name === "temper" ? T : R).still();
+  try { localStorage.setItem("irid-tab", name); } catch (e) {}
+}
+$("tab-temper").onclick = () => show("temper");
+$("tab-register").onclick = () => show("register");
+let first = location.hash === "#register" ? "register" : location.hash === "#temper" ? "temper" : null;
+if (!first) { try { first = localStorage.getItem("irid-tab"); } catch (e) {} }
+show(first === "register" ? "register" : "temper");
+addEventListener("resize", () => { (active === "temper" ? T : R).resize(); (active === "temper" ? T : R).still(); });
+
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (!document.hidden) (active === "temper" ? T : R).frame(reduced && active === "temper" ? dt * 0.5 : dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+</body></html>

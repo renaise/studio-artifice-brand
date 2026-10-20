@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Studio Artifice · Research</title>
+<meta name="description" content="Studio Artifice brand research, laid out as a guideline: mark, color, greys, type, atoms, the reading rule, studies, tokens and references.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+/* Studio Artifice research, laid out the way the final guideline will be:
+   a sticky index rail, one ruled section per subject, token cards, reference cards.
+   Type: Helvetica Now Display only, never monospace. The font is not self-hosted
+   (no web licence); it renders where installed and falls back to Helvetica Neue. */
+:root {
+  --sans: "Helvetica Now Display", "Helvetica Now Display Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* phase colors, Figma masters (canonical order) */
+  --strategy: #D2FF1E;
+  --identity: #FF1BD1;
+  --application: #00EBEF;
+  --production: #0009FF;
+
+  /* greys from the masters */
+  --register: #9A9A9A;
+  --warm-05: #5C5A54;
+  --warm-06: #7A7871;
+  --ground-1: #F6F6F6;
+  --ground-2: #EBEBEB;
+  --ground-3: #CACACA;
+  --ink: #0E0E0E;
+  --panel: #151515;
+  --line-dark: #262626;
+  --paper: #ECECEC;
+  --grad-ground: linear-gradient(180deg, #EBEBEB 0%, #BFBFBF 55%, #EEEEEE 100%);
+  --film: linear-gradient(90deg, #000000 0.0%, #020203 0.2%, #4D505F 2.2%, #9395A9 4.6%, #C7C3CF 7.1%, #E6D7CE 9.6%, #F0D3AD 11.8%, #EABC70 13.9%, #D8960E 15.8%, #BC6504 17.5%, #A43C4D 18.6%, #880075 19.6%, #4E00A5 21.2%, #3324B1 21.7%, #003CBB 22.2%, #0091D6 24.8%, #72C5C4 27.5%, #9FD4AA 28.9%, #CCD973 30.8%, #EFCB07 33.0%, #FDAA30 35.0%, #F67088 37.3%, #CF18BF 39.8%, #8C3BD1 42.0%, #6757D1 42.8%, #0075CB 43.8%, #00B89A 46.8%, #53D352 49.7%, #B5CE50 52.0%, #EFB08C 54.6%, #FF7DB9 57.3%, #F154C4 59.8%, #BE63B3 62.3%, #88829B 64.0%, #57958A 65.1%, #03A37D 66.0%, #00BE70 68.6%, #6EC391 71.6%, #C1B1AE 74.4%, #E598B5 76.8%, #EF82AB 79.0%, #E77999 81.1%, #CE8089 83.2%, #8B9E8C 86.8%, #5BB1A2 89.9%, #88B3AA 93.9%, #D6938F 100.0%);
+
+  /* page roles, light */
+  --bg: #EBEBEB;
+  --surface: #F6F6F6;
+  --plate: #F6F6F6;
+  --text: #0E0E0E;
+  --text-2: #4A4A4A;
+  --text-3: #7E7E7E;
+  --line: rgba(14,14,14,0.10);
+  --line-2: rgba(14,14,14,0.22);
+  --mark: #0E0E0E;
+  --stage: #0E0E0E;
+  --on-stage: #ECECEC;
+
+  --r-sm: 6px;
+  --measure: 62ch;
+  --ease: cubic-bezier(.22,1,.36,1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E0E0E; --surface: #151515; --plate: #151515;
+    --text: #ECECEC; --text-2: #B4B4B4; --text-3: #8A8A8A;
+    --line: rgba(255,255,255,0.10); --line-2: rgba(255,255,255,0.22);
+    --mark: #ECECEC; --grad-ground: linear-gradient(180deg, #1A1A1A 0%, #0E0E0E 100%);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E0E0E; --surface: #151515; --plate: #151515;
+  --text: #ECECEC; --text-2: #B4B4B4; --text-3: #8A8A8A;
+  --line: rgba(255,255,255,0.10); --line-2: rgba(255,255,255,0.22);
+  --mark: #ECECEC; --grad-ground: linear-gradient(180deg, #1A1A1A 0%, #0E0E0E 100%);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.4; font-weight: 400; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p { margin: 0; font-weight: 400; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* shell: rail + main */
+.shell { max-width: 1560px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: clamp(28px, 3.8vw, 56px); }
+.rail { position: sticky; top: 0; height: 100vh; padding: 48px 24px 48px 0; border-right: 1px solid var(--line); display: flex; flex-direction: column; }
+.railbrand { display: block; text-decoration: none; margin-bottom: 28px; }
+.railbrand svg { display: block; height: 18px; width: auto; margin-bottom: 12px; color: var(--mark); }
+.railbrand-t { font-size: 21px; line-height: 1.12; letter-spacing: -0.01em; display: block; }
+.toc { display: flex; flex-direction: column; }
+.toc a { position: relative; font-size: 13.5px; color: var(--text-3); text-decoration: none; padding: 7px 0; }
+.toc a:hover, .toc a.active { color: var(--text); }
+.toc a.active::before { content: ""; position: absolute; left: -13px; top: 50%; width: 5px; height: 5px; border-radius: 50%; background: var(--text-3); transform: translateY(-50%); }
+.railfoot { margin-top: auto; display: flex; flex-direction: column; gap: 12px; }
+.theme { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0; cursor: pointer; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+.theme i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid currentColor; background: var(--text); }
+.railnote { font-size: 11px; color: var(--text-3); line-height: 1.35; }
+
+main { min-width: 0; max-width: 1180px; width: 100%; }
+.card { border-top: 1px solid var(--line); padding: clamp(34px, 4.6vw, 60px) 0; scroll-margin-top: 8px; }
+.card:last-of-type { padding-bottom: clamp(48px, 6vw, 80px); }
+.hero { border-top: 0; padding-top: 48px; }
+h2 { font-size: clamp(22px, 3vw, 32px); line-height: 1.05; letter-spacing: -0.02em; }
+h3 { font-size: clamp(17px, 1.9vw, 21px); line-height: 1.1; letter-spacing: -0.012em; }
+.sub-h { margin-top: clamp(28px, 3.4vw, 44px); }
+.sub { color: var(--text-2); font-size: clamp(15px, 1.5vw, 18px); line-height: 1.28; max-width: var(--measure); margin-top: 10px; }
+.sub + .sub { margin-top: 8px; }
+.lede { font-size: clamp(17px, 1.7vw, 21px); line-height: 1.24; letter-spacing: -0.01em; max-width: 40ch; margin-top: 16px; }
+.eyebrow { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+.note { font-size: 12.5px; color: var(--text-3); max-width: var(--measure); margin-top: 12px; }
+.block { margin-top: 20px; }
+
+/* hero plate */
+.heroplate { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-sm); background: var(--grad-ground); border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; }
+.heroplate svg { width: min(40%, 380px); height: auto; color: var(--ink); }
+:root[data-theme="dark"] .heroplate svg { color: var(--paper); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .heroplate svg { color: var(--paper); } }
+.heroplate .legend { position: absolute; left: 18px; bottom: 18px; }
+.heroplate .cap { position: absolute; right: 18px; bottom: 16px; }
+
+/* about */
+.cols3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 20px; }
+.cols3 p { font-size: 13.5px; line-height: 1.38; color: var(--text); margin-top: 8px; }
+.cols3 .caps { text-transform: uppercase; font-size: 11px; letter-spacing: .06em; line-height: 1.5; }
+
+/* the four-box legend (chosen visual) */
+.legend { display: inline-grid; grid-template-columns: repeat(4, 22px); height: 14px; border: 1px solid var(--register); }
+.legend i { border-left: 1px solid var(--register); }
+.legend i:first-child { border-left: 0; }
+
+/* mark cards */
+.markgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 20px; }
+.mcard { background: #F6F6F6; color: #0E0E0E; border: 1px solid var(--line); border-radius: var(--r-sm); padding: 34px 20px 18px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.mcard.dark { background: var(--ink); border-color: #262626; color: var(--paper); }
+.mcard .art { border: 1px dashed currentColor; padding: 18px 22px; opacity: 1; display: grid; place-items: center; min-height: 104px; }
+.mcard .art { border-color: color-mix(in srgb, currentColor 28%, transparent); }
+.mcard .art svg { display: block; height: 68px; width: auto; }
+.mcard .lbl { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: color-mix(in srgb, currentColor 60%, transparent); }
+.mcard .row { display: flex; gap: 8px; align-items: center; font-size: 10.5px; color: color-mix(in srgb, currentColor 60%, transparent); }
+.pillbtn { border: 1px solid color-mix(in srgb, currentColor 30%, transparent); background: none; border-radius: 999px; padding: 3px 10px; font-size: 10.5px; cursor: pointer; color: inherit; }
+.pillbtn:hover { border-color: currentColor; }
+
+/* tables */
+.tbl { overflow-x: auto; margin-top: 16px; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 13px; }
+th { font-weight: 400; text-align: left; color: var(--text); padding: 10px 14px 10px 0; border-bottom: 1px solid var(--line-2); font-size: 12.5px; }
+td { padding: 11px 14px 11px 0; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--text-2); }
+td:first-child { color: var(--text); }
+.tag { display: inline-block; border: 1px solid var(--line-2); border-radius: 4px; padding: 1px 6px; font-size: 11px; color: var(--text-2); white-space: nowrap; }
+.aa { font-size: 26px; line-height: 1; color: var(--text); }
+.sw { display: inline-block; width: 11px; height: 11px; vertical-align: -1px; margin-right: 8px; border: 1px solid var(--register); }
+
+/* color */
+.phases { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 20px; }
+.phase { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
+.phase .chip { height: clamp(110px, 14vw, 180px); border-bottom: 1px solid var(--line); }
+.phase .meta { padding: 12px 14px 14px; display: grid; gap: 3px; }
+.phase .nm { font-size: 15px; }
+.phase .kv { font-size: 11.5px; color: var(--text-3); display: flex; justify-content: space-between; gap: 8px; }
+.orders { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 14px 20px; align-items: center; margin-top: 18px; }
+.orders .legend { grid-template-columns: repeat(4, 32px); height: 18px; }
+.orders .t { font-size: 13.5px; color: var(--text-2); }
+.orders .t b { font-weight: 400; color: var(--text); display: block; }
+
+/* grayscale */
+.greys { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 20px; }
+.grey .chip { height: 56px; border-radius: var(--r-sm); border: 1px solid var(--line); }
+.grey .k { font-size: 10.5px; color: var(--text-3); margin-top: 8px; }
+.grey .v { font-size: 11.5px; color: var(--text); text-transform: uppercase; }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; margin-top: 12px; }
+.gradplate { height: 110px; border-radius: var(--r-sm); border: 1px solid var(--line); background: linear-gradient(180deg, #EBEBEB 0%, #BFBFBF 55%, #EEEEEE 100%); }
+.gradaxis { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-3); margin-top: 8px; }
+.pluge { display: grid; grid-template-columns: repeat(3, 1fr); height: 110px; border-radius: var(--r-sm); overflow: hidden; border: 1px solid var(--line); }
+.pluge div { display: flex; align-items: flex-end; padding: 8px 10px; font-size: 10.5px; color: #8A8A8A; }
+
+/* atoms */
+.matrix { display: grid; grid-template-columns: 90px repeat(5, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); margin-top: 20px; overflow: hidden; }
+.matrix > div { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 14px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; min-width: 0; }
+.matrix > div:nth-child(6n) { border-right: 0; }
+.matrix > div:nth-last-child(-n+6) { border-bottom: 0; }
+.matrix .h { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); padding: 10px; }
+.matrix .rh { align-items: flex-start; }
+.matrix svg { width: 54px; height: 54px; color: var(--text-2); }
+.matrix .n { font-size: 13px; color: var(--text); }
+.matrix .c { font-size: 11px; color: var(--text-3); }
+.cov { display: block; width: 100%; max-width: 110px; height: 6px; background-image: repeating-linear-gradient(to right, var(--line-2) 0 1px, transparent 1px 4px); position: relative; }
+.cov i { position: absolute; inset: 0 auto 0 0; background: var(--text-2); }
+.units { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.unit { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); }
+.unit .top { height: 92px; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 20px; }
+.unit .top svg { width: 46px; height: 46px; color: var(--text-2); }
+.unit .bd { padding: 12px 20px 18px; }
+.unit .dots { display: flex; gap: 6px; margin-bottom: 10px; }
+.unit .dots svg { width: 13px; height: 13px; }
+.unit .nm { font-size: 15px; }
+.unit .nm span { font-size: 11px; color: var(--text-3); margin-left: 6px; }
+.unit p { font-size: 12.5px; color: var(--text-2); margin-top: 6px; max-width: 48ch; }
+
+/* the reading */
+.rule { border-left: 2px solid var(--text); padding-left: 16px; font-size: clamp(18px, 2vw, 24px); line-height: 1.22; letter-spacing: -0.01em; max-width: 34ch; margin-top: 20px; }
+.fieldwrap { display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 8px; margin-top: 20px; }
+.fieldplate { position: relative; background: var(--stage); border-radius: var(--r-sm); overflow: hidden; aspect-ratio: 16 / 10; touch-action: none; cursor: crosshair; }
+.fieldplate canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.fieldplate .hint { position: absolute; left: 14px; top: 12px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #8A8A8A; pointer-events: none; }
+.scale { background: var(--stage); color: var(--on-stage); border-radius: var(--r-sm); padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 11.5px; }
+.scale .eyebrow { color: #8A8A8A; }
+.scalebar { display: grid; grid-template-rows: repeat(4, 1fr) 2.2fr; height: 220px; border: 1px solid var(--register); }
+.scalebar i { border-top: 1px solid var(--register); position: relative; }
+.scalebar i:first-child { border-top: 0; }
+.scalebar i.grey { background: linear-gradient(180deg, #555, #111); }
+.scalekey { display: grid; gap: 4px; color: #B4B4B4; }
+.scalekey span { display: flex; justify-content: space-between; }
+.scale input { width: 100%; accent-color: var(--paper); }
+.film { position: relative; height: 56px; border-radius: var(--r-sm); border: 1px solid var(--line); background: var(--film); margin-top: 20px; }
+.film .mk { position: absolute; top: -5px; bottom: -5px; width: 1px; background: var(--text); }
+.film .mk span { position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); font-size: 10.5px; white-space: nowrap; color: var(--text-2); display: flex; align-items: center; gap: 4px; }
+.film .mk span i { width: 8px; height: 8px; border: 1px solid var(--register); }
+.filmaxis { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-3); margin-top: 30px; }
+
+/* studies and references: image cards */
+.vgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; margin-top: 14px; }
+.vcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: border-color .2s var(--ease); }
+a.vcard:hover { border-color: var(--line-2); }
+.vcard .img { aspect-ratio: 4 / 3; background: var(--ink); overflow: hidden; display: grid; place-items: center; }
+.vcard .img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s var(--ease); }
+a.vcard:hover .img img { transform: scale(1.03); }
+.vcard .img.paper { background: #F6F6F6; }
+.vcard .img.paper img { object-fit: contain; width: 84%; height: auto; }
+.vcard .img svg { width: 78%; height: 78%; }
+.vcard .t { font-size: 14.5px; margin: 12px 14px 4px; }
+.vcard .m { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); margin: 0 14px 6px; }
+.vcard .d { font-size: 12.5px; color: var(--text-2); margin: 0 14px 14px; line-height: 1.38; }
+.grouph { margin-top: 30px; }
+.grouph:first-of-type { margin-top: 22px; }
+
+/* tokens */
+.tgroup { font-size: 13px; margin-top: 22px; }
+.tgroupn { font-size: 12.5px; color: var(--text-3); margin-top: 4px; max-width: var(--measure); }
+.tgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 10px 0 20px; align-items: start; }
+.tcard { display: flex; flex-direction: column; padding: 0 0 12px; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); cursor: pointer; overflow: hidden; min-height: 132px; transition: border-color .2s var(--ease); }
+.tcard:hover { border-color: var(--line-2); }
+.tsw { display: block; height: 58px; width: 100%; border-bottom: 1px solid var(--line); }
+.tsw.glyph, .tsw.type { display: flex; align-items: center; justify-content: center; background: var(--bg); color: var(--text); }
+.tsw.glyph svg { width: 34px; height: 34px; }
+.tsw.type { font-size: 26px; }
+.tbody { display: flex; flex-direction: column; gap: 3px; padding: 11px 12px 0; min-width: 0; }
+.tnm { font-size: 12.5px; line-height: 1.25; color: var(--text); }
+.tkv { font-size: 11px; color: var(--text-3); overflow-wrap: anywhere; }
+.thx { font-size: 11px; color: var(--text-2); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.tcard.copied .thx { color: var(--text); }
+.tcard.copied .thx::after { content: " · copied"; text-transform: none; }
+
+.foot { font-size: 12px; color: var(--text-3); padding: 0 0 48px; }
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; padding: 0 16px; gap: 0; }
+  .rail { position: static; height: auto; padding: 24px 0 18px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .toc { flex-direction: row; flex-wrap: wrap; gap: 0 16px; }
+  .toc a.active::before { display: none; }
+  .railfoot { margin-top: 16px; }
+  .cols3, .split { grid-template-columns: 1fr; }
+  .phases { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .greys { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .markgrid, .units { grid-template-columns: 1fr; }
+  .fieldwrap { grid-template-columns: 1fr; }
+  .scalebar { height: 120px; }
+  .matrix { grid-template-columns: 64px repeat(5, minmax(0, 1fr)); }
+  .matrix svg { width: 36px; height: 36px; }
+  .matrix .n { font-size: 11px; }
+  .orders { grid-template-columns: 1fr; gap: 6px 0; }
+  .orders .t { margin-bottom: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- glyphs, unit box -0.5..0.5, from the Figma masters -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="g-square" d="M-0.5 -0.5L0.5 -0.5L0.5 0.5L-0.5 0.5L-0.5 -0.5Z"/>
+    <path id="g-screw" fill-rule="evenodd" d="M0 -0.5C0.27614 -0.5 0.5 -0.27614 0.5 0C0.5 0.27614 0.27614 0.5 0 0.5C-0.27614 0.5 -0.5 0.27614 -0.5 0C-0.5 -0.27614 -0.27614 -0.5 0 -0.5ZM-0.03857 -0.26667L-0.03857 -0.03857L-0.26667 -0.03857L-0.26667 0.03857L-0.03857 0.03857L-0.03857 0.26667L0.03857 0.26667L0.03857 0.03857L0.26667 0.03857L0.26667 -0.03857L0.03857 -0.03857L0.03857 -0.26667L-0.03857 -0.26667Z"/>
+    <path id="g-cross" d="M-0.07231 -0.5L0.07231 -0.5L0.07231 -0.07231L0.5 -0.07231L0.5 0.07231L0.07231 0.07231L0.07231 0.5L-0.07231 0.5L-0.07231 0.07231L-0.5 0.07231L-0.5 -0.07231L-0.07231 -0.07231L-0.07231 -0.5Z"/>
+    <path id="g-mono" fill-rule="evenodd" d="M-0.00001 -0.5C0.27614 -0.5 0.5 -0.27615 0.5 -0.00001L0.49984 0.0129C0.493 0.28308 0.27182 0.5 -0.00001 0.5L-0.0129 0.49984C-0.28308 0.493 -0.5 0.27182 -0.5 -0.00001C-0.5 -0.27614 -0.27614 -0.5 -0.00001 -0.5ZM-0.00001 -0.43228C-0.23874 -0.43227 -0.43227 -0.23874 -0.43228 -0.00001C-0.43228 0.23873 -0.23874 0.43227 -0.00001 0.43228C0.23873 0.43228 0.43228 0.23873 0.43228 -0.00001C0.43227 -0.23874 0.23873 -0.43228 -0.00001 -0.43228ZM0.24338 0.22766L0.17857 0.22766L0.11813 0.07691L-0.11781 0.07691L-0.17753 0.22766L-0.24161 0.22766L-0.03479 -0.29083L0.03365 -0.29083L0.24338 0.22766ZM-0.0013 -0.22457C-0.03188 -0.14301 -0.06271 -0.06291 -0.09378 0.01574L-0.09597 0.02157L0.09628 0.02157L0.09337 0.01502C0.07007 -0.04275 0.03851 -0.12262 -0.0013 -0.22457Z"/>
+    <!-- the device: square beside screw, 252.79 x 124.27 on the masters -->
+    <symbol id="device" viewBox="0 0 252.79 124.27">
+      <rect x="0" y="0" width="124.27" height="124.27" fill="currentColor"/>
+      <use href="#g-screw" fill="currentColor" transform="translate(190.655 62.135) scale(124.27)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="shell">
+  <aside class="rail">
+    <a class="railbrand" href="#top" aria-label="Studio Artifice research, top">
+      <svg viewBox="0 0 252.79 124.27" aria-hidden="true"><use href="#device"/></svg>
+      <span class="railbrand-t">Studio Artifice<br>Research</span>
+    </a>
+    <nav class="toc" id="toc" aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#mark">Mark</a>
+      <a href="#color">Color</a>
+      <a href="#grayscale">Grayscale</a>
+      <a href="#type">Typography</a>
+      <a href="#atoms">Atoms</a>
+      <a href="#reading">The Reading</a>
+      <a href="#studies">Studies</a>
+      <a href="#tokens">Tokens</a>
+      <a href="#refs">References</a>
+    </nav>
+    <div class="railfoot">
+      <button class="theme" id="theme" type="button"><i></i><span>Light mode</span></button>
+      <p class="railnote">Working draft, October 2026. Research, not yet guideline.</p>
+    </div>
+  </aside>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="card hero">
+      <div class="heroplate">
+        <svg viewBox="0 0 252.79 124.27" role="img" aria-label="Studio Artifice device: a square beside the screw"><use href="#device"/></svg>
+        <span class="legend" aria-label="Phase colors, Figma order"><i style="background:var(--strategy)"></i><i style="background:var(--identity)"></i><i style="background:var(--application)"></i><i style="background:var(--production)"></i></span>
+        <span class="cap eyebrow">Square · Screw</span>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="card" id="about">
+      <h2>About</h2>
+      <p class="sub">This page lays out the R&amp;D behind the Studio Artifice identity in the shape the final guideline will take. Everything here is a study. Nothing is yet a rule unless it says so.</p>
+      <div class="cols3">
+        <div><span class="eyebrow">Phases</span><p class="caps">Strategy, Identity, Application, Production</p></div>
+        <div><span class="eyebrow">The question</span><p>The identity is strictly monochrome, and it carries four phase colors. What are those colors for? Three instrument traditions give the same answer: in thermal imaging, thin-film interference and color bars, color is a reading on a declared scale, never decoration.</p></div>
+        <div><span class="eyebrow">Thesis</span><p>Color appears only with its reference, and the row of four squares is that reference. Hue never builds hierarchy. It only reports a condition.</p></div>
+      </div>
+    </section>
+
+    <!-- MARK -->
+    <section class="card" id="mark">
+      <h2>Mark</h2>
+      <p class="sub">Two shapes. The square is the printed patch. The screw is a circle with a cross cut out of its centre, and it is never drawn as a plain filled circle. Set side by side they are the device; the Ⓐ monogram sits beside the wordmark.</p>
+      <div class="markgrid">
+        <div class="mcard">
+          <div class="art"><svg viewBox="0 0 252.79 124.27" aria-label="Device"><use href="#device"/></svg></div>
+          <span class="lbl">Device · Light</span>
+          <span class="row"><span class="num">252.79 × 124.27</span><button class="pillbtn" data-dl="device" data-ink="#0E0E0E">SVG</button></span>
+        </div>
+        <div class="mcard dark">
+          <div class="art"><svg viewBox="0 0 252.79 124.27" aria-label="Device"><use href="#device"/></svg></div>
+          <span class="lbl">Device · Dark</span>
+          <span class="row"><span class="num">252.79 × 124.27</span><button class="pillbtn" data-dl="device" data-ink="#ECECEC">SVG</button></span>
+        </div>
+        <div class="mcard">
+          <div class="art"><svg viewBox="-0.5 -0.5 1 1" aria-label="A monogram"><use href="#g-mono" fill="currentColor"/></svg></div>
+          <span class="lbl">Ⓐ monogram · Light</span>
+          <span class="row"><span class="num">135.65 square</span><button class="pillbtn" data-dl="mono" data-ink="#0E0E0E">SVG</button></span>
+        </div>
+        <div class="mcard dark">
+          <div class="art"><svg viewBox="-0.5 -0.5 1 1" aria-label="A monogram"><use href="#g-mono" fill="currentColor"/></svg></div>
+          <span class="lbl">Ⓐ monogram · Dark</span>
+          <span class="row"><span class="num">135.65 square</span><button class="pillbtn" data-dl="mono" data-ink="#ECECEC">SVG</button></span>
+        </div>
+      </div>
+
+      <h3 class="sub-h">On the masters</h3>
+      <p class="sub">The wordmark is fixed, outlined art. No live font matches it, so it is never re-set in type.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Element</th><th>Master</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Device</td><td class="num">252.79 × 124.27</td><td>A solid square beside the screw. Used from 14 px to 949 px.</td></tr>
+          <tr><td>Wordmark</td><td class="num">1662.39 × 217.19</td><td>Outlined. Reads as Helvetica Now Display.</td></tr>
+          <tr><td>Ⓐ monogram</td><td class="num">135.65 square</td><td>A component instance on the cover.</td></tr>
+          <tr><td>Lockup</td><td class="num">1856 × 269.6</td><td>Wordmark plus Ⓐ. No master combines device, wordmark and Ⓐ.</td></tr>
+          <tr><td>Clear space</td><td>2x / 1x</td><td>2x on top, bottom and outer sides; 1x between wordmark and Ⓐ.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="sub-h">Open decisions</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Decision</th><th>Options</th></tr></thead>
+        <tbody>
+          <tr><td>Lockup</td><td>Two-part (wordmark and Ⓐ, as drawn), or a new three-part master with the device.</td></tr>
+          <tr><td>Greys</td><td>Warm (#5C5A54, #7A7871) or neutral.</td></tr>
+          <tr><td>Mark on light grounds</td><td>Pure white, or an off-white paper.</td></tr>
+          <tr><td>Minimum sizes</td><td>Not yet set for the device or the lockup.</td></tr>
+          <tr><td>Row order</td><td>Which phase owns which color is fixed. The order of the row is open (see Color).</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- COLOR -->
+    <section class="card" id="color">
+      <h2>Color</h2>
+      <p class="sub">Four phase colors, each tied to one phase. Measured, they span both media: three sit near print's process inks, one near the screen's blue primary. Mixed as light at 41 : 23 : 10 : 26 they balance to a neutral grey near L* 76, so the monochrome system is their balanced sum.</p>
+      <div class="phases">
+        <div class="phase"><div class="chip" style="background:var(--strategy)"></div><div class="meta"><span class="nm">Strategy</span><span class="kv num"><span>#D2FF1E</span><span>L* 94 · 72°</span></span><span class="kv">Lime · film 308 nm</span></div></div>
+        <div class="phase"><div class="chip" style="background:var(--identity)"></div><div class="meta"><span class="nm">Identity</span><span class="kv num"><span>#FF1BD1</span><span>L* 59 · 312°</span></span><span class="kv">Magenta · film 398 nm</span></div></div>
+        <div class="phase"><div class="chip" style="background:var(--application)"></div><div class="meta"><span class="nm">Application</span><span class="kv num"><span>#00EBEF</span><span>L* 85 · 181°</span></span><span class="kv">Cyan · film 275 nm</span></div></div>
+        <div class="phase"><div class="chip" style="background:var(--production)"></div><div class="meta"><span class="nm">Production</span><span class="kv num"><span>#0009FF</span><span>L* 33 · 238°</span></span><span class="kv">Blue · film 222 nm</span></div></div>
+      </div>
+
+      <h3 class="sub-h">Two orders</h3>
+      <p class="sub">The Figma order is canonical. Film order is a proposal: it is the order a thin film passes through as it thickens, and the order the thermal mannequin already uses for heat.</p>
+      <div class="orders">
+        <span class="legend"><i style="background:var(--strategy)"></i><i style="background:var(--identity)"></i><i style="background:var(--application)"></i><i style="background:var(--production)"></i></span>
+        <span class="t"><b>Figma order · canonical</b>Strategy, Identity, Application, Production. In grey: four keys that dip and recover (L* 94, 59, 85, 33).</span>
+        <span class="legend"><i style="background:var(--production)"></i><i style="background:var(--application)"></i><i style="background:var(--strategy)"></i><i style="background:var(--identity)"></i></span>
+        <span class="t"><b>Film order · proposed</b>Production, Application, Strategy, Identity. Thickness 222, 275, 308, 398 nm, and heat order on the mannequin.</span>
+        <span class="legend"><i style="background:var(--strategy)"></i><i style="background:var(--application)"></i><i style="background:var(--identity)"></i><i style="background:var(--production)"></i></span>
+        <span class="t"><b>Color-bar order · reference</b>Strategy, Application, Identity, Production. In grey, a descending staircase like SMPTE bars on a waveform.</span>
+      </div>
+      <p class="note">Only the staircase reading depends on order. Every study on this page runs in either order.</p>
+
+      <h3 class="sub-h">Usage</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Rule</th><th>Why</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>A block never appears without its scale.</td><td>Thermal color only means something next to its scale bar.</td><td><span class="tag">Proposed</span></td></tr>
+          <tr><td>Exact hexes only in bands, isotherms and readings.</td><td>The mannequin photo lands 0% on target on the vectorscope; the photo is the picture, the hexes are the measurement.</td><td><span class="tag">Proposed</span></td></tr>
+          <tr><td>Iridescence never fills a surface.</td><td>Film color appears only where two layers meet, and its hue reports the gap.</td><td><span class="tag">Proposed</span></td></tr>
+          <tr><td>The row of four is the check strip.</td><td>Every other appearance of color is checked against it.</td><td><span class="tag">Proposed</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- GRAYSCALE -->
+    <section class="card" id="grayscale">
+      <h2>Grayscale</h2>
+      <p class="sub">Grounds, the register-mark grey, the warm greys from the masters, and the three near-blacks the screen pages are built on.</p>
+      <div class="greys" id="greys"></div>
+
+      <h3 class="sub-h">Ground gradient</h3>
+      <div class="split">
+        <p class="sub" style="margin-top:0">One gradient from the masters, a light falloff behind a figure, never under text and never with a hue in it. It reads as lit, not filled.</p>
+        <div><div class="gradplate"></div><div class="gradaxis num"><span>0% · EBEBEB</span><span>55% · BFBFBF</span><span>100% · EEEEEE</span></div></div>
+      </div>
+
+      <h3 class="sub-h">Near-blacks</h3>
+      <div class="split">
+        <p class="sub" style="margin-top:0">Ink, panel and line sit at L* 4, 8 and 14. A badly set screen merges them, so the black level check is built from exactly these three: if the line and panel steps vanish, the display is crushing blacks.</p>
+        <div class="pluge"><div style="background:#0E0E0E">Ink · L* 4</div><div style="background:#151515">Panel · L* 8</div><div style="background:#262626">Line · L* 14</div></div>
+      </div>
+    </section>
+
+    <!-- TYPE -->
+    <section class="card" id="type">
+      <h2>Typography</h2>
+      <p class="sub">One family. Helvetica Now Display is the only typeface, everywhere: pages, decks, Rive files and the design system. There is no monospace anywhere, not even for figures or code. Hierarchy comes from scale and value, never weight; Light is kept for display sizes.</p>
+      <h3 class="sub-h">Faces</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Preview</th><th>Face</th><th>Token</th><th>Use</th><th>Stack</th></tr></thead>
+        <tbody>
+          <tr><td><span class="aa">Aa</span></td><td>Helvetica Now Display Regular</td><td><span class="tag">--type-text</span></td><td>All text, labels, figures</td><td>Helvetica Now Display, Helvetica Neue, Helvetica, Arial, sans-serif</td></tr>
+          <tr><td><span class="aa" style="font-weight:300">Aa</span></td><td>Helvetica Now Display Light</td><td><span class="tag">--type-display</span></td><td>Display sizes only</td><td>Same stack, weight 300</td></tr>
+        </tbody>
+      </table></div>
+      <h3 class="sub-h">Steps on the masters</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Preview</th><th>Step</th><th>Size</th><th>Case</th><th>Tracking</th><th>Where</th></tr></thead>
+        <tbody>
+          <tr><td><span class="aa" style="font-size:34px;font-weight:300">Aa</span></td><td>Display</td><td class="num">Scaled to format</td><td>Sentence</td><td class="num">−2%</td><td>Covers, titles, reel cards</td></tr>
+          <tr><td><span class="aa">Aa</span></td><td>Body</td><td class="num">24 px</td><td>Sentence</td><td class="num">+12%</td><td>Index and slide body text</td></tr>
+          <tr><td><span class="aa" style="font-size:18px;letter-spacing:.06em">AA</span></td><td>Label</td><td class="num">18 px</td><td>Uppercase</td><td class="num">—</td><td>Phase bar, taglines, chapter numbers, slide headers</td></tr>
+          <tr><td><span class="aa" style="font-size:18px">Aa</span></td><td>Caption</td><td class="num">18 px</td><td>Sentence</td><td class="num">—</td><td>Index chapter labels</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Settings lines that read like instruments (ε 0.95 · SPAN 18–36 °C) are set in Label, uppercase Regular with tabular figures, never in a monospace face.</p>
+    </section>
+
+    <!-- ATOMS -->
+    <section class="card" id="atoms">
+      <h2>Atoms</h2>
+      <p class="sub">Four primitives from the masters: square, screw, Ⓐ monogram and cross. Sorted by how much of a cell each one inks, they become a tone ramp, so any image or field can be drawn in the brand's own shapes. The chosen ramp, Brand 5, scales the cross to 72% so it sits halfway to the monogram.</p>
+      <div class="matrix" id="matrix"></div>
+      <h3 class="sub-h eyebrow" style="font-size:10.5px">The four units</h3>
+      <div class="units" id="units"></div>
+    </section>
+
+    <!-- THE READING -->
+    <section class="card" id="reading">
+      <h2>The Reading</h2>
+      <p class="sub">The idea every study tests. The field stays monochrome. Color appears only where a value crosses a declared threshold, and the scale it is read against is always on screen.</p>
+      <p class="rule">Color appears only with its reference, and the row of four squares is that reference.</p>
+
+      <h3 class="sub-h">Heat on the field</h3>
+      <p class="sub">The Shape Field with the pointer as a heat source. Brightness drifts on noise and picks a glyph from the Brand 5 ramp; heat lifts cells up the ramp and cools on a known curve. Only cells past the isotherm take a phase color, banded in heat order.</p>
+      <div class="fieldwrap">
+        <div class="fieldplate" id="fieldplate"><canvas id="field" aria-label="Shape Field with pointer heat and phase isotherms"></canvas><span class="hint">Move to add heat · press to pulse</span></div>
+        <div class="scale">
+          <span class="eyebrow">Scale · heat order</span>
+          <div class="scalebar" aria-hidden="true">
+            <i style="background:var(--identity)"></i><i style="background:var(--strategy)"></i><i style="background:var(--application)"></i><i style="background:var(--production)"></i><i class="grey"></i>
+          </div>
+          <div class="scalekey num">
+            <span><span>Identity</span><span>hottest</span></span>
+            <span><span>Strategy</span><span></span></span>
+            <span><span>Application</span><span></span></span>
+            <span><span>Production</span><span id="isoval">iso 0.55</span></span>
+          </div>
+          <label class="eyebrow" for="iso">Isotherm</label>
+          <input id="iso" type="range" min="0.25" max="0.9" step="0.01" value="0.55">
+        </div>
+      </div>
+
+      <h3 class="sub-h">Three directions, one system</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Direction</th><th>What a color means</th><th>Over time</th><th>Where the four blocks appear</th></tr></thead>
+        <tbody>
+          <tr><td>Thermal</td><td>A condition now</td><td>Live, decays</td><td>Isotherm bands on a scale bar</td></tr>
+          <tr><td>Iridescence</td><td>The gap between layers, or what has built up</td><td>Persistent</td><td>Film bands in seams, temper, the live mark</td></tr>
+          <tr><td>Color bars</td><td>A known value to check against</td><td>Fixed</td><td>The row of four as the reference strip</td></tr>
+          <tr><td>Registration</td><td>Where a plate landed against its target</td><td>Per proof</td><td>Four plates on one mark; in register they close to black</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="sub-h">Film spectrum</h3>
+      <p class="sub">Thin-film color from 0 to 1000 nm, fitted as 47 stops where position equals thickness divided by ten. All four phase colors are second-order colors of one film, which gives them a physical order. A candidate brand gradient, used only where it reports a gap or a thickness.</p>
+      <div class="film" role="img" aria-label="Film spectrum from 0 to 1000 nanometres with the four phase colors marked">
+        <span class="mk" style="left:22.2%"><span><i style="background:var(--production)"></i>222</span></span>
+        <span class="mk" style="left:27.5%"><span><i style="background:var(--application)"></i>275</span></span>
+        <span class="mk" style="left:30.8%"><span><i style="background:var(--strategy)"></i>308</span></span>
+        <span class="mk" style="left:39.8%"><span><i style="background:var(--identity)"></i>398</span></span>
+      </div>
+      <div class="filmaxis num"><span>0 nm · black</span><span>500 nm</span><span>1000 nm · pale wash</span></div>
+    </section>
+
+    <!-- STUDIES -->
+    <section class="card" id="studies">
+      <h2>Studies</h2>
+      <p class="sub">Every live study so far, by label. Each opens full screen and runs in Figma order or film order.</p>
+      <div id="studygroups"></div>
+      <h3 class="sub-h">Research notes</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Label</th><th>Research</th><th>Finding</th></tr></thead>
+        <tbody>
+          <tr><td>A1</td><td>Brand masters inventory</td><td>Mark, wordmark, monogram, lockup, clear space, color and type as drawn; decisions still open are listed under Mark.</td></tr>
+          <tr><td>B1</td><td>Shape Field plan</td><td>A grid where each cell draws the shape whose ink coverage matches a drifting noise field. Batched into four paths per frame: 1.4 ms on a phone, 5.3 ms at 2560 × 1440.</td></tr>
+          <tr><td>C1</td><td>Thermal imaging</td><td>Thermal color is false color across a declared window. Isotherms color only what crosses a threshold, which keeps a monochrome brand monochrome.</td></tr>
+          <tr><td>E1</td><td>Iridescence</td><td>Thin-film color is a reading of the distance between two surfaces. Industry already uses it as a gauge.</td></tr>
+          <tr><td>F1</td><td>Color bars and print checks</td><td>Bars and control strips are references of known value that travel with the work. The brand calls the square the printed patch, so the row of four is a test strip.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- TOKENS -->
+    <section class="card" id="tokens">
+      <h2>Tokens</h2>
+      <p class="sub">Every value above, by name. Select a card to copy its value. Names follow the Rive brand library, which every motion file is built from.</p>
+      <div id="tokrows"></div>
+    </section>
+
+    <!-- REFERENCES -->
+    <section class="card" id="refs">
+      <h2>References</h2>
+      <p class="sub">What the system is measured against. Each source is an instrument that uses color as a reading, and each one informed a study above.</p>
+      <div id="refgroups"></div>
+    </section>
+
+    <p class="foot">Studio Artifice · Research draft · October 2026 · Set in Helvetica Now Display where installed.</p>
+  </main>
+</div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+  const glyph = (id, fill = "currentColor") => `<svg viewBox="-0.5 -0.5 1 1" aria-hidden="true"><use href="#g-${id}" fill="${fill}"/></svg>`;
+  const crossScaled = (s, fill = "currentColor") => `<svg viewBox="-0.5 -0.5 1 1" aria-hidden="true"><use href="#g-cross" fill="${fill}" transform="scale(${s})"/></svg>`;
+
+  /* ---------- theme ---------- */
+  const root = document.documentElement, tbtn = $("#theme");
+  const sysDark = () => matchMedia("(prefers-color-scheme: dark)").matches;
+  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : sysDark();
+  const syncTheme = () => { tbtn.lastElementChild.textContent = isDark() ? "Dark mode" : "Light mode"; };
+  try { const t = localStorage.getItem("safx-research-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  tbtn.onclick = () => { root.dataset.theme = isDark() ? "light" : "dark"; try { localStorage.setItem("safx-research-theme", root.dataset.theme); } catch (e) {} syncTheme(); };
+  syncTheme();
+
+  /* ---------- rail highlight ---------- */
+  const links = [...document.querySelectorAll("#toc a")];
+  const io = new IntersectionObserver(es => {
+    for (const e of es) if (e.isIntersecting) links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
+  }, { rootMargin: "-30% 0px -60% 0px" });
+  links.forEach(a => { const s = $(a.getAttribute("href")); if (s) io.observe(s); });
+
+  /* ---------- SVG downloads ---------- */
+  const paths = id => $("#g-" + id).getAttribute("d");
+  document.querySelectorAll("[data-dl]").forEach(b => b.onclick = () => {
+    const ink = b.dataset.ink, k = b.dataset.dl;
+    let svg;
+    if (k === "device") svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252.79 124.27"><rect width="124.27" height="124.27" fill="${ink}"/><path fill="${ink}" fill-rule="evenodd" transform="translate(190.655 62.135) scale(124.27)" d="${paths("screw")}"/></svg>`;
+    else svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 1 1" width="135.65" height="135.65"><path fill="${ink}" fill-rule="evenodd" d="${paths("mono")}"/></svg>`;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+    a.download = `safx-${k}-${ink === "#0E0E0E" ? "light" : "dark"}.svg`;
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+
+  /* ---------- greys ---------- */
+  const GREYS = [
+    ["Ground 1", "#F6F6F6"], ["Ground 2", "#EBEBEB"], ["Ground 3", "#CACACA"], ["Register", "#9A9A9A"], ["Warm 06", "#7A7871"], ["Warm 05", "#5C5A54"],
+    ["Paper", "#ECECEC"], ["Ramp mid", "#BFBFBF"], ["Muted", "#969696"], ["Line", "#262626"], ["Panel", "#151515"], ["Ink", "#0E0E0E"],
+  ];
+  const gw = $("#greys");
+  for (const [k, v] of GREYS) gw.append(el("div", "grey", `<div class="chip" style="background:${v}"></div><div class="k">${k}</div><div class="v num">${v.slice(1)}</div>`));
+
+  /* ---------- atoms ---------- */
+  const RAMP = [
+    { n: "Blank", c: 0, svg: `<svg viewBox="-0.5 -0.5 1 1"><rect x="-0.5" y="-0.5" width="1" height="1" fill="none" stroke="currentColor" stroke-width="0.01" stroke-dasharray="0.03 0.03" opacity=".5"/></svg>` },
+    { n: "Cross at 72%", c: 9, svg: crossScaled(0.72) },
+    { n: "Ⓐ monogram", c: 19, svg: glyph("mono") },
+    { n: "Screw", c: 48, svg: glyph("screw") },
+    { n: "Square", c: 67, svg: glyph("square") },
+  ];
+  const mx = $("#matrix");
+  mx.append(el("div", "h rh", "Ramp"));
+  RAMP.forEach((r, i) => mx.append(el("div", "h", "Step " + i)));
+  mx.append(el("div", "h rh", "Glyph"));
+  RAMP.forEach(r => mx.append(el("div", "", `${r.svg}<span class="n">${r.n}</span>`)));
+  mx.append(el("div", "h rh", "Ink"));
+  RAMP.forEach(r => mx.append(el("div", "", `<span class="cov"><i style="width:${r.c / 0.67 * 100}%"></i></span><span class="c num">${r.c}%</span>`)));
+
+  const PH = ["var(--strategy)", "var(--identity)", "var(--application)", "var(--production)"];
+  const UNITS = [
+    { id: "square", nm: "Square", tag: "patch", p: "The printed patch. Tiles at the grid's own pitch and fills the cell. In a row of four it is the reference strip every color is checked against." },
+    { id: "screw", nm: "Screw", tag: "lens", p: "A circle with a cross cut from its centre, never a plain circle. It is also the registration mark and the vectorscope graticule: one shape, three instruments." },
+    { id: "mono", nm: "Ⓐ monogram", tag: "stamp", p: "The letter inside its ring. A ramp step, and the shape cells gather into at the end of a sting or under a click on the logo." },
+    { id: "cross", nm: "Cross", tag: "axes", p: "The cut-out of the screw, drawn alone. Crosshair, plus, the scope's axes. Scaled to 72% it is the lightest tone on the ramp." },
+  ];
+  const uw = $("#units");
+  for (const u of UNITS) uw.append(el("div", "unit", `<div class="top">${glyph(u.id)}</div><div class="bd"><div class="dots">${PH.map(c => glyph(u.id, c)).join("")}</div><div class="nm">${u.nm}<span>${u.tag}</span></div><p>${u.p}</p></div>`));
+
+  /* ---------- studies ---------- */
+  const STUDY_GROUPS = [
+    ["Field and heat", "The brand's shapes as a field, and heat as a reading on it."],
+    ["Film", "Film color as a reading of the gap between layers."],
+    ["Checks", "The row of four as a test strip, a scope and a register mark."],
+  ];
+  const STUDIES = [
+    { g: 0, id: "B2", t: "Shape Field", k: "Prototype", src: "shape-field", d: "The live field on the Brand 5 ramp. Move to light it up, click to send a ripple, tune grid, noise and pointer." },
+    { g: 0, id: "D1", t: "Mannequin directions", k: "Prototype", src: "mannequin", d: "The thermal mannequin as a field, isotherm and contour figures, a warm-up sting and the image on the scope. Its heat order is film order." },
+    { g: 1, id: "E2", t: "Temper record · Register test", k: "Prototype", src: "iridescence-1-2", d: "Heat leaves a permanent film in the field; the screw acts as an optical flat whose fringes close to black at register." },
+    { g: 1, id: "E3", t: "Original only · Interference chart · Seam · Coated lens", k: "Prototype", src: "iridescence-3-6", d: "Four iridescence studies in one tabbed page." },
+    { g: 2, id: "F2", t: "Proof strip · Grey balance", k: "Prototype · grey balance dropped", src: "color-check-prototypes", d: "Patches measured against targets; only failures take their color. Grey balance kept for reference." },
+    { g: 2, id: "F3", t: "SAFX Color Check", k: "Prototype", src: "color-check-suite", d: "Bars and tone leader with slate, a black level check from the near-blacks, and a plate switchboard." },
+    { g: 2, id: "F4", t: "Brand Vectorscope", k: "Prototype", src: "vectorscope", d: "The screw as graticule, the cross as axes, the four colors as target boxes. On-system work lands in the boxes." },
+    { g: 0, id: "G1", t: "Phase Sliders", k: "Prototype", src: "phase-sliders", d: "The four-box legend opens into a dashed rail and becomes four sliders, from isotherm thresholds to a motion cue sheet." },
+    { g: 2, id: "G2", t: "Registration Scope", k: "Prototype · sting chosen", src: "registration-scope", d: "Registration marks joined with the vectorscope. Four plates on one mark; in register they close to black." },
+  ];
+  const sg = $("#studygroups");
+  STUDY_GROUPS.forEach(([name, note], gi) => {
+    sg.append(el("p", "eyebrow grouph", name));
+    sg.append(el("p", "tgroupn", note));
+    const grid = el("div", "vgrid");
+    for (const s of STUDIES.filter(x => x.g === gi)) {
+      const a = el("a", "vcard", `<span class="img"><img loading="lazy" src="img/${s.src}.jpg" alt=""></span><span class="t">${s.t}</span><span class="m">${s.id} · ${s.k} ↗</span><span class="d">${s.d}</span>`);
+      a.href = "studies/" + s.src + ".html"; a.target = "_blank"; a.rel = "noopener";
+      grid.append(a);
+    }
+    sg.append(grid);
+  });
+
+  /* ---------- tokens ---------- */
+  const T = (nm, tk, val, sw, kind) => ({ nm, tk, val, sw: sw || val, kind });
+  const TOKENS = [
+    ["Phase", "Canonical, Figma order. One color per phase, fixed.", [
+      T("Strategy", "--strategy", "#D2FF1E"), T("Identity", "--identity", "#FF1BD1"), T("Application", "--application", "#00EBEF"), T("Production", "--production", "#0009FF"),
+    ]],
+    ["Film order", "Proposed. The same four by thickness, and by heat on the mannequin.", [
+      T("222 nm. Thinnest, coolest.", "--film-222", "#0009FF"), T("275 nm", "--film-275", "#00EBEF"), T("308 nm", "--film-308", "#D2FF1E"), T("398 nm. Thickest, hottest.", "--film-398", "#FF1BD1"),
+      T("0 to 1000 nm, 47 stops.", "--film", "Gradient", "var(--film)"),
+    ]],
+    ["Grounds", "What everything stands on.", [
+      T("The page.", "--ground-1", "#F6F6F6"), T("A container.", "--ground-2", "#EBEBEB"), T("The deep ground.", "--ground-3", "#CACACA"),
+      T("Light falling off behind a figure.", "--grad-ground", "Gradient", "linear-gradient(180deg,#EBEBEB,#BFBFBF 55%,#EEEEEE)"),
+      T("Paper on a dark page.", "--paper", "#ECECEC"),
+    ]],
+    ["Lines and greys", "Structure, and the greys still under review.", [
+      T("Every hairline and legend border.", "--register", "#9A9A9A"), T("Labels on dark.", "--muted", "#969696"),
+      T("Warm grey, open decision.", "--warm-05", "#5C5A54"), T("Warm grey, open decision.", "--warm-06", "#7A7871"),
+    ]],
+    ["Near-blacks", "The three steps the black level check is built from.", [
+      T("Line. L* 14.", "--line", "#262626"), T("Panel. L* 8.", "--panel", "#151515"), T("Ink. L* 4.", "--ink", "#0E0E0E"),
+    ]],
+    ["Glyph ramp", "Brand 5. Ink coverage of each step in its cell.", [
+      T("Blank", "--ramp-0", "0%", null, "glyph:blank"), T("Cross at 72%", "--ramp-1", "9%", null, "glyph:cross"), T("Ⓐ monogram", "--ramp-2", "19%", null, "glyph:mono"),
+      T("Screw", "--ramp-3", "48%", null, "glyph:screw"), T("Square", "--ramp-4", "67%", null, "glyph:square"),
+    ]],
+    ["Type", "One family, two weights.", [
+      T("All text. Regular.", "--type-text", "Helvetica Now Display", null, "type:400"), T("Display sizes. Light.", "--type-display", "Helvetica Now Display Light", null, "type:300"),
+    ]],
+  ];
+  const tr = $("#tokrows");
+  for (const [g, note, list] of TOKENS) {
+    tr.append(el("div", "tgroup", g)); tr.append(el("p", "tgroupn", note));
+    const grid = el("div", "tgrid");
+    for (const t of list) {
+      let sw;
+      if (t.kind && t.kind.startsWith("glyph:")) {
+        const k = t.kind.slice(6);
+        sw = `<span class="tsw glyph">${k === "blank" ? "" : k === "cross" ? crossScaled(0.72) : glyph(k)}</span>`;
+      } else if (t.kind && t.kind.startsWith("type:")) {
+        sw = `<span class="tsw type" style="font-weight:${t.kind.slice(5)}">Aa</span>`;
+      } else sw = `<span class="tsw" style="background:${t.sw}"></span>`;
+      const b = el("button", "tcard", `${sw}<span class="tbody"><span class="tnm">${t.nm}</span><span class="tkv">${t.tk}</span><span class="thx">${t.val.replace("#", "")}</span></span>`);
+      b.type = "button"; b.title = "Copy " + (t.val === "Gradient" ? t.tk : t.val);
+      b.onclick = async () => {
+        const v = t.val === "Gradient" ? `var(${t.tk})` : t.val;
+        try { await navigator.clipboard.writeText(v); b.classList.add("copied"); setTimeout(() => b.classList.remove("copied"), 1200); } catch (e) {}
+      };
+      grid.append(b);
+    }
+    tr.append(grid);
+  }
+
+  /* ---------- references ---------- */
+  const scopeSVG = `<svg viewBox="-60 -60 120 120" aria-hidden="true"><circle r="50" fill="none" stroke="#9A9A9A" stroke-width=".6"/><circle r="25" fill="none" stroke="#5C5A54" stroke-width=".4" stroke-dasharray="1 2"/><path d="M-50 0H50M0 -50V50" stroke="#9A9A9A" stroke-width=".5"/>${[[72,"#D2FF1E"],[312,"#FF1BD1"],[181,"#00EBEF"],[238,"#0009FF"]].map(([h,c])=>{const a=(h-90)*Math.PI/180,x=Math.cos(a)*38,y=Math.sin(a)*38;return `<rect x="${(x-4).toFixed(1)}" y="${(y-4).toFixed(1)}" width="8" height="8" fill="none" stroke="${c}" stroke-width=".9"/>`}).join("")}<circle r="1.4" fill="#ECECEC"/></svg>`;
+  const asciiSVG = `<svg viewBox="0 0 160 120" aria-hidden="true" font-family="Helvetica Now Display, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9" fill="#ECECEC">${(() => { const r = " .:-=+*#%@"; let s = ""; for (let y = 0; y < 11; y++) { let row = ""; for (let x = 0; x < 22; x++) { const v = (Math.sin(x * .45 + y * .2) + Math.cos(y * .6 - x * .15) + 2) / 4; row += r[Math.min(9, Math.floor(v * 10))]; } s += `<text x="4" y="${12 + y * 10}" textLength="152" xml:space="preserve">${row.replace(/&/g, "&amp;")}</text>`; } return s; })()}</svg>`;
+  const REFS = [
+    ["The instruments", "Where color is already a reading. Each one set a rule above.", [
+      { t: "Thermal imaging", m: "False color · isotherms", img: "img/ref-thermal.jpg", d: "A palette stretched across a declared temperature window, meaningless without its scale bar. Isotherms color only what crosses a threshold. Informed the Reading and the mannequin." },
+      { t: "Thin-film interference", m: "Soap film · temper colors · 0–1000 nm", img: "img/ref-film.jpg", d: "Color that is a distance, not a pigment. The four phase colors are second-order colors of one film, 222 to 398 nm. Informed the film spectrum and film order." },
+      { t: "SMPTE color bars", m: "Broadcast reference", img: "img/ref-bars.jpg", d: "Known values sent ahead of the signal so everything after can be checked. In grey they step down a staircase. Informed the Color Check and color-bar order." },
+      { t: "Registration marks", m: "Print · control strip", img: "img/ref-marks.png", paper: true, d: "A circle and a crosshair printed on every plate. In register the plates stack to one black mark; drift splits it into colored ghosts. The screw is this mark." },
+      { t: "Vectorscope", m: "Broadcast · color targets", svg: scopeSVG, d: "Every pixel plotted by hue and saturation against target boxes. The screw is the graticule, the cross the axes, the four colors the targets." },
+      { t: "ASCII art", m: "Tone by ink coverage", svg: asciiSVG, d: "Characters sorted by how much of a cell they ink, so type can render any image. The Shape Field does the same with the brand's four primitives." },
+    ]],
+  ];
+  const rg = $("#refgroups");
+  for (const [g, note, list] of REFS) {
+    rg.append(el("p", "eyebrow grouph", g)); rg.append(el("p", "tgroupn", note));
+    const grid = el("div", "vgrid");
+    for (const r of list) {
+      const media = r.img ? `<img loading="lazy" src="${r.img}" alt="">` : r.svg;
+      grid.append(el("div", "vcard", `<span class="img${r.paper ? " paper" : ""}">${media}</span><span class="t">${r.t}</span><span class="m">${r.m}</span><span class="d">${r.d}</span>`));
+    }
+    rg.append(grid);
+  }
+
+  /* ---------- the reading: Shape Field with heat and isotherms ---------- */
+  const cv = $("#field"), plate = $("#fieldplate"), ctx = cv.getContext("2d");
+  const G = {}; for (const k of ["square", "screw", "cross", "mono"]) G[k] = new Path2D(paths(k));
+  // ramp by coverage: blank, cross 72%, mono, screw, square
+  const STEPS = [0, 0.09, 0.19, 0.48, 0.67];
+  const HEAT = ["#0009FF", "#00EBEF", "#D2FF1E", "#FF1BD1"]; // heat order = film order
+  let W = 0, H = 0, cols = 0, rows = 0, cell = 22, heat = new Float32Array(0), dpr = 1;
+  let iso = 0.55;
+  $("#iso").oninput = e => { iso = +e.target.value; $("#isoval").textContent = "iso " + iso.toFixed(2); if (still) draw(0); };
+  function resize() {
+    dpr = Math.min(2, devicePixelRatio || 1);
+    const r = plate.getBoundingClientRect(); W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    cell = W < 520 ? 16 : 22;
+    cols = Math.ceil(W / cell); rows = Math.ceil(H / cell);
+    heat = new Float32Array(cols * rows);
+  }
+  // value noise, cheap and smooth
+  const P = new Uint8Array(512); { const p = [...Array(256).keys()]; for (let i = 255; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [p[i], p[j]] = [p[j], p[i]]; } for (let i = 0; i < 512; i++) P[i] = p[i & 255]; }
+  const fade = t => t * t * (3 - 2 * t);
+  const h3 = (x, y, z) => P[(P[(P[x & 255] + y) & 255] + z) & 255] / 255;
+  function noise(x, y, z) {
+    const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z), xf = fade(x - xi), yf = fade(y - yi), zf = fade(z - zi);
+    const l = (a, b, t) => a + (b - a) * t;
+    const v = (dz) => l(l(h3(xi, yi, zi + dz), h3(xi + 1, yi, zi + dz), xf), l(h3(xi, yi + 1, zi + dz), h3(xi + 1, yi + 1, zi + dz), xf), yf);
+    return l(v(0), v(1), zf);
+  }
+  const ptr = { x: -1e3, y: -1e3, on: false };
+  function addHeat(px, py, amt, rad) {
+    const cx = px / cell, cy = py / cell, R = rad / cell;
+    for (let y = Math.max(0, (cy - R) | 0); y < Math.min(rows, cy + R + 1); y++)
+      for (let x = Math.max(0, (cx - R) | 0); x < Math.min(cols, cx + R + 1); x++) {
+        const d = Math.hypot(x + .5 - cx, y + .5 - cy) / R; if (d < 1) { const i = y * cols + x; heat[i] = Math.min(1, heat[i] + amt * (1 - d * d)); }
+      }
+  }
+  plate.addEventListener("pointermove", e => { const r = plate.getBoundingClientRect(); ptr.x = e.clientX - r.left; ptr.y = e.clientY - r.top; ptr.on = true; if (still) { addHeat(ptr.x, ptr.y, .12, 70); draw(0); } });
+  plate.addEventListener("pointerleave", () => { ptr.on = false; });
+  plate.addEventListener("pointerdown", e => { const r = plate.getBoundingClientRect(); addHeat(e.clientX - r.left, e.clientY - r.top, .9, 120); if (still) draw(0); });
+
+  function draw(t) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = "#0E0E0E"; ctx.fillRect(0, 0, W, H);
+    const s = cell * 0.8, z = t * 0.00012;
+    const byStep = [[], [], [], [], []], hot = [];
+    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+      const i = y * cols + x;
+      const n = noise(x * .09 + noise(x * .03, y * .03, z) * 2, y * .09, z * 2);
+      const base = Math.max(0, Math.min(1, (n - .25) * 1.5)) * .62;
+      const v = Math.min(1, base + heat[i]);
+      let k = 0, best = 9; const c = v * .67;
+      for (let j = 0; j < 5; j++) { const d = Math.abs(STEPS[j] - c); if (d < best) { best = d; k = j; } }
+      if (heat[i] > iso) hot.push([x, y, k || 4, Math.min(3, Math.floor((heat[i] - iso) / ((1 - iso) / 4)))]);
+      else if (k) byStep[k].push(x, y);
+    }
+    const paint = (k, x, y) => {
+      ctx.setTransform(dpr * s * (k === 1 ? .72 : 1), 0, 0, dpr * s * (k === 1 ? .72 : 1), dpr * (x * cell + cell / 2), dpr * (y * cell + cell / 2));
+      ctx.fill(k === 1 ? G.cross : k === 2 ? G.mono : k === 3 ? G.screw : G.square, "evenodd");
+    };
+    const tones = ["", "#6E6E6E", "#9A9A9A", "#C4C4C4", "#ECECEC"];
+    for (let k = 1; k < 5; k++) { ctx.fillStyle = tones[k]; const a = byStep[k]; for (let j = 0; j < a.length; j += 2) paint(k, a[j], a[j + 1]); }
+    for (const [x, y, k, b] of hot) { ctx.fillStyle = HEAT[b]; paint(k, x, y); }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let last = 0, visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(plate);
+  function loop(t) {
+    requestAnimationFrame(loop);
+    if (!visible || t - last < 30) return;
+    const dt = Math.min(64, t - last) / 1000; last = t;
+    if (ptr.on) addHeat(ptr.x, ptr.y, .16, 80);
+    else addHeat(W * (.5 + .36 * Math.sin(t * .00041)), H * (.5 + .32 * Math.sin(t * .00067 + 1)), .09, 70);
+    const k = Math.exp(-dt / 1.2); for (let i = 0; i < heat.length; i++) heat[i] *= k;
+    draw(t);
+  }
+  resize();
+  if (still) { addHeat(W * .5, H * .5, .95, 110); addHeat(W * .3, H * .4, .7, 70); }
+  draw(0);
+  addEventListener("resize", () => { resize(); draw(performance.now()); });
+  if (!still) requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

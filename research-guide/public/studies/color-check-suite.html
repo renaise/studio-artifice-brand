@@ -1,0 +1,729 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>SAFX Color Check</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Instrument bench on the brand's ink ground: one canvas stage per check (the
+   same drawing as the Rive scripts) with its inputs and view model outputs
+   beside it. Single dark look by choice, matching the Brand Vectorscope page. */
+:root {
+  --ink: #0E0E0E; --panel: #171717; --line: #242424; --paper: #F4F1EA; --muted: #8F8F8F; --dim: #7C7C7C;
+  --sans: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --label: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--ink); color: var(--paper); font: 15px/1.5 var(--sans); }
+.wrap { max-width: 1280px; margin: 0 auto; padding-block: 40px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 24px; }
+header { display: grid; gap: 12px; }
+h1 { font-weight: 300; font-size: clamp(32px, 5vw, 52px); letter-spacing: -0.02em; line-height: 1.05; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 70ch; color: var(--muted); }
+.lab { font: 500 11px var(--label); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.tabs { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--line); }
+.tabs button { border: none; border-bottom: 2px solid transparent; padding: 10px 14px 9px; color: var(--muted); }
+.tabs button[aria-selected="true"] { color: var(--paper); border-bottom-color: var(--paper); background: transparent; }
+.bench { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+@media (max-width: 940px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+.stage { border: 1px solid var(--line); background: var(--ink); position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); }
+@media (max-width: 940px) { .stage { position: relative; top: auto; } }
+.stage canvas { display: block; width: 100%; touch-action: none; }
+.side { display: grid; gap: 16px; min-width: 0; }
+.card { background: var(--panel); border: 1px solid var(--line); padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.card p { font-size: 13px; }
+button { font: 500 11px var(--label); letter-spacing: .08em; text-transform: uppercase; color: var(--paper); background: transparent; border: 1px solid var(--line); padding: 7px 10px; cursor: pointer; border-radius: 0; }
+button:hover { border-color: var(--muted); }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 1px solid var(--paper); outline-offset: 2px; }
+button[aria-pressed="true"] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.row { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; align-items: center; }
+.row .lab { white-space: nowrap; }
+.seg { display: flex; flex-wrap: wrap; }
+.seg button + button { border-left: none; }
+input[type=range] { width: 100%; accent-color: var(--paper); }
+input[type=text], textarea { width: 100%; background: var(--ink); color: var(--paper); border: 1px solid var(--line); font: 12px/1.35 var(--mono); padding: 6px 8px; border-radius: 0; }
+textarea { height: 180px; resize: vertical; color: var(--muted); font-size: 11px; white-space: pre; overflow: auto; }
+.out { width: 100%; border-collapse: collapse; font: 12px var(--mono); font-variant-numeric: tabular-nums; }
+.out td { padding: 4px 0; border-bottom: 1px solid var(--line); }
+.out td:last-child { text-align: right; color: var(--paper); }
+.out td:first-child { color: var(--muted); }
+.keys { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.keys button { padding: 8px 2px; display: grid; justify-items: center; gap: 6px; }
+.keys .sw { width: 18px; height: 18px; border: 1px solid var(--dim); }
+.keys button[aria-pressed="false"] .sw { background: transparent !important; }
+.keys button[aria-pressed="false"] { color: var(--dim); }
+.keys button[aria-pressed] { background: transparent; color: var(--paper); border-color: var(--line); }
+.panel[hidden] { display: none; }
+.foot { font-size: 13px; }
+code { font: 12px var(--mono); color: var(--paper); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="lab">Studio Artifice · Color check</span>
+    <h1>SAFX Color Check</h1>
+    <p>Three checks built from the row of four phase colors, ported from their Rive scripts. Each one draws the same frame as its Rive artboard, takes the same inputs and reports the same view model outputs. Colors, label size, spacing and the ease are the brand library's token defaults.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Checks">
+    <button role="tab" id="tab-bars" aria-selected="true" aria-controls="p-bars" data-tab="bars">Bars and tone</button>
+    <button role="tab" id="tab-black" aria-selected="false" aria-controls="p-black" data-tab="black">Black level check</button>
+    <button role="tab" id="tab-plate" aria-selected="false" aria-controls="p-plate" data-tab="plate">Plate view</button>
+  </div>
+
+  <div class="bench">
+    <div class="stage"><canvas id="cv" aria-label="Color check frame"></canvas></div>
+
+    <div class="side">
+      <!-- 1 Bars and tone -->
+      <div class="panel" id="p-bars" role="tabpanel" aria-labelledby="tab-bars">
+        <div class="side">
+          <div class="card">
+            <span class="lab">What it is</span>
+            <p>A reference sent before the work. Leader builds the four bars in, fills the slate, holds with a countdown and an optional 1 kHz tone, then cuts to ink. Standby is the site's no-signal state: bars hold, the slate shows a status and a clock runs. Hover a bar to read it.</p>
+          </div>
+          <div class="card">
+            <span class="lab">Inputs</span>
+            <div class="row"><span class="lab">Mode</span><div class="seg" id="b-mode"><button data-v="0" aria-pressed="true">Leader</button><button data-v="1">Standby</button></div></div>
+            <div class="row"><span class="lab">Order</span><div class="seg" id="b-order"><button data-v="0" aria-pressed="true">Figma</button><button data-v="1">Color bar</button></div></div>
+            <div class="row"><span class="lab">Tone</span><div class="seg" id="b-tone"><button data-v="0" aria-pressed="true">Off</button><button data-v="1">1 kHz</button></div></div>
+            <div class="row"><span class="lab">Hold <span id="b-holdv">5</span> s</span><input type="range" id="b-hold" min="1" max="15" step="1" value="5"></div>
+            <div class="row"><label class="lab" for="b-project">Project</label><input type="text" id="b-project" value="Studio Artifice Identity 2026"></div>
+            <div class="row"><label class="lab" for="b-phase">Phase</label><input type="text" id="b-phase" value="Identity"></div>
+            <div class="row"><label class="lab" for="b-version">Version</label><input type="text" id="b-version" value="V1"></div>
+            <div class="row"><label class="lab" for="b-date">Date</label><input type="text" id="b-date" value="2026-10-19"></div>
+            <div class="row"><label class="lab" for="b-status">Status</label><input type="text" id="b-status" value="No signal"></div>
+            <div class="seg"><button id="b-replay">Replay leader</button></div>
+          </div>
+          <div class="card"><span class="lab">View model outputs</span><table class="out" id="b-out"></table></div>
+        </div>
+      </div>
+
+      <!-- 2 Black level -->
+      <div class="panel" id="p-black" role="tabpanel" aria-labelledby="tab-black" hidden>
+        <div class="side">
+          <div class="card">
+            <span class="lab">What it is</span>
+            <p>PLUGE from the brand's own near-blacks: black, ink, panel and line. On a well set screen ink merges with black, panel is just visible and line is clear. Drag LIFT until panel appears; a page adds that lift to its raised surfaces. BLUE ONLY shows the bars through the blue channel, the broadcast hue check.</p>
+          </div>
+          <div class="card">
+            <span class="lab">Inputs</span>
+            <div class="row"><span class="lab">Lift <span id="k-liftv">+0.0</span></span><input type="range" id="k-lift" min="-4" max="16" step="0.5" value="0"></div>
+            <div class="row"><span class="lab">Blue only</span><div class="seg" id="k-blue"><button data-v="0" aria-pressed="true">Off</button><button data-v="1">On</button></div></div>
+            <div class="row"><span class="lab">Order</span><div class="seg" id="k-order"><button data-v="0" aria-pressed="true">Figma</button><button data-v="1">Color bar</button></div></div>
+          </div>
+          <div class="card"><span class="lab">View model outputs</span><table class="out" id="k-out"></table></div>
+        </div>
+      </div>
+
+      <!-- 4 Plate view -->
+      <div class="panel" id="p-plate" role="tabpanel" aria-labelledby="tab-plate" hidden>
+        <div class="side">
+          <div class="card">
+            <span class="lab">What it is</span>
+            <p>A page as a press checker sees it: every element prints on one plate. The four squares at the page's top right are the switchboard. Hover a key to see only that plate; click to switch it off. With all four phase plates off the page must still read.</p>
+          </div>
+          <div class="card">
+            <span class="lab">Plates</span>
+            <div class="keys" id="l-keys"></div>
+            <div class="row"><span class="lab">Order</span><div class="seg" id="l-order"><button data-v="0" aria-pressed="true">Figma</button><button data-v="1">Color bar</button></div></div>
+            <div class="seg"><button id="l-phasesoff">Phase plates off</button><button id="l-allon">All on</button></div>
+          </div>
+          <div class="card"><span class="lab">View model outputs</span><table class="out" id="l-out"></table></div>
+          <div class="card">
+            <label class="lab" for="l-elements">Elements · plate|kind|x|y|w|h|text</label>
+            <textarea id="l-elements" spellcheck="false"></textarea>
+            <p>Page units 1600 × 900. Plates: strategy, identity, application, production, ink, paper. Kinds: rect, rule, text, square, screw, cross. Edits redraw live.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// SafxKit, ported -----------------------------------------------------------------
+const C = {
+  lime: [210, 255, 30], magenta: [255, 27, 209], cyan: [0, 235, 239], blue: [0, 9, 255],
+  ink: [14, 14, 14], panel: [23, 23, 23], line: [36, 36, 36], paper: [244, 241, 234], linen: [252, 250, 245],
+  text3: [143, 143, 143], text4: [124, 124, 124],
+};
+const N = { labelSize: 11, hairline: 1, sp6: 34, motionMs: 200 };
+const STUDIO = 'Studio Artifice';
+const PHASES = [
+  { key: 'strategy', name: 'Strategy', number: '01', token: 'lime' },
+  { key: 'identity', name: 'Identity', number: '02', token: 'magenta' },
+  { key: 'application', name: 'Application', number: '03', token: 'cyan' },
+  { key: 'production', name: 'Production', number: '04', token: 'blue' },
+];
+const ORDERS = [[0, 1, 2, 3], [0, 2, 1, 3]];
+const phaseRgb = i => C[PHASES[i].token];
+const rgb = (c, a = 1) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const toLin = c => (c /= 255) <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+const fromLin = c => clamp(Math.floor((c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055) * 255 + 0.5), 0, 255);
+const luminance = c => 0.2126729 * toLin(c[0]) + 0.7151522 * toLin(c[1]) + 0.072175 * toLin(c[2]);
+const lstar = c => { const y = luminance(c); return y > 216 / 24389 ? 116 * Math.cbrt(y) - 16 : 24389 / 27 * y; };
+const greyOf = c => { const g = fromLin(luminance(c)); return [g, g, g]; };
+const hex = c => '#' + c.map(v => v.toString(16).padStart(2, '0').toUpperCase()).join('');
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// The one brand curve, cubic-bezier(.22, 1, .36, 1).
+const bez = (a, b, t) => { const u = 1 - t; return 3 * u * u * t * a + 3 * u * t * t * b + t * t * t; };
+function ease(t) {
+  if (t <= 0) return 0; if (t >= 1) return 1;
+  let lo = 0, hi = 1, s = t;
+  for (let i = 0; i < 20; i++) { s = (lo + hi) / 2; if (bez(0.22, 0.36, s) < t) lo = s; else hi = s; }
+  return bez(1, 1, s);
+}
+const step = (time, start, dur) => dur <= 0 ? (time >= start ? 1 : 0) : ease((time - start) / dur);
+
+// Primitives into a Path2D (fill with 'evenodd' so the screw's cross is a hole).
+const CROSS = [-1, -0.5, 1, -0.5, 1, -1, 0.5, -1, 0.5, 1, 1, 1, 1, 0.5, -1, 0.5, -1, 1, -0.5, 1, -0.5, -1, -1, -1];
+function addCross(p, x, y, s, arm = 0.07231) {
+  const a = s / 2, w = s * arm;
+  for (let k = 0; k < CROSS.length; k += 2) {
+    const cx = CROSS[k], cy = CROSS[k + 1];
+    const px = Math.abs(cx) === 1 ? cx * w : cx * 2 * a, py = Math.abs(cy) === 1 ? cy * w : cy * 2 * a;
+    k === 0 ? p.moveTo(x + px, y + py) : p.lineTo(x + px, y + py);
+  }
+  p.closePath();
+}
+function addScrew(p, x, y, s) {
+  p.moveTo(x + s / 2, y); p.arc(x, y, s / 2, 0, Math.PI * 2); p.closePath();
+  addCross(p, x, y, s * 0.53334, 0.03857 / 0.53334);
+}
+
+// Labels: Helvetica Now Display, uppercase by brand rule; top at y, ax 0 left / .5 centre / 1 right.
+function label(g, s, x, y, size, color, ax = 0) {
+  g.font = `${size}px "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif`;
+  g.textBaseline = 'top';
+  const w = g.measureText(s).width;
+  g.fillStyle = color;
+  g.fillText(s, x - w * ax, y);
+  return w;
+}
+function labelWidth(g, s, size) { g.font = `${size}px "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif`; return g.measureText(s).width; }
+
+// Scale and gutter shared by the frames: brand values on a wide stage, a tighter gutter on a phone.
+function metrics(W, H) {
+  const u = Math.max(1, Math.min(W / 1920, H / 1080) * 2);
+  const pad = W < 600 ? 16 : N.sp6 * u;
+  return { u, ls: N.labelSize * u, pad };
+}
+
+// 1 Bars and tone ---------------------------------------------------------------------
+const FPS = 24;
+function timecode(sec) {
+  sec = Math.max(0, sec);
+  const f = Math.floor(sec * FPS) % FPS, s = Math.floor(sec);
+  const p2 = n => String(n).padStart(2, '0');
+  return `${p2(Math.floor(s / 3600))}:${p2(Math.floor(s / 60) % 60)}:${p2(s % 60)}:${p2(f)}`;
+}
+const bars = {
+  mode: 0, order: 0, hold: 5, tone: false,
+  project: 'Studio Artifice Identity 2026', phase: 'Identity', version: 'V1', date: '2026-10-19', status: 'No signal',
+  t: 0, clock: 0, done: false, hover: -1,
+  beats() {
+    const d = N.motionMs / 1000, barsIn = 4 * d * 0.6 + d, slateIn = barsIn + 2 * d;
+    return { d, barsIn, slateIn, holdEnd: slateIn + Math.max(0, this.hold) };
+  },
+  replay() { this.t = 0; this.done = false; },
+  advance(dt) {
+    this.clock += dt; this.t += dt;
+    if (this.mode === 0) {
+      const { holdEnd } = this.beats();
+      if (this.t >= holdEnd) this.done = true;
+    }
+    tone.set(this.toneOn());
+  },
+  toneOn() {
+    const { slateIn, holdEnd } = this.beats();
+    return active === 'bars' && this.mode === 0 && this.tone && this.t >= slateIn && this.t < holdEnd;
+  },
+  frame(W, H) { return { barH: H * 0.6, wedgeH: H * 0.08 }; },
+  draw(g, W, H) {
+    const { ls, pad } = metrics(W, H);
+    const { barH, wedgeH } = this.frame(W, H);
+    g.fillStyle = rgb(C.ink); g.fillRect(0, 0, W, H);
+    const leader = this.mode === 0;
+    const { d, barsIn, slateIn, holdEnd } = this.beats();
+    const tt = leader ? this.t : 1e9;
+    const bw = W / 4;
+    ORDERS[this.order].forEach((i, k) => {
+      const a = step(tt, k * d * 0.6, d);
+      if (a <= 0) return;
+      const col = phaseRgb(i), x = k * bw;
+      g.fillStyle = rgb(col); g.fillRect(x, barH * (1 - a), bw + 0.5, barH * a);
+      const gr = greyOf(col);
+      g.fillStyle = rgb(gr); g.fillRect(x, barH, bw + 0.5, wedgeH * a);
+      const onLight = lstar(col) > 50, txt = rgb(onLight ? C.ink : C.paper);
+      g.save(); g.globalAlpha = a;
+      const ph = PHASES[i];
+      const title = bw >= ls * 0.6 * 16 ? `${ph.number} ${ph.name.toUpperCase()}` : ph.number;
+      label(g, title, x + pad * 0.5, barH - ls * 3.6, ls, txt);
+      label(g, hex(col), x + pad * 0.5, barH - ls * 2, ls, txt);
+      label(g, `L* ${Math.round(lstar(col))}`, x + pad * 0.5, barH + wedgeH / 2 - ls / 2, ls, rgb(lstar(gr) > 50 ? C.ink : C.paper));
+      if (this.hover === i) {
+        g.strokeStyle = txt; g.lineWidth = N.hairline;
+        g.strokeRect(x + 1.5, 1.5, bw - 3, barH + wedgeH - 3);
+      }
+      g.restore();
+    });
+
+    const y0 = barH + wedgeH;
+    const slate = step(tt, barsIn, 2 * d);
+    if (slate > 0) {
+      g.save(); g.globalAlpha = slate;
+      let sy = y0 + pad; const x0 = pad;
+      label(g, STUDIO.toUpperCase(), x0, sy, ls * 2, rgb(C.paper));
+      sy += ls * 3.2;
+      const rows = leader
+        ? [['PROJECT', this.project], ['PHASE', this.phase], ['VERSION', this.version], ['DATE', this.date]]
+        : [['STATUS', this.status], ['PROJECT', this.project]];
+      const keyW = ls * 0.6 * 9;
+      for (const [k, v] of rows) {
+        label(g, k, x0, sy, ls, rgb(C.text3));
+        label(g, String(v).toUpperCase(), x0 + keyW, sy, ls, rgb(C.paper));
+        sy += ls * 1.8;
+      }
+      // register plus
+      let cy = y0 + (H - y0) / 2, s = Math.min((H - y0) * 0.42, W * 0.08), plusX = W / 2;
+      if (W < H) { s = Math.min(W * 0.12, (H - y0) * 0.2); cy = y0 + pad + s / 2; plusX = W - pad - s / 2; } // tall: top right of the slate, clear of the stacked timecode
+      const pp = new Path2D(); addCross(pp, plusX, cy, s);
+      g.fillStyle = rgb(C.paper); g.fill(pp);
+      // timecode block position (right on a wide frame, under the slate rows on a tall one)
+      let tcx = W - pad, tcy = y0 + pad, tax = 1;
+      if (W < H) { tcx = pad; tcy = sy + ls * 0.6; tax = 0; }
+      // black-level trio: line, panel, ink; kept clear of the tone line on a short slate
+      let tw = Math.min((H - y0) * 0.25, W * 0.05);
+      if (W >= H) tw = Math.max(6, Math.min(tw, H - pad - ls * 2 - (tcy + ls * 4.4)));
+      const tx = W - pad - tw * 3, ty = H - pad - tw - ls * 2;
+      ['line', 'panel', 'ink'].forEach((n, k) => { g.fillStyle = rgb(C[n]); g.fillRect(tx + k * tw, ty, tw, tw); });
+      label(g, 'LINE · PANEL · INK', W - pad, ty + tw + ls * 0.6, ls, rgb(C.text3), 1);
+      // timecode and tone
+      const tc = leader ? timecode(holdEnd - Math.max(slateIn, this.t)) : timecode(this.clock);
+      label(g, tc, tcx, tcy, ls * 2, rgb(C.paper), tax);
+      const on = this.toneOn();
+      label(g, on ? 'TONE 1 kHz  −20 dBFS' : 'TONE OFF', tcx, tcy + ls * 2.8, ls, rgb(on ? C.paper : C.text3), tax);
+      g.restore();
+    }
+    if (leader) {
+      const out = step(this.t, holdEnd, d);
+      if (out > 0) {
+        g.fillStyle = rgb(C.ink, out); g.fillRect(0, 0, W, H);
+        if (out >= 1) label(g, 'LEADER DONE · CLICK TO REPLAY', W / 2, H / 2 - ls / 2, ls, rgb(C.text3), 0.5);
+      }
+    }
+  },
+  pointer(type, x, y, W, H) {
+    const { barH, wedgeH } = this.frame(W, H);
+    if (type === 'leave') { this.hover = -1; return; }
+    this.hover = (y >= 0 && y < barH + wedgeH && x >= 0 && x < W) ? ORDERS[this.order][clamp(Math.floor(x / (W / 4)), 0, 3)] : -1;
+    if (type === 'down' && this.mode === 0 && this.done) this.replay();
+  },
+  outputs() {
+    const { holdEnd } = this.beats();
+    const p = this.mode === 0 ? clamp(this.t / Math.max(1e-6, holdEnd), 0, 1) : 0;
+    return [['leaderProgress', p.toFixed(3)], ['leaderDone', String(this.mode === 0 && this.done)], ['hoverPhase', String(this.hover + 1)]];
+  },
+};
+
+// The tone: 1 kHz sine at −20 dBFS (gain 0.1), started only from a click on the Tone switch.
+const tone = {
+  ctx: null, osc: null,
+  unlock() { try { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); this.ctx.resume(); } catch (e) { this.ctx = null; } },
+  set(on) {
+    if (!this.ctx) return;
+    if (on && !this.osc) {
+      const o = this.ctx.createOscillator(), gn = this.ctx.createGain();
+      o.frequency.value = 1000; gn.gain.value = 0.1; o.connect(gn).connect(this.ctx.destination); o.start();
+      this.osc = o;
+    } else if (!on && this.osc) { this.osc.stop(); this.osc = null; }
+  },
+};
+
+// 2 Black level check -------------------------------------------------------------
+const SMPTE = [[191, 191, 191], [191, 191, 0], [0, 191, 191], [0, 191, 0], [191, 0, 191], [191, 0, 0], [0, 0, 191]];
+const lifted = (c, k) => c.map(v => clamp(Math.floor(v + k + 0.5), 0, 255));
+const black = {
+  lift: 0, blue: false, blueAnim: 0, order: 0, liftMin: -4, liftMax: 16,
+  dragging: false, set: false, hoverChip: false, track: [0, 0, 0, 0], chip: [0, 0, 0, 0],
+  advance(dt) {
+    const target = this.blue ? 1 : 0, sv = REDUCED ? 1 : dt / (N.motionMs / 1000);
+    this.blueAnim = this.blueAnim < target ? Math.min(target, this.blueAnim + sv) : Math.max(target, this.blueAnim - sv);
+  },
+  areas(W, H) {
+    const m = metrics(W, H), pad = m.pad;
+    if (W >= H) return [m, [pad, pad, W / 2 - pad * 1.5, H - pad * 2], [W / 2 + pad * 0.5, pad, W / 2 - pad * 1.5, H - pad * 2]];
+    return [m, [pad, pad, W - pad * 2, H * 0.5 - pad * 1.5], [pad, H * 0.5 + pad * 0.5, W - pad * 2, H * 0.5 - pad * 1.5]];
+  },
+  draw(g, W, H) {
+    g.fillStyle = rgb(C.ink); g.fillRect(0, 0, W, H);
+    const [m, a1, a2] = this.areas(W, H);
+    this.drawPluge(g, a1, m.ls);
+    this.drawBlue(g, a2, m.ls);
+  },
+  drawPluge(g, [x0, y0, w, h], ls) {
+    label(g, 'BLACK LEVEL', x0, y0, ls, rgb(C.text3));
+    label(g, w > ls * 0.62 * 38 ? 'DRAG LIFT UNTIL PANEL IS JUST VISIBLE' : 'DRAG LIFT UNTIL PANEL SHOWS', x0, y0 + ls * 1.8, ls, rgb(C.paper));
+    const patches = [['BLACK', [0, 0, 0]], ['INK', C.ink], ['PANEL', lifted(C.panel, this.lift)], ['LINE', lifted(C.line, this.lift * 2)]];
+    const top = y0 + ls * 5, trackSpace = ls * 8;
+    const s = Math.min(w / 4, h - (top - y0) - trackSpace), px = x0 + (w - s * 4) / 2;
+    patches.forEach(([n, c], k) => {
+      g.fillStyle = rgb(c); g.fillRect(px + k * s, top, s + 0.5, s);
+      label(g, n, px + k * s + s / 2, top + s + ls * 0.6, ls, rgb(C.text3), 0.5);
+      label(g, `L* ${Math.round(lstar(c))}`, px + k * s + s / 2, top + s + ls * 2.1, ls, rgb(C.text3), 0.5);
+    });
+    // register plus across the ink/panel seam, in line
+    const pp = new Path2D(); addCross(pp, px + s * 2, top + s / 2, s * 0.5);
+    g.fillStyle = rgb(lifted(C.line, this.lift * 2)); g.fill(pp);
+    // LIFT track
+    const ty = top + s + ls * 4.6, tx = px, tw = s * 4;
+    this.track = [tx, ty - ls * 1.4, tw, ls * 2.8];
+    g.fillStyle = rgb(C.text4); g.fillRect(tx, ty, tw, N.hairline);
+    const lo = this.liftMin, hi = Math.max(lo + 1, this.liftMax);
+    const f = clamp((this.lift - lo) / (hi - lo), 0, 1), zero = clamp((0 - lo) / (hi - lo), 0, 1);
+    g.fillRect(tx + tw * zero - N.hairline / 2, ty - ls * 0.4, N.hairline, ls * 0.8 + N.hairline);
+    const hs = ls * 1.2;
+    g.fillStyle = rgb(C.paper); g.fillRect(tx + tw * f - hs / 2, ty - hs / 2, hs, hs);
+    label(g, 'LIFT', tx, ty + ls * 1.4, ls, rgb(C.text3));
+    label(g, (this.lift >= 0 ? '+' : '') + this.lift.toFixed(1), tx + tw, ty + ls * 1.4, ls, rgb(C.paper), 1);
+    if (this.set) label(g, 'SET', tx + tw / 2, ty + ls * 1.4, ls, rgb(C.paper), 0.5);
+  },
+  drawBlue(g, [x0, y0, w, h], ls) {
+    const b = ease(this.blueAnim);
+    label(g, 'HUE CHECK', x0, y0, ls, rgb(C.text3));
+    const chipW = labelWidth(g, 'BLUE ONLY', ls) + ls * 2, cx = x0 + w - chipW, cy = y0 - ls * 0.4, ch = ls * 2.2;
+    this.chip = [cx, cy, chipW, ch];
+    if (this.blue) {
+      g.fillStyle = rgb(C.paper); g.fillRect(cx, cy, chipW, ch);
+      label(g, 'BLUE ONLY', cx + ls, cy + ls * 0.6, ls, rgb(C.ink));
+    } else {
+      g.strokeStyle = rgb(this.hoverChip ? C.paper : C.text4); g.lineWidth = N.hairline;
+      g.strokeRect(cx + 0.5, cy + 0.5, chipW - 1, ch - 1);
+      label(g, 'BLUE ONLY', cx + ls, cy + ls * 0.6, ls, rgb(C.paper));
+    }
+    const row = (cols, names, ry, rh) => {
+      const bw = w / cols.length;
+      cols.forEach((col, k) => {
+        g.fillStyle = rgb([Math.floor(col[0] * (1 - b) + 0.5), Math.floor(col[1] * (1 - b) + 0.5), col[2]]);
+        g.fillRect(x0 + k * bw, ry, bw + 0.5, rh);
+        if (names) {
+          label(g, names[k], x0 + k * bw, ry + rh + ls * 0.6, ls, rgb(C.text3));
+          label(g, `B ${col[2]}`, x0 + k * bw, ry + rh + ls * 2.1, ls, rgb(C.text3));
+        }
+      });
+    };
+    const rh = (h - ls * 12) / 2, r1 = y0 + ls * 5;
+    label(g, 'SMPTE 75%', x0, r1 - ls * 1.6, ls, rgb(C.text3));
+    row(SMPTE, null, r1, rh * 0.8);
+    const longV = w > ls * 0.62 * 42;
+    const verdict = b > 0.5 ? (longV ? 'FOUR EQUAL BLUE BARS: DISPLAY HUE IS RIGHT' : 'FOUR EQUAL BLUE BARS: HUE OK') : 'SWITCH TO BLUE ONLY TO CHECK HUE';
+    label(g, verdict, x0, r1 + rh * 0.8 + ls * 0.6, ls, rgb(C.paper));
+    const r2 = r1 + rh + ls * 3.2;
+    label(g, 'SAFX PHASES', x0, r2 - ls * 1.6, ls, rgb(C.text3));
+    const ord = ORDERS[this.order];
+    const narrow = w / 4 < ls * 0.62 * 11.5;
+    row(ord.map(phaseRgb), ord.map(i => narrow ? PHASES[i].name.slice(0, 5).toUpperCase() : PHASES[i].name.toUpperCase()), r2, rh * 0.8);
+  },
+  liftAt(x) {
+    const r = this.track, lo = this.liftMin, hi = Math.max(lo + 1, this.liftMax);
+    const f = clamp((x - r[0]) / Math.max(1, r[2]), 0, 1);
+    this.lift = Math.round((lo + f * (hi - lo)) * 2) / 2;
+    syncBlack();
+  },
+  pointer(type, x, y) {
+    const inR = r => x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3];
+    if (type === 'down') {
+      if (inR(this.track)) { this.dragging = true; this.liftAt(x); return true; }
+      if (inR(this.chip)) { this.blue = !this.blue; syncBlack(); }
+    } else if (type === 'move') {
+      if (this.dragging) this.liftAt(x);
+      this.hoverChip = inR(this.chip);
+    } else if (type === 'up' || type === 'leave') {
+      if (this.dragging) { this.dragging = false; this.set = true; }
+      if (type === 'leave') this.hoverChip = false;
+    }
+  },
+  outputs() {
+    return [['surfaceLift', this.lift.toFixed(1)], ['panelHex', hex(lifted(C.panel, this.lift))], ['lineHex', hex(lifted(C.line, this.lift * 2))],
+      ['blackLevelSet', String(this.set)], ['blueOnlyOn', String(this.blue)]];
+  },
+};
+
+// 4 Plate view -------------------------------------------------------------------
+const PAGE_W = 1600, PAGE_H = 900;
+const PLATE_KEYS = ['strategy', 'identity', 'application', 'production', 'ink', 'paper'];
+const PLATE_LETTER = ['S', 'I', 'A', 'P', 'K', 'W'];
+const plateRgb = i => i < 4 ? phaseRgb(i) : i === 4 ? C.ink : C.paper;
+const SAMPLE = [
+  'ink|rect|0|0|560|900|',
+  'paper|text|48|48|0|22|STUDIO ARTIFICE',
+  'paper|text|48|92|0|11|07  COLOR',
+  'paper|cross|86|380|76|76|',
+  'paper|text|48|690|0|44|COLOR IS',
+  'paper|text|48|746|0|44|A READING',
+  'paper|text|48|836|0|11|HUE REPORTS A CONDITION. IT NEVER BUILDS HIERARCHY.',
+  'ink|text|640|48|0|11|SECTION 07  ·  COLOR',
+  'ink|rule|640|78|900|1|',
+  'ink|text|640|112|0|22|FOUR PHASE COLORS, ONE MONOCHROME SYSTEM',
+  'ink|text|640|156|0|11|THE ROW OF FOUR IS THE REFERENCE EVERY COLOR IS CHECKED AGAINST.',
+  'strategy|rect|640|214|150|150|',
+  'identity|rect|810|214|150|150|',
+  'application|rect|980|214|150|150|',
+  'production|rect|1150|214|150|150|',
+  'ink|text|640|378|0|11|01 STRATEGY',
+  'ink|text|810|378|0|11|02 IDENTITY',
+  'ink|text|980|378|0|11|03 APPLICATION',
+  'ink|text|1150|378|0|11|04 PRODUCTION',
+  'ink|rule|640|430|900|1|',
+  'ink|square|640|500|44|44|', 'ink|screw|700|500|44|44|', 'ink|cross|760|500|44|44|', 'ink|screw|820|500|44|44|',
+  'strategy|square|880|500|44|44|', 'ink|cross|940|500|44|44|', 'ink|square|1000|500|44|44|', 'identity|screw|1060|500|44|44|',
+  'ink|cross|1120|500|44|44|', 'ink|screw|1180|500|44|44|', 'application|square|1240|500|44|44|', 'ink|cross|1300|500|44|44|',
+  'ink|square|1360|500|44|44|', 'production|screw|1420|500|44|44|', 'ink|cross|1480|500|44|44|',
+  'ink|text|640|560|0|11|ISOTHERM: ONLY CELLS PAST A THRESHOLD TAKE A PHASE COLOR.',
+  'ink|rule|640|640|900|1|',
+  'ink|text|640|668|0|11|ENGAGEMENT 2026',
+  'ink|rect|640|712|900|10|',
+  'strategy|rect|640|712|190|10|', 'identity|rect|830|712|260|10|', 'application|rect|1090|712|240|10|', 'production|rect|1330|712|210|10|',
+  'ink|text|640|740|0|11|WEEKS 1-3', 'ink|text|830|740|0|11|WEEKS 4-7', 'ink|text|1090|740|0|11|WEEKS 8-10', 'ink|text|1330|740|0|11|WEEKS 11-12',
+  'ink|text|640|852|0|11|COPYRIGHT © 2026 / ALL RIGHTS RESERVED',
+].join('\n');
+
+function parse(text) {
+  const out = [];
+  for (const line of (text || '').split('\n')) {
+    const f = line.split('|'), plate = PLATE_KEYS.indexOf((f[0] || '').trim());
+    if (plate >= 0 && f.length >= 6) out.push({ plate, kind: f[1], x: +f[2] || 0, y: +f[3] || 0, w: +f[4] || 0, h: +f[5] || 0, text: f[6] || '' });
+  }
+  return out;
+}
+function area(e) {
+  switch (e.kind) {
+    case 'rect': case 'square': return e.w * e.h;
+    case 'rule': return e.w * Math.max(1, e.h);
+    case 'screw': return e.w * e.h * 0.48;
+    case 'cross': return e.w * e.h * 0.27;
+    case 'text': return e.text.length * e.h * 0.6 * e.h * 0.35;
+  }
+  return 0;
+}
+const plate = {
+  items: parse(SAMPLE), order: 0, on: [true, true, true, true, true, true], fade: [1, 1, 1, 1, 1, 1],
+  hover: -1, hoverAnim: [0, 0, 0, 0, 0, 0], keys: [], scale: 1, ox: 0, oy: 0,
+  advance(dt, W, H) {
+    const k = REDUCED ? 1 : dt / (N.motionMs / 1000);
+    for (let i = 0; i < 6; i++) {
+      const t = this.on[i] ? 1 : 0, h = this.hover === i ? 1 : 0;
+      this.fade[i] = this.fade[i] < t ? Math.min(t, this.fade[i] + k) : Math.max(t, this.fade[i] - k);
+      this.hoverAnim[i] = this.hoverAnim[i] < h ? Math.min(h, this.hoverAnim[i] + k) : Math.max(h, this.hoverAnim[i] - k);
+    }
+    this.scale = Math.min(W / PAGE_W, H / PAGE_H);
+    this.ox = (W - PAGE_W * this.scale) / 2; this.oy = (H - PAGE_H * this.scale) / 2;
+  },
+  px(x, y) { return [this.ox + x * this.scale, this.oy + y * this.scale]; },
+  strength(i) {
+    const s = ease(this.fade[i]), any = Math.max(...this.hoverAnim);
+    return s * (1 - 0.85 * ease(any) * (1 - ease(this.hoverAnim[i])));
+  },
+  draw(g, W, H) {
+    const sc = this.scale;
+    g.fillStyle = rgb(C.panel); g.fillRect(0, 0, W, H);
+    const [x0, y0] = this.px(0, 0);
+    g.fillStyle = rgb(C.linen); g.fillRect(x0, y0, PAGE_W * sc, PAGE_H * sc);
+    const batch = PLATE_KEYS.map(() => new Path2D());
+    for (const e of this.items) {
+      const b = batch[e.plate], [x, y] = this.px(e.x, e.y), w = e.w * sc, h = e.h * sc;
+      if (e.kind === 'rect') b.rect(x, y, w, h);
+      else if (e.kind === 'rule') b.rect(x, y, w, Math.max(N.hairline, h));
+      else if (e.kind === 'square') b.rect(x, y, w, w);
+      else if (e.kind === 'screw') addScrew(b, x + w / 2, y + h / 2, w);
+      else if (e.kind === 'cross') addCross(b, x + w / 2, y + h / 2, w);
+    }
+    // ink first, then the phases, then paper, so knock-outs sit on top as on press
+    for (const i of [4, 0, 1, 2, 3, 5]) {
+      const s = this.strength(i);
+      if (s <= 0.002) continue;
+      g.save(); g.globalAlpha = s;
+      g.fillStyle = rgb(plateRgb(i)); g.fill(batch[i], 'evenodd');
+      for (const e of this.items) if (e.plate === i && e.kind === 'text') {
+        const [x, y] = this.px(e.x, e.y);
+        label(g, e.text, x, y, Math.max(1, e.h * sc), rgb(plateRgb(i)));
+      }
+      g.restore();
+    }
+    this.drawSwitchboard(g);
+  },
+  drawSwitchboard(g) {
+    const s = 30, gap = 8, sc = this.scale, ls = Math.max(9, 11 * sc);
+    const x = PAGE_W - 48 - 4 * s - 3 * gap, y = 40;
+    this.keys = [];
+    ORDERS[this.order].forEach((i, k) => {
+      const [kx, ky] = this.px(x + k * (s + gap), y), ks = s * sc;
+      if (this.on[i]) { g.fillStyle = rgb(plateRgb(i)); g.fillRect(kx, ky, ks, ks); }
+      g.strokeStyle = rgb(C.ink); g.lineWidth = this.hover === i ? 2 : 1;
+      g.strokeRect(kx + 0.5, ky + 0.5, ks - 1, ks - 1);
+      this.keys[i] = [kx, ky, ks, ks];
+    });
+    const names = { 4: 'INK', 5: 'PAPER' };
+    let lx = x - 24;
+    for (const i of [5, 4]) {
+      const w = labelWidth(g, names[i], ls) / sc;
+      lx -= w + 22;
+      const [kx, ky] = this.px(lx, y + s / 2 - 6), ks = 12 * sc;
+      g.fillStyle = rgb(this.on[i] ? plateRgb(i) : C.linen); g.fillRect(kx, ky, ks, ks);
+      g.strokeStyle = rgb(C.ink); g.lineWidth = this.hover === i ? 2 : 1;
+      g.strokeRect(kx + 0.5, ky + 0.5, ks - 1, ks - 1);
+      const [tx, ty] = this.px(lx + 18, y + s / 2 - ls / sc / 2);
+      label(g, names[i], tx, ty, ls, rgb(C.text4));
+      this.keys[i] = [kx - 4, ky - 6, (w + 22) * sc, ks + 12];
+    }
+  },
+  keyAt(x, y) {
+    for (let i = 0; i < 6; i++) { const r = this.keys[i]; if (r && x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3]) return i; }
+    return -1;
+  },
+  pointer(type, x, y) {
+    if (type === 'leave') { this.hover = -1; return; }
+    const k = this.keyAt(x, y);
+    this.hover = k;
+    if (type === 'down' && k >= 0) { this.on[k] = !this.on[k]; syncPlate(); }
+  },
+  outputs() {
+    const L = this.on.map((o, i) => o ? PLATE_LETTER[i] : '-');
+    const cov = [0, 0, 0, 0, 0, 0]; let mono = true;
+    for (const e of this.items) {
+      cov[e.plate] += area(e);
+      if (e.plate < 4 && !['rect', 'square', 'screw'].includes(e.kind)) mono = false;
+    }
+    const total = PAGE_W * PAGE_H;
+    return [['platesOn', L.slice(0, 4).join('') + ' ' + L[4] + L[5]], ['hoverPlate', String(this.hover + 1)], ['monoSafe', String(mono)],
+      ...PLATE_KEYS.map((k, i) => [k + 'Coverage', (Math.round(cov[i] / total * 1000) / 10).toFixed(1) + '%'])];
+  },
+};
+
+// Stage ---------------------------------------------------------------------------
+const scenes = { bars, black, plate };
+let active = 'bars';
+const cv = document.getElementById('cv'), g = cv.getContext('2d');
+let W = 960, H = 540;
+function aspect() {
+  const narrow = cv.parentElement.clientWidth < 600;
+  if (active === 'plate') return 9 / 16;
+  return narrow ? 16 / 9 : 9 / 16;
+}
+function size() {
+  W = cv.parentElement.clientWidth - 2;
+  H = Math.round(W * aspect());
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  cv.style.height = H + 'px';
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+new ResizeObserver(size).observe(cv.parentElement);
+
+function pos(e) { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+cv.addEventListener('pointerdown', e => { const [x, y] = pos(e); cv.setPointerCapture(e.pointerId); scenes[active].pointer('down', x, y, W, H); });
+cv.addEventListener('pointermove', e => { const [x, y] = pos(e); scenes[active].pointer('move', x, y, W, H); cursor(x, y); });
+cv.addEventListener('pointerup', e => { const [x, y] = pos(e); scenes[active].pointer('up', x, y, W, H); if (e.pointerType !== 'mouse') scenes[active].pointer('leave', x, y, W, H); });
+cv.addEventListener('pointerleave', e => { const [x, y] = pos(e); scenes[active].pointer('leave', x, y, W, H); });
+function cursor(x, y) {
+  let c = 'default';
+  if (active === 'black') { const r = black.track, q = black.chip; if ((x >= r[0] && x <= r[0] + r[2] && y >= r[1] && y <= r[1] + r[3]) || (x >= q[0] && x <= q[0] + q[2] && y >= q[1] && y <= q[1] + q[3])) c = 'pointer'; }
+  if (active === 'plate' && plate.keyAt(x, y) >= 0) c = 'pointer';
+  if (active === 'bars' && bars.mode === 0 && bars.done) c = 'pointer';
+  cv.style.cursor = c;
+}
+
+const outEls = { bars: document.getElementById('b-out'), black: document.getElementById('k-out'), plate: document.getElementById('l-out') };
+let lastOut = '';
+function renderOutputs() {
+  const rows = scenes[active].outputs(), key = active + JSON.stringify(rows);
+  if (key === lastOut) return; lastOut = key;
+  outEls[active].innerHTML = rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+}
+
+let prev = performance.now();
+function loop(now) {
+  const dt = Math.min(0.1, (now - prev) / 1000); prev = now;
+  bars.advance(dt); black.advance(dt); plate.advance(dt, W, H);
+  scenes[active].draw(g, W, H);
+  renderOutputs();
+  requestAnimationFrame(loop);
+}
+
+// Controls -------------------------------------------------------------------------
+function seg(id, fn) {
+  const el = document.getElementById(id);
+  el.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    el.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    fn(+b.dataset.v);
+  });
+  return el;
+}
+function setSeg(el, v) { el.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(+x.dataset.v === v))); }
+
+seg('b-mode', v => { bars.mode = v; bars.replay(); });
+seg('b-order', v => { bars.order = v; });
+seg('b-tone', v => { bars.tone = !!v; if (v) tone.unlock(); });
+const holdEl = document.getElementById('b-hold');
+holdEl.addEventListener('input', () => { bars.hold = +holdEl.value; document.getElementById('b-holdv').textContent = holdEl.value; });
+for (const k of ['project', 'phase', 'version', 'date', 'status']) {
+  const el = document.getElementById('b-' + k);
+  el.addEventListener('input', () => { bars[k] = el.value; });
+}
+document.getElementById('b-replay').addEventListener('click', () => { bars.mode = 0; setSeg(document.getElementById('b-mode'), 0); bars.replay(); });
+
+const liftEl = document.getElementById('k-lift'), blueSeg = seg('k-blue', v => { black.blue = !!v; });
+liftEl.addEventListener('input', () => { black.lift = +liftEl.value; black.set = true; syncBlack(); });
+seg('k-order', v => { black.order = v; });
+function syncBlack() {
+  liftEl.value = black.lift;
+  document.getElementById('k-liftv').textContent = (black.lift >= 0 ? '+' : '') + black.lift.toFixed(1);
+  setSeg(blueSeg, black.blue ? 1 : 0);
+}
+
+const keysEl = document.getElementById('l-keys');
+const KEY_NAMES = ['Strat', 'Ident', 'Appl', 'Prod', 'Ink', 'Paper'];
+function buildKeys() {
+  const ord = [...ORDERS[plate.order], 4, 5];
+  keysEl.innerHTML = ord.map(i => `<button data-i="${i}" aria-pressed="${plate.on[i]}" aria-label="${PLATE_KEYS[i]} plate"><span class="sw" style="background:${rgb(plateRgb(i))}"></span>${KEY_NAMES[i]}</button>`).join('');
+}
+keysEl.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const i = +b.dataset.i; plate.on[i] = !plate.on[i]; syncPlate(); });
+keysEl.addEventListener('pointerover', e => { const b = e.target.closest('button'); plate.hover = b ? +b.dataset.i : -1; });
+keysEl.addEventListener('pointerleave', () => { plate.hover = -1; });
+function syncPlate() { keysEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(plate.on[+b.dataset.i]))); }
+seg('l-order', v => { plate.order = v; buildKeys(); });
+document.getElementById('l-phasesoff').addEventListener('click', () => { for (let i = 0; i < 4; i++) plate.on[i] = false; syncPlate(); });
+document.getElementById('l-allon').addEventListener('click', () => { plate.on.fill(true); syncPlate(); });
+const elText = document.getElementById('l-elements');
+elText.value = SAMPLE;
+elText.addEventListener('input', () => { plate.items = parse(elText.value); });
+buildKeys();
+
+// Tabs, deep-linkable as #bars, #black, #plate.
+const tabs = [...document.querySelectorAll('[role=tab]')];
+function show(name) {
+  if (!scenes[name]) name = 'bars';
+  active = name; lastOut = '';
+  tabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+  for (const k of Object.keys(scenes)) document.getElementById('p-' + k).hidden = k !== name;
+  if (name === 'bars') bars.replay();
+  tone.set(false);
+  try { localStorage.setItem('safx-cc-tab', name); } catch (e) {}
+  size();
+}
+tabs.forEach(t => t.addEventListener('click', () => { show(t.dataset.tab); try { history.replaceState(null, '', '#' + t.dataset.tab); } catch (e) {} }));
+window.addEventListener('hashchange', () => { if (scenes[location.hash.slice(1)]) show(location.hash.slice(1)); });
+let start = location.hash.slice(1);
+if (!scenes[start]) { try { start = localStorage.getItem('safx-cc-tab') || 'bars'; } catch (e) { start = 'bars'; } }
+
+document.fonts.load('11px "Helvetica Now Display"').catch(() => {}).finally(() => {
+  show(start);
+  requestAnimationFrame(t => { prev = t; loop(t); });
+});
+</script>
+
+</body></html>

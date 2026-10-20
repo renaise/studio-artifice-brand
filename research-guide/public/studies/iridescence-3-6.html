@@ -1,0 +1,648 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Iridescence Studies</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one instrument stage per prototype, controls and legend docked under it like a readout panel. */
+:root {
+  --ink: #0E0E0E;       /* ground */
+  --panel: #171717;     /* raised surface */
+  --line: #242424;      /* hairline */
+  --paper: #F4F1EA;     /* text on ink */
+  --linen: #FCFAF5;     /* light stage ground */
+  --muted: #7A7871;     /* warm grey 06 */
+  --sans: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --label: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ease: cubic-bezier(.22,1,.36,1);
+  color-scheme: dark;
+}
+html, body { background: var(--ink); color: var(--paper); }
+body { font: 300 15px/1.5 var(--sans); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; }
+h1 { font: 300 clamp(26px, 4vw, 40px)/1.05 var(--sans); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.lbl { font: 11px/1.4 var(--label); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.tabs { display: flex; gap: 0; border: 1px solid var(--line); border-radius: 2px; }
+.tabs button { font: 11px var(--label); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); background: transparent; border: 0; padding: 10px 14px; cursor: pointer; }
+.tabs button[aria-selected="true"] { color: var(--ink); background: var(--paper); }
+.tabs button:focus-visible, .ctl button:focus-visible, .ctl select:focus-visible, .ctl input:focus-visible { outline: 1px solid var(--paper); outline-offset: 2px; }
+.stage { position: relative; height: min(68vh, 620px); min-height: 360px; border: 1px solid var(--line); border-radius: 2px; overflow: hidden; background: var(--ink); touch-action: none; }
+.stage.light { background: var(--linen); }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hint { position: absolute; left: 14px; top: 12px; pointer-events: none; }
+.stage.light .hint { color: #8a877f; }
+.dock { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 28px; }
+@media (max-width: 760px) { .dock { grid-template-columns: minmax(0, 1fr); } }
+.ctl { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
+.ctl label { display: flex; flex-direction: column; gap: 5px; }
+.ctl select, .ctl button { font: 12px var(--label); color: var(--paper); background: var(--panel); border: 1px solid var(--line); border-radius: 2px; padding: 7px 9px; cursor: pointer; }
+.ctl button:hover, .ctl select:hover { border-color: var(--muted); }
+.ctl input[type=range] { width: 140px; accent-color: var(--paper); }
+.legend { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.bar { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.bar i { display: block; height: 26px; border-radius: 2px; }
+.bar span { font: 10.5px/1.3 var(--label); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; overflow-wrap: anywhere; }
+.settings { font: 11px/1.5 var(--label); color: var(--paper); text-transform: uppercase; letter-spacing: .06em; border-top: 1px solid var(--line); padding-top: 8px; overflow-wrap: anywhere; }
+.note { max-width: 66ch; color: #b9b5ab; margin: 0; }
+.note b { font-weight: 500; color: var(--paper); }
+.note a { color: var(--paper); }
+.scrub { display: flex; align-items: center; gap: 10px; }
+.scrub input { width: 200px; }
+.scrub output { font: 11px var(--label); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 4.5ch; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<style>
+/* Ideas 3–6 additions */
+.tabs { flex-wrap: wrap; }
+.stage.chart { height: 300px; min-height: 0; }
+@media (max-width: 640px) { .stage.chart { height: 270px; } }
+.stage.panelbg { background: var(--panel); }
+.stage canvas:focus-visible { outline: 1px solid var(--paper); outline-offset: -3px; }
+.reading { display: flex; gap: 14px; align-items: stretch; min-width: 0; }
+.reading .sw { flex: none; width: 64px; height: 64px; border-radius: 2px; background: var(--ink); border: 1px solid var(--line); }
+.reading .rd { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-width: 0; flex: 1; }
+.reading .big { font: 300 clamp(22px, 3vw, 30px)/1 var(--sans); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.bars button.bar { all: unset; display: flex; flex-direction: column; gap: 5px; min-width: 0; cursor: pointer; }
+.bars button.bar:focus-visible i { outline: 1px solid var(--paper); outline-offset: 2px; }
+.bars button.bar:hover span { color: var(--paper); }
+.bars button.bar[aria-pressed="true"] span { color: var(--paper); }
+.ctl output { font: 11px var(--label); color: var(--muted); font-variant-numeric: tabular-nums; }
+.links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.links a { color: var(--paper); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="lbl">Studio Artifice · iridescence explorations</div>
+      <h1>Iridescence studies</h1>
+    </div>
+    <div class="tabs" role="tablist">
+      <button id="tab-original" role="tab" aria-selected="true" aria-controls="p-original">Original only</button>
+      <button id="tab-chart" role="tab" aria-selected="false" aria-controls="p-chart">Interference chart</button>
+      <button id="tab-seam" role="tab" aria-selected="false" aria-controls="p-seam">Seam</button>
+      <button id="tab-lens" role="tab" aria-selected="false" aria-controls="p-lens">Coated lens</button>
+    </div>
+  </header>
+
+  <!-- 3 · Original only -->
+  <section id="p-original" role="tabpanel" aria-labelledby="tab-original">
+    <div class="wrap">
+      <div class="stage" id="stage-o"><canvas id="cv-o" aria-label="Device mark with a thin film on the screw circle"></canvas><div class="hint lbl">Move around the mark to tilt it</div></div>
+      <div class="dock">
+        <div class="ctl">
+          <label class="lbl">Output<select id="o-live"><option value="live">Live original</option><option value="static">Static export</option></select></label>
+          <label class="lbl">Film facing you <output id="o-nm-v">300 nm</output><input type="range" id="o-nm" min="200" max="420" step="1" value="300"></label>
+          <label class="lbl">Full tilt <output id="o-tilt-v">60°</output><input type="range" id="o-tilt" min="20" max="80" step="1" value="60"></label>
+        </div>
+        <div class="legend">
+          <div class="settings" id="o-settings">&nbsp;</div>
+        </div>
+      </div>
+      <p class="note"><b>Reading it.</b> Optically variable ink changes colour with the viewing angle, so a copy can't reproduce it. Here the screw circle carries a soap film (n 1.33). The pointer sets the viewing angle: tilting shortens the light path through the film, so the hue walks toward blue. Switch to Static export and the film is gone, because anything printed or exported is the plain monochrome mark. If it shifts, it is the original. This puts hue on a mark, which the library's rule (marks are high contrast only) doesn't allow yet, so treat it as an exploration.</p>
+    </div>
+  </section>
+
+  <!-- 4 · Interference chart -->
+  <section id="p-chart" role="tabpanel" aria-labelledby="tab-chart" hidden>
+    <div class="wrap">
+      <div class="lbl">07 Color · Interference chart</div>
+      <div class="stage chart" id="stage-c"><canvas id="cv-c" tabindex="0" role="slider" aria-label="Film thickness" aria-valuemin="0" aria-valuemax="1500" aria-valuenow="308"></canvas></div>
+      <div class="dock">
+        <div class="legend">
+          <div class="reading">
+            <div class="sw" id="c-sw"></div>
+            <div class="rd">
+              <div class="big" id="c-big">0 nm</div>
+              <div class="settings" id="c-settings">&nbsp;</div>
+            </div>
+          </div>
+          <div class="ctl">
+            <button id="c-replay">Replay sweep</button>
+            <label class="lbl">Legend order<select id="c-order"><option value="figma">Figma</option><option value="film">Film</option></select></label>
+          </div>
+        </div>
+        <div class="legend">
+          <div class="lbl">Legend · pick a phase to read it</div>
+          <div class="bars" id="c-bars"></div>
+        </div>
+      </div>
+      <p class="note"><b>Reading it.</b> One thickness axis runs from 0 nm (black) through the four phase colours at their film thicknesses and on to the pale wash past 1 µm. A colour counts as a reading only once its order and scale are declared, so the chart prints both. Drag along the axis, or focus it and use the arrow keys (Shift for 10 nm steps). The axis is physical, so it always runs in film order. The legend defaults to Figma order, which stays canonical until the order is decided.</p>
+    </div>
+  </section>
+
+  <!-- 5 · Seam -->
+  <section id="p-seam" role="tabpanel" aria-labelledby="tab-seam" hidden>
+    <div class="wrap">
+      <div class="stage" id="stage-s"><canvas id="cv-s" aria-label="Two layers with a film-coloured seam between them"></canvas><div class="hint lbl" id="hint-s">Click or tap to cut</div></div>
+      <div class="dock">
+        <div class="ctl">
+          <button id="s-cut">Cut to IRL</button>
+          <label class="lbl">Direction<select id="s-dir"><option value="right">From right</option><option value="left">From left</option></select></label>
+          <label class="lbl">Duration<select id="s-steps"><option value="4">4 steps · 800 ms</option><option value="8">8 steps · 1.6 s</option><option value="24">24 steps · 4.8 s</option></select></label>
+          <label class="lbl">Gap at start <output id="s-gap-v">1100 nm</output><input type="range" id="s-gap" min="300" max="1500" step="10" value="1100"></label>
+        </div>
+        <div class="legend">
+          <div class="settings" id="s-settings">&nbsp;</div>
+        </div>
+      </div>
+      <p class="note"><b>Reading it.</b> Interference only happens where two surfaces sit close together, so the colour lives in the gap and never on either layer. As layer B (IRL) slides over layer A (URL), the strip at its leading edge is a wedge of air between them, thickest at the edge. The gap closes as B lands, the bands sweep down through the film orders to black, and the seam disappears. Each cut runs in brand motion steps of 200 ms on the brand curve. Iridescence is how the brand moves between states, never a state.</p>
+    </div>
+  </section>
+
+  <!-- 6 · Coated lens -->
+  <section id="p-lens" role="tabpanel" aria-labelledby="tab-lens" hidden>
+    <div class="wrap">
+      <div class="stage panelbg" id="stage-l"><canvas id="cv-l" aria-label="A lens with a coating glint over a greyscale composition"></canvas><div class="hint lbl">Move to steer the lens</div></div>
+      <div class="dock">
+        <div class="ctl">
+          <label class="lbl">Coating <output id="l-nm-v">110 nm</output><input type="range" id="l-nm" min="60" max="180" step="1" value="110"></label>
+          <label class="lbl">Light from <output id="l-ang-v">225°</output><input type="range" id="l-ang" min="0" max="355" step="5" value="225"></label>
+          <label class="lbl">Glint <output id="l-gl-v">0.90</output><input type="range" id="l-gl" min="0" max="1" step="0.05" value="0.9"></label>
+          <label class="lbl">Magnification<select id="l-mag"><option value="1">1×</option><option value="2" selected>2×</option><option value="3">3×</option></select></label>
+        </div>
+        <div class="legend">
+          <div class="reading">
+            <div class="sw" id="l-sw"></div>
+            <div class="rd">
+              <div class="big" id="l-big">#000000</div>
+              <div class="settings" id="l-settings">&nbsp;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="note"><b>Reading it.</b> A lens coating is a quarter-wave film (MgF2, n 1.38, about 110 nm on glass). Its only visible trace is a faint glint at the rim on the side facing the light, and its hue shifts along the arc as the angle grows. Moving the lens fast tilts it a little and shifts the hue too. Everything under the lens stays greyscale: colour marks the instrument, never the thing observed. The swatch shows the glint colour at the centre of the arc.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+"use strict";
+const $ = id => document.getElementById(id);
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+// ---------- Library tokens (safx-brand-library SAFXColor / SAFXSpace / SAFXType) ----------
+const T = {
+  ink: "#0E0E0E", panel: "#171717", line: "#242424", paper: "#F4F1EA",
+  warmGreyDark: "#5C5A54", warmGreyLight: "#7A7871", text3: "#8F8F8F",
+  lime: "#D2FF1E", magenta: "#FF1BD1", cyan: "#00EBEF", blue: "#0009FF",
+  motionMs: 200, labelSize: 11, labelTracking: 0.88,
+};
+const LABEL_FONT = `${T.labelSize}px "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif`;
+const PHASES = {
+  Strategy:    { token: "lime",    nm: 308 },
+  Identity:    { token: "magenta", nm: 398 },
+  Application: { token: "cyan",    nm: 275 },
+  Production:  { token: "blue",    nm: 222 },
+};
+const FIGMA_ORDER = ["Strategy", "Identity", "Application", "Production"];
+const FILM_ORDER  = ["Production", "Application", "Strategy", "Identity"];
+
+// ---------- Film tables (same as the Rive scripts and the Film Spectrum asset) ----------
+// Soap film n 1.33, reflected colour every 1 nm, 0–1500 nm.
+const FILM_HEX = "00000001010102020305050808090D0D0E1311121816171D1A1B221E1F2722232C2627302A2B352D2F3A31333E353742383A473C3E4B40424F4345534649574A4C5B4D505F515363545666575A6A5A5D6E5D607161637564667867697B6A6C7F6D6F8270728573758876788B787B8E7B7E917E809481839783869A86889C898B9F8B8DA18E90A49092A69395A99597AB9899AD9A9BAF9D9EB19FA0B3A1A2B5A4A4B7A6A6B9A8A8BBAAAABDACACBEAEAEC0B1B0C1B3B2C3B5B3C4B7B5C6B9B7C7BAB8C8BCBAC9BEBBCAC0BDCBC2BECCC3C0CDC5C1CEC7C3CFC8C4D0CAC5D0CCC6D1CDC8D1CFC9D2D0CAD2D2CBD3D3CCD3D4CDD3D6CED3D7CFD3D8CFD3D9D0D3DBD1D3DCD2D3DDD2D3DED3D3DFD4D2E0D4D2E1D5D1E2D5D1E3D6D0E4D6D0E5D6CFE6D7CEE6D7CDE7D7CCE8D7CBE9D7CAE9D8C9EAD8C8EBD8C7EBD8C6ECD7C4ECD7C3EDD7C1EDD7C0EDD7BEEED6BDEED6BBEED6B9EFD5B7EFD5B5EFD4B3EFD4B1EFD3AFF0D3ADF0D2ABF0D1A8F0D1A6F0D0A4EFCFA1EFCE9FEFCD9CEFCC99EFCB96EFCA94EEC991EEC88EEEC78BEDC588EDC484EDC381ECC17EECC07AEBBF77EABD73EABC70E9BA6CE9B868E8B764E7B560E6B35CE5B158E5AF54E4AE50E3AC4BE2AA47E1A842E0A53DDFA338DEA132DD9F2DDB9D26DA9A20D99818D8960ED69301D59100D48E00D28B00D18900CF8600CE8300CC8100CA7E00C97B00C77800C57500C37200C26F00C06C00BE6800BC6504BA6211B85E1AB65B22B45728B1542EAF5034AD4C39AB483EA84443A64048A43C4DA138519E33559C2F5A992A5E972562941F6691196A8E116D8B077188007585007882007C7F007F7C008378008675008971008C6E008F6A00926700956300985F009B5B009E5600A05200A34E00A54906A84410AA3F18AD391EAF3324B12C29B3242EB51B33B70D37B9003CBB0040BD0044BF0048C0004CC2004FC30053C50057C6005AC8005EC90061CA0065CB0068CD006BCE006ECF0072D00075D00078D1007BD2007ED30080D30083D40086D40089D5008BD5008ED50091D60093D60096D60098D6009BD6009DD6009FD600A1D500A4D505A6D517A8D421AAD42AACD331AED337B0D23DB2D243B4D148B6D04DB7CF51B9CE56BBCD5ABCCC5EBECB63C0CA67C1C86AC2C76EC4C672C5C476C7C379C8C17DC9C080CABE83CBBC87CCBA8ACEB88DCFB790D0B593D0B396D1B099D2AE9CD3AC9FD4AAA1D4A7A4D5A5A7D6A2AAD6A0ACD79DAFD79BB1D898B4D895B6D892B9D98FBBD98CBDD989BFD986C2D983C4D980C6D97DC8D979CAD976CCD973CED96FD0D96BD2D868D4D864D6D860D7D75CD9D758DBD654DDD650DED54CE0D548E1D443E3D33FE4D23AE6D235E7D130E8D02BEACF25EBCE1FECCD19EDCC11EFCB07F0C900F1C800F2C700F3C600F4C400F5C300F5C100F6C000F7BE00F8BD00F8BB00F9B900FAB800FAB606FBB411FBB218FCB01FFCAE25FCAC2AFDAA30FDA835FDA639FDA43EFDA243FD9F47FD9D4BFD9B4FFD9853FD9657FD935BFD915FFC8E63FC8C67FC896AFB866EFB8471FA8175FA7E78F97B7BF8787EF87581F77385F67088F56C8AF4698DF36690F26393F16096F05D98EF599BED569DEC53A0EB4FA2E94CA5E848A7E645A9E541ABE33EADE13AAFE036B1DE33B3DC2FB5DA2BB7D827B9D623BAD420BCD21CBECF18BFCD14C1CB10C2C80DC3C60AC5C308C6C007C7BE08C8BB09C9B80CCAB50FCBB212CCAF16CDAC1ACDA91DCEA621CFA225CF9F29D09B2DD09730D09434D19038D18C3BD1883FD18442D17F46D17B49D1764DD17150D16C53D16757D1615AD05B5DD05560D04E63CF4766CF3F69CE356CCD2A6FCD1A72CC0075CB0078CA007BC9007EC80080C70083C60086C50088C4008BC2008DC10090C00092BE0094BD0097BB0099BA009BB8009DB600A0B500A2B300A4B100A6AF00A8AD00AAAB00ACA900ADA700AFA500B1A300B3A100B49F00B69C00B89A00B99800BB9600BC9300BE9100BF8E00C08C00C28900C38700C48400C58200C67F00C77D00C87A00C97700CA7500CB7200CC6F00CD6D00CD6A00CE6800CF6500CF6312D06025D15E32D15B3CD15944D2574CD25453D35259D3505FD34E65D34D6AD34B70D34A74D34879D3477ED34682D34687D3458BD3458FD34593D34597D2459AD2469ED246A2D147A5D149A8D04AACD04BAFCF4DB2CE4FB5CE50B8CD52BBCC54BECC56C1CB59C3CA5BC6C95DC9C85FCBC762CEC664D0C566D2C469D5C36BD7C26ED9C070DBBF73DDBE75DFBD77E1BB7AE3BA7CE5B97FE7B781E8B683EAB485ECB388EDB18AEFB08CF0AE8EF1AC90F3AB93F4A995F5A797F6A699F7A49BF8A29CF9A09EFA9EA0FB9CA2FC9BA4FD99A5FE97A7FE95A9FF93AAFF91ACFF8FADFF8DAFFF8BB0FF89B2FF87B3FF85B4FF83B5FF81B6FF7FB8FF7DB9FF7BBAFF79BBFF77BCFF75BCFF73BDFF71BEFF6FBFFF6DC0FF6BC0FF69C1FE67C1FE66C2FD64C2FC62C3FC61C3FB5FC3FA5EC4F95CC4F85BC4F759C4F658C4F457C4F356C4F255C4F154C4EF54C4EE53C3EC53C3EB52C3E952C3E852C2E652C2E452C1E252C1E053C0DF53C0DD54BFDB55BED855BDD656BDD457BCD258BBD059BACD5BB9CB5CB8C85DB7C65FB6C360B5C162B4BE63B3BB65B2B967B0B668AFB36AAEB06CADAD6EABAA6FAAA771A8A473A7A075A69D77A49A79A3967AA1937CA08F7E9E8B809D88829B84839A8085987C8796788995738B936F8C926B8E9066908F61918D5C938B57958A5196884C9887469A853F9B84389D82309E8126A08019A17E03A37D00A47C00A57A00A77900A87800A97700AB7600AC7500AD7400AE7300AF7200B17200B27100B37100B47000B57000B66F00B76F00B86F00B86F00B96F00BA6F00BB6F00BC6F00BC6F00BD7000BE7000BE7100BF7100BF7200C07300C07300C17400C17500C27600C27700C27800C37900C37A00C37B00C47D00C47E16C47F23C4802DC48135C4833CC48443C48548C4874EC48853C48958C48B5DC48C62C38D66C38F6AC3906EC39172C29376C2947AC2957EC19681C19885C19988C09A8BC09B8FBF9D92BF9E95BE9F98BDA09BBDA19EBCA2A1BCA3A4BBA4A6BAA5A9BAA6ACB9A7AEB8A8B1B7A9B3B6AAB5B6ABB8B5ABBAB4ACBCB3ADBEB2AEC1B1AEC3B0AFC5AFB0C7AEB0C9ADB1CAACB1CCABB2CEAAB2D0A9B3D1A8B3D3A7B3D5A6B4D6A5B4D8A4B4D9A3B4DBA2B4DCA1B5DDA0B5DE9FB5E09EB5E19DB5E29BB5E39AB5E499B5E598B5E697B4E796B4E895B4E894B4E993B3EA92B3EB91B3EB90B2EC8EB2EC8DB2ED8CB1ED8BB1EE8AB0EE89B0EE89AFEF88AEEF87AEEF86ADEF85ADEF84ACEF83ABEF82ABEF82AAEF81A9EF80A8EF80A7EF7FA7EF7EA6EE7EA5EE7DA4EE7DA3ED7CA2ED7CA2EC7BA1EC7BA0EB7B9FEB7A9EEA7A9DE97A9CE97A9BE87A9AE77A99E77999E67998E57997E47A96E37A95E27A94E17A93E07A92DF7A92DE7B91DD7B90DB7B8FDA7C8ED97C8ED87D8DD67D8CD57E8BD47E8BD27F8AD17F8ACF8089CE8089CC8188CB8288C98287C88387C68486C48586C38586C18685BF8785BE8885BC8985BA8985B88A85B68B85B58C85B38D85B18E85AF8E85AD8F85AB9085A99186A79286A59386A39486A194879F95879D96889B9788999889979989959A8A939A8A919B8B8F9C8B8D9D8C8B9E8C899E8D869F8E84A08E82A18F80A2907EA2917CA3917AA49279A59377A59375A69473A79571A7966FA8966EA9976CA9986AAA9969AA9967AB9A66AB9B64AC9B63AD9C62AD9D61AE9E60AE9E5FAF9F5EAFA05DAFA05CB0A15CB0A15BB1A25BB1A35AB1A35AB2A45AB2A45AB2A55AB3A55BB3A65BB3A65BB3A75CB4A75DB4A75DB4A85EB4A85FB4A860B4A961B5A962B5A964B5AA65B5AA66B5AA68B5AA69B5AA6BB5AB6CB5AB6EB5AB6FB5AB71B5AB73B5AB74B5AB76B4AB78B4AB7AB4AB7BB4AB7DB4AB7FB4AB81B3AA83B3AA84B3AA86B3AA88B3AA8AB2A98CB2A98DB2A98FB1A991B1A893B1A895B0A896B0A798B0A79AAFA79CAFA69DAEA69FAEA5A1ADA5A2ADA4A4ADA4A6ACA3A7ACA3A9ABA3AAABA2ACAAA1AEAAA1AFA9A0B1A8A0B2A89FB3A79FB5A79EB6A69EB8A69DB9A59DBAA59CBCA49CBDA39BBEA39ABFA29AC1A299C2A199C3A098C4A098C59F97C69F97C79E96C89D96C99D95CA9C95CB9C94CC9B94CD9A93CE9A93CF9992CF9992D09892D19891D29791D29691D39690D49590D49590D59490D5948FD6938FD6938FD7928FD7928FD8918ED8918ED8908ED9908ED9908ED98F8ED98F8EDA8E8EDA8E8EDA8E8EDA8D8EDA8D8EDA8D8EDA8D8FDA8C8FDA8C8FDA8C8FDA8C8FDA8B90DA8B90DA8B90D98B90D98B91D98B91D98B91D88B92D88B92D88B92D78B93D78B93D78B94D68B94D68B94D58B95D58B95D48B96D48B96D38B96D28C97D28C97D18C98D18C98D08C99CF8D99CE8D9ACE8D9ACD8E9BCC8E9BCB8E9BCA8E9CCA8F9CC98F9DC8909DC7909EC6909EC5919EC4919FC3929FC292A0C192A0C093A0BF93A1BE94A1BD94A1BC95A2BB95A2BA96A2B896A3B797A3B697A3B598A3B498A4B399A4B299A4B09AA4AF9AA5AE9BA5AD9BA5AC9CA5AA9CA5A99DA5A89DA5A79EA5A69EA6A49FA6A39FA6A2A0A6A1A0A6A0A0A69FA1A69DA1A69CA2A69BA2A69AA3A699A3A598A4A597A4A596A4A595A5A594A5A593A6A592A6A591A6A490A7A48FA7A48EA7A48DA8A48CA8A38CA8A38BA9A38AA9A389A9A289AAA288AAA287AAA287AAA186ABA186ABA185ABA085ABA085ABA084AC9F84AC9F84AC9F84AC9E84AC9E83AC9E83AC9D83AC9D83AD9D84AD9C84AD9C84AD9C84AD9B84AD9B85AD9B85AD9A85AD9A86AD9A86AD9986AD9987AD9988AD9888AC9889AC9889AC978AAC978BAC978BAC978CAC968DAC968EAB968FAB968FAB9590AB9591AB9592AA9593AA9594AA9595AA9496AA9497A99498A99499A9949AA9949BA8949CA8949DA8949EA7949FA794A0A794A1A694A2A694A3A694A4A594A5A594A6A594A7A494A8A494A9A494AAA394ABA394ACA394ADA294AEA295AEA295AFA195B0A195B1A095B2A095B3A096B49F96B59F96B69F96B69E96B79E97B89E97B99D97BA9D97BA9D98BB9C98BC9C98BD9C98BD9B99BE9B99BF9B99BF9A99C09A9AC19A9AC1999AC2999AC2999BC3989BC4989BC4989BC5989CC5979CC5979CC6979CC6979DC7979DC7969DC7969DC8969EC8969EC8969EC9959EC9959EC9959FC9959FCA959FCA959FCA959FCA959FCA95A0CA94A0CA94A0CB94A0CB94A0CB94A0CB94A0CB94A1CB94A1CB94A1CB94A1CA94A1CA94A1CA94A1CA95A1CA95A1CA95A1CA95A1C995A1C995A1C995A1C995A1C995A1C895A1C896A1C896A1C796A1C796A1C796A1C696A1C697A1C697A1C597A1C597A0C497A0C498A0C398A0C398A0C298A0C298A0C199A0C199A0C0999FC0999FBF9A9FBF9A9FBE9A9FBE9A9FBD9B9FBC9B9EBC9B9EBB9B9EBB9C9EBA9C9EB99C9EB99C9DB89D9DB89D9DB79D9DB69D9DB69E9CB59E9CB49E9CB49E9CB39F9CB29F9CB29F9BB19F9BB09F9BB0A09BAFA09BAFA09BAEA09BADA09AADA19AACA19AABA19AABA19AAAA19AAAA29AA9A29AA8A299A8A299A7A299A7A299A6A399A6A399A5A399A5A399A4A399A4A399A3A399A3A499A2A499A2A498A1A498A1A498A0A498A0A498A0A4989FA4989FA4989FA4989EA4989EA4989EA5989DA5989DA5989DA5989DA5999CA5999CA5999CA5999CA5999CA5999CA5999CA5999CA5999CA5999BA5999BA5999BA5999BA5999BA4999CA49A9CA49A9CA49A9CA49A9CA49A9CA49A9CA49A9CA49A9CA49A9DA49A9DA49B9DA49B9DA49B9DA49B9EA39B9EA39B9EA39B9FA39B9FA39B9FA39B9FA39CA0A39CA0A39CA1A39CA1A29CA1A29CA2A29CA2A29CA2A29CA3A29CA3A29CA4A29CA4A29DA4A19DA5A19DA5A19DA6A19DA6A19DA7A19DA7A19DA7A19DA8A09DA8A09DA9A09DA9A09DAAA09DAAA09DABA09DABA09DABA09DAC9F9DAC9F9DAD9F9DAD9F9DAE9F9DAE9F9DAF9F9DAF9F9DAF9F9DB09F9DB09F9DB19E9DB19E9DB19E9DB29E9DB29E9DB39E9DB39E9DB39E9DB49E9DB49E9DB49E9DB59E9DB59E9DB69D9DB69D9DB69D9DB79D9DB79D9DB79D9DB79D9DB89D9DB89D9CB89D9CB99D9CB99D9CB99D9CB99D9CBA9D9CBA9D9CBA9D9CBA9D9CBA9D9CBB9D9CBB9D9CBB9D9CBB9D9CBB9D9CBC9D9CBC9D9CBC9D9BBC9D9BBC9D9BBC9D9BBC9D9BBC9D9BBC9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBD9D9BBC9D9BBC9D9BBC9D9BBC9D9BBC9D9BBC9D9BBC9D9BBC9D9BBC9D9BBB9D9B";
+// MgF2 coating (n 1.38) on glass (n 1.52), 40–200 nm, most of the white removed.
+const COAT_HEX = "FFBE8FFFBE8EFFBE8DFFBE8BFFBD8AFFBD89FFBD87FFBD86FFBD85FFBD83FFBC82FFBC81FFBC80FFBC7FFFBC7DFFBB7CFFBB7BFFBB7AFFBA79FFBA78FFBA77FFB976FFB976FFB875FFB874FFB874FFB773FFB773FFB673FFB572FFB572FFB472FFB373FFB373FFB273FFB174FFB075FFAF76FFAE77FFAD78FFAC7AFFAA7BFFA97DFFA87FFFA682FFA485FFA288FFA08BFF9E8FFF9B92FF9997FF999FFF9AA7FF9BB0FF9CB9FF9EC1FF9FCAFFA1D3FFA3DCFFA5E5FFA7EEFFAAF8FDABFFF4A7FFEBA4FFE3A1FFDB9EFFD39CFFCC9AFFC598FFBF96FFB895FFB293FFAD92FFA791FFA290FF9C8FFF978FFF928EFF8E8EFF8C90FF8A92FF8893FF8695FF8597FF8498FF839AFF829BFF819DFF819EFF80A0FF80A1FF7FA3FF7FA4FF7FA5FF7FA7FF7FA8FF80A9FF80ABFF81ACFF81ADFF82AFFF82B0FF83B1FF84B3FF85B4FF86B6FF87B7FF89B9FF8ABAFF8CBCFF8DBDFF8FBFFF90C1FF92C3FF94C4FF96C6FF98C8FF9BCAFF9DCCFFA0CEFFA2D1FFA5D3FFA8D5FFACD8FFAFDBFFB3DDFFB7E1FFBBE4FFBFE7FFC4EBFFC9EFFFCFF3FFD5F8FFDBFDFFDFFFFCE2FFF6E4FFEFE7FFE9EAFFE3EEFFDEF1FFD9F4FFD4F7FFCFFAFFCBFDFFC6FFFFC2FFFCBCFFFAB7FFF8B2FFF6ADFFF4A8FFF2A4FFF0A0FFEF9BFFED98FFEC94FFEA90FFE98DFFE789FFE686";
+const lut = h => { const a = new Uint8Array(h.length / 2); for (let i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16); return a; };
+const FL = lut(FILM_HEX), CL = lut(COAT_HEX);
+function sample(L, lo, hi, nm) {
+  nm = clamp(nm, lo, hi);
+  const k = nm - lo, i = Math.floor(k), j = Math.min(i + 1, hi - lo), f = k - i;
+  return [0, 1, 2].map(c => L[i * 3 + c] + (L[j * 3 + c] - L[i * 3 + c]) * f);
+}
+const film = nm => sample(FL, 0, 1500, nm);
+const coat = nm => sample(CL, 40, 200, nm);
+const css = c => `rgb(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])})`;
+const hexOf = c => "#" + c.map(v => Math.round(v).toString(16).padStart(2, "0")).join("").toUpperCase();
+// Tilting a film shortens the light path: effective thickness = d · cos(refraction angle).
+const tiltFactor = (deg, n) => { const s = Math.sin(deg * Math.PI / 180) / n; return Math.sqrt(Math.max(0, 1 - s * s)); };
+// Brand curve, cubic-bezier(.22, 1, .36, 1) (library Motion/Ease).
+function brandEase(t) {
+  t = clamp(t, 0, 1);
+  const x1 = .22, y1 = 1, x2 = .36, y2 = 1;
+  let u = t;
+  for (let k = 0; k < 8; k++) {
+    const x = 3 * (1 - u) * (1 - u) * u * x1 + 3 * (1 - u) * u * u * x2 + u * u * u - t;
+    const dx = 3 * (1 - u) * (1 - u) * x1 + 6 * (1 - u) * u * (x2 - x1) + 3 * u * u * (1 - x2);
+    if (Math.abs(x) < 1e-5 || dx === 0) break;
+    u = clamp(u - x / dx, 0, 1);
+  }
+  return 3 * (1 - u) * (1 - u) * u * y1 + 3 * (1 - u) * u * u * y2 + u * u * u;
+}
+
+// ---------- Marks (library Mark/Device, Mark/Lockup, Glyphs) ----------
+const DEV = { w: 261.803, h: 128.698, sqW: 121.407, cx: 197.454, cy: 64.349, r: 64.349 };
+const CROSS_HALF_W = 4.96 / 64.349, CROSS_HALF_L = 34.32 / 64.349;
+// The screw circle: a circle with the cross cut out (fill with "evenodd").
+function screwPath(cx, cy, r) {
+  const p = new Path2D();
+  p.arc(cx, cy, r, 0, Math.PI * 2);
+  const w = r * CROSS_HALF_W, l = r * CROSS_HALF_L;
+  p.moveTo(cx - w, cy - l); p.lineTo(cx + w, cy - l); p.lineTo(cx + w, cy - w); p.lineTo(cx + l, cy - w);
+  p.lineTo(cx + l, cy + w); p.lineTo(cx + w, cy + w); p.lineTo(cx + w, cy + l); p.lineTo(cx - w, cy + l);
+  p.lineTo(cx - w, cy + w); p.lineTo(cx - l, cy + w); p.lineTo(cx - l, cy - w); p.lineTo(cx - w, cy - w);
+  p.closePath();
+  return p;
+}
+// Draws the device mark with its top-left at (x, y), scale s. Returns the screw circle.
+function drawDevice(ctx, x, y, s, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, DEV.sqW * s, DEV.h * s);
+  const c = { cx: x + DEV.cx * s, cy: y + DEV.cy * s, r: DEV.r * s };
+  ctx.fill(screwPath(c.cx, c.cy, c.r), "evenodd");
+  return c;
+}
+const LOCKUP = { w: 1148, h: 167, paths: ["M52.9722 165.145C36.8658 165.145 24.0403 161.507 14.4958 154.229C4.95123 146.832 0.119307 135.498 0 120.226H15.5695C15.9275 141.105 28.395 151.544 52.9722 151.544C63.2326 151.544 71.1665 149.516 76.7739 145.46C82.3813 141.403 85.185 135.498 85.185 127.743C85.185 121.658 82.8585 116.945 78.2056 113.605C73.5526 110.145 65.6801 107.582 54.346 105.076L43.0715 102.571C30.7829 99.8269 21.2384 95.7108 14.4379 90.2227C7.7567 84.6153 4.41611 76.4428 4.41611 65.7052C4.41611 55.5641 8.35323 47.5109 16.2275 41.5455C24.1017 35.4609 34.6604 32.4186 47.9034 32.4186C56.9707 32.4186 64.7853 33.4923 71.3472 35.6399C77.9091 37.7874 83.0393 40.8297 86.7378 44.7668C90.4363 48.5846 93.1207 52.7604 94.791 57.294C96.5806 61.8277 97.535 66.8386 97.6543 72.3267H82.2638C81.5479 63.498 78.6249 56.9361 73.4947 52.6411C68.4838 48.2267 59.9534 46.0196 47.9034 46.0196C38.8361 46.0196 31.9163 47.8092 27.144 51.3884C22.3718 54.8482 19.9856 59.6205 19.9856 65.7052C19.9856 72.0284 22.0139 76.92 26.0703 80.3799C30.246 83.7205 38.1799 86.7032 49.872 89.3279L61.1465 91.8333C75.4633 94.9353 85.664 99.4093 91.7486 105.255C97.8333 111.101 100.755 120.225 100.755 129.65C100.755 141.103 96.5192 148.323 88.0484 155.124C79.6969 161.805 68.0048 165.145 52.9722 165.145Z", "M151.876 84.7923H132.906V144.744C132.906 149.993 136.426 152.618 143.465 152.618H151.876V164.609C147.939 164.966 144.539 165.145 141.675 165.145C126.285 165.145 118.59 158.762 118.59 145.997V84.7923H103.378V72.2651H118.59V46.1369H132.906V72.2651H151.876V84.7923Z", "M223.008 72.2651H237.325V164.609H223.724V150.829C216.805 161.447 207.141 166.756 194.733 166.756C184.472 166.756 176.479 163.952 170.752 158.345C165.025 152.738 162.162 144.863 162.162 134.722V72.2651H176.479V133.291C176.479 147.011 183.518 153.871 197.596 153.871C204.277 153.871 210.183 151.365 215.313 146.355C220.443 141.344 223.008 134.066 223.008 124.521V72.2651Z", "M321.492 37.1889H335.809V164.609H322.208V150.292C314.93 161.268 304.372 166.756 290.532 166.756C277.528 166.756 267.088 162.401 259.214 153.692C251.459 144.863 247.582 133.112 247.582 118.437C247.582 103.762 251.459 92.07 259.214 83.3606C267.088 74.5319 277.528 70.1176 290.532 70.1176C303.895 70.1176 314.215 75.2478 321.492 85.5082V37.1889ZM270.668 144.744C276.036 150.829 283.255 153.871 292.322 153.871C301.389 153.871 308.607 150.769 313.976 144.565C319.345 138.242 322.029 129.532 322.029 118.437C322.029 107.341 319.345 98.6916 313.976 92.4876C308.607 86.1643 301.389 83.0027 292.322 83.0027C283.374 83.0027 276.156 86.2836 270.668 92.8455C265.299 99.2881 262.614 108.057 262.614 119.153C262.614 130.129 265.299 138.659 270.668 144.744Z", "M351.883 58.3062V43.3109H367.095V58.3062H351.883ZM352.42 164.609V72.2651H366.737V164.609H352.42Z", "M455.881 153.513C447.53 162.342 436.792 166.756 423.668 166.756C410.545 166.756 399.807 162.342 391.456 153.513C383.104 144.684 378.928 132.992 378.928 118.437C378.928 103.881 383.104 92.1893 391.456 83.3606C399.807 74.5319 410.545 70.1176 423.668 70.1176C436.792 70.1176 447.53 74.5319 455.881 83.3606C464.233 92.1893 468.408 103.881 468.408 118.437C468.408 132.992 464.233 144.684 455.881 153.513ZM402.014 144.565C407.383 150.769 414.601 153.871 423.668 153.871C432.736 153.871 439.954 150.769 445.323 144.565C450.691 138.242 453.376 129.532 453.376 118.437C453.376 107.341 450.691 98.6916 445.323 92.4876C439.954 86.1643 432.736 83.0027 423.668 83.0027C414.601 83.0027 407.383 86.1643 402.014 92.4876C396.645 98.6916 393.961 107.341 393.961 118.437C393.961 129.532 396.645 138.242 402.014 144.565Z", "M605.062 164.609L590.209 127.564H532.226L517.551 164.609H501.802L552.627 37.1889H569.449L620.99 164.609H605.062ZM537.594 113.963H584.84L584.124 112.352C578.397 98.1547 570.642 78.5287 560.859 53.4743C553.343 73.5178 545.767 93.2034 538.131 112.531L537.594 113.963Z", "M669.988 70.6324C673.215 70.3581 674.756 70.3581 677.616 70.5108V84.6665H674.059C664.693 84.6665 657.343 86.9966 652.008 91.6569C646.673 96.3172 644.005 103.069 644.005 111.911V164.609H629.778V72.1195H643.294V88.4305C649.577 76.6006 656.639 71.7672 669.988 70.6324Z", "M729.677 84.7923H710.707V144.744C710.707 149.993 714.227 152.618 721.266 152.618H729.677V164.609C725.74 164.966 722.339 165.145 719.476 165.145C704.085 165.145 696.39 158.762 696.39 145.997V84.7923H681.179V70.3581H696.39V46.1369H710.707V70.3581H729.677V84.7923Z", "M741.333 58.3062V42.6751H756.544V58.3062H741.333ZM741.87 164.609V72.2651H756.186V164.609H741.87Z", "M780.01 62.7802C780.01 45.4807 788.6 36.831 805.78 36.831C809.002 36.831 812.044 36.9503 814.907 37.1889V49.3582H806.675C798.443 49.3582 794.327 53.7129 794.327 62.4223V72.2651H814.013V84.7923H794.327V164.609H780.01V84.7923H764.799V72.2651H780.01V62.7802ZM825.886 42.6751H841.097V58.3062H825.886V42.6751ZM826.422 164.609V72.2651H840.739V164.609H826.422Z", "M895.625 166.756C882.859 166.756 872.54 162.401 864.665 153.692C856.791 144.863 852.854 133.112 852.854 118.437C852.854 103.643 856.731 91.8911 864.486 83.1817C872.361 74.4723 882.74 70.1176 895.625 70.1176C906.602 70.1176 915.609 73.1599 922.648 79.2445C929.687 85.2099 933.923 93.3228 935.355 103.583H920.501C919.308 96.9019 916.385 91.8314 911.732 88.3715C907.198 84.7923 901.829 83.0027 895.625 83.0027C887.393 83.0027 880.712 86.045 875.582 92.1297C870.452 98.095 867.887 106.864 867.887 118.437C867.887 130.01 870.452 138.838 875.582 144.923C880.831 150.888 887.512 153.871 895.625 153.871C901.829 153.871 907.258 152.081 911.911 148.502C916.564 144.923 919.487 139.733 920.68 132.933H935.355C933.804 143.432 929.389 151.723 922.112 157.808C914.953 163.773 906.124 166.756 895.625 166.756Z", "M1028.25 118.437V123.448H958.095C958.811 133.589 961.614 141.165 966.506 146.176C971.517 151.187 978.198 153.692 986.55 153.692C999.315 153.692 1007.49 147.965 1011.07 136.512H1025.92C1023.53 145.579 1018.94 152.916 1012.14 158.524C1005.46 164.012 996.81 166.756 986.192 166.756C973.426 166.756 963.046 162.401 955.052 153.692C947.178 144.983 943.241 133.231 943.241 118.437C943.241 103.881 947.119 92.1893 954.873 83.3606C962.748 74.5319 973.068 70.1176 985.834 70.1176C999.077 70.1176 1009.46 74.7109 1016.97 83.8975C1024.49 93.0841 1028.25 104.597 1028.25 118.437ZM985.834 83.1817C978.437 83.1817 972.292 85.5082 967.401 90.1611C962.628 94.8141 959.646 101.615 958.453 110.563H1012.86C1012.14 102.569 1009.4 96.0071 1004.62 90.877C999.971 85.7468 993.708 83.1817 985.834 83.1817Z", "M1106.05 0C1129.22 0 1148 18.783 1148 41.9531L1147.99 43.0361C1147.41 65.7061 1128.85 83.9072 1106.05 83.9072L1104.96 83.8936C1082.29 83.3194 1064.09 64.7615 1064.09 41.9531C1064.09 18.7832 1082.88 0.000247424 1106.05 0ZM1106.05 5.68262C1086.01 5.68286 1069.78 21.9218 1069.78 41.9531C1069.78 61.9847 1086.01 78.2244 1106.05 78.2246C1126.08 78.2246 1142.32 61.9848 1142.32 41.9531C1142.32 21.9216 1126.08 5.68262 1106.05 5.68262ZM1126.47 61.0557H1121.03L1115.96 48.4072H1096.16L1091.15 61.0557H1085.77L1103.13 17.5508H1108.87L1126.47 61.0557ZM1105.94 23.1104C1103.37 29.9538 1100.78 36.6754 1098.18 43.2744L1097.99 43.7637H1114.13L1113.88 43.2139C1111.93 38.3664 1109.28 31.6647 1105.94 23.1104Z"].map(d => new Path2D(d)) };
+function drawLockup(ctx, cx, cy, width, color) {
+  const s = width / LOCKUP.w;
+  ctx.save();
+  ctx.translate(cx - width / 2, cy - LOCKUP.h * s / 2);
+  ctx.scale(s, s);
+  ctx.fillStyle = color;
+  for (const p of LOCKUP.paths) ctx.fill(p, "evenodd");
+  ctx.restore();
+}
+// Glyphs in a unit box centred on 0 (Shape Field set).
+const G = {
+  cross: new Path2D("M-0.07231 -0.5L0.07231 -0.5L0.07231 -0.07231L0.5 -0.07231L0.5 0.07231L0.07231 0.07231L0.07231 0.5L-0.07231 0.5L-0.07231 0.07231L-0.5 0.07231L-0.5 -0.07231L-0.07231 -0.07231Z"),
+  mono: new Path2D("M0 -0.5C0.27614 -0.5 0.5 -0.27615 0.5 0L0.49984 0.0129C0.493 0.28308 0.27182 0.5 0 0.5L-0.0129 0.49984C-0.28308 0.493 -0.5 0.27182 -0.5 0C-0.5 -0.27614 -0.27614 -0.5 0 -0.5ZM0 -0.43228C-0.23874 -0.43227 -0.43227 -0.23874 -0.43228 0C-0.43228 0.23873 -0.23874 0.43227 0 0.43228C0.23873 0.43228 0.43228 0.23873 0.43228 0C0.43227 -0.23874 0.23873 -0.43228 0 -0.43228ZM0.24338 0.22766L0.17857 0.22766L0.11813 0.07691L-0.11781 0.07691L-0.17753 0.22766L-0.24161 0.22766L-0.03479 -0.29083L0.03365 -0.29083ZM-0.0013 -0.22457C-0.03188 -0.14301 -0.06271 -0.06291 -0.09378 0.01574L-0.09597 0.02157L0.09628 0.02157L0.09337 0.01502C0.07007 -0.04275 0.03851 -0.12262 -0.0013 -0.22457Z"),
+  screw: new Path2D("M0 -0.5C0.27614 -0.5 0.5 -0.27614 0.5 0C0.5 0.27614 0.27614 0.5 0 0.5C-0.27614 0.5 -0.5 0.27614 -0.5 0C-0.5 -0.27614 -0.27614 -0.5 0 -0.5ZM-0.03857 -0.26667L-0.03857 -0.03857L-0.26667 -0.03857L-0.26667 0.03857L-0.03857 0.03857L-0.03857 0.26667L0.03857 0.26667L0.03857 0.03857L0.26667 0.03857L0.26667 -0.03857L0.03857 -0.03857L0.03857 -0.26667Z"),
+  square: new Path2D("M-0.5 -0.5L0.5 -0.5L0.5 0.5L-0.5 0.5Z"),
+};
+function glyph(ctx, name, x, y, size, color) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(size, size); ctx.fillStyle = color;
+  ctx.fill(G[name], "evenodd"); ctx.restore();
+}
+
+function label(ctx, s, x, y, align, color) {
+  ctx.font = LABEL_FONT;
+  if ("letterSpacing" in ctx) ctx.letterSpacing = T.labelTracking + "px";
+  ctx.textAlign = align; ctx.textBaseline = "top"; ctx.fillStyle = color;
+  ctx.fillText(s, x, y);
+}
+function labelW(ctx, s) {
+  ctx.font = LABEL_FONT;
+  if ("letterSpacing" in ctx) ctx.letterSpacing = T.labelTracking + "px";
+  return ctx.measureText(s).width;
+}
+
+// ---------- Canvas helper ----------
+function fit(canvas) {
+  const r = canvas.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
+  const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, cw: r.width, ch: r.height };
+}
+function localPoint(canvas, e) { const r = canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+function bindRange(id, fmt, fn) {
+  const el = $(id), out = $(id + "-v");
+  const go = () => { const v = +el.value; if (out) out.textContent = fmt(v); fn(v); };
+  el.addEventListener("input", go); go();
+}
+
+// =====================================================================
+// 3 · Original only
+// =====================================================================
+const O = { live: true, filmNm: 300, wedgeNm: 140, maxTilt: 60, idle: 0.35, time: 0, tx: 0, ty: 0, ax: 0, ay: 0, on: false, geo: null };
+{
+  const cv = $("cv-o");
+  const move = e => {
+    if (!O.geo) return;
+    const [x, y] = localPoint(cv, e), g = O.geo;
+    let dx = (x - g.cx) / g.reach, dy = (y - g.cy) / g.reach;
+    const len = Math.hypot(dx, dy);
+    if (len > 1) { dx /= len; dy /= len; }
+    O.ax = dx; O.ay = dy; O.on = true;
+  };
+  cv.addEventListener("pointermove", move);
+  cv.addEventListener("pointerdown", move);
+  cv.addEventListener("pointerleave", () => { O.on = false; });
+  cv.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") O.on = false; });
+  $("o-live").addEventListener("change", e => { O.live = e.target.value === "live"; });
+  bindRange("o-nm", v => v + " nm", v => { O.filmNm = v; });
+  bindRange("o-tilt", v => v + "°", v => { O.maxTilt = v; });
+}
+function frameOriginal(dt) {
+  const { ctx, cw, ch } = fit($("cv-o"));
+  O.time += dt;
+  let ax = O.ax, ay = O.ay;
+  if (!O.on) { ax = reduced ? 0 : Math.cos(O.time * 0.37) * O.idle; ay = reduced ? 0 : Math.sin(O.time * 0.53) * O.idle * 0.6; }
+  const k = 1 - Math.exp(-dt * 6);
+  O.tx += (ax - O.tx) * k; O.ty += (ay - O.ty) * k;
+
+  const s = Math.min(cw * 0.66 / DEV.w, ch * 0.42 / DEV.h, 3.2);
+  const x0 = (cw - DEV.w * s) / 2, y0 = (ch - DEV.h * s) / 2 - 18;
+  ctx.fillStyle = T.ink; ctx.fillRect(0, 0, cw, ch);
+  const c = drawDevice(ctx, x0, y0, s, T.paper);
+  O.geo = { cx: c.cx, cy: c.cy, reach: Math.max(120, Math.min(cw, ch) * 0.55) };
+
+  const len = Math.hypot(O.tx, O.ty), lenC = Math.min(1, len);
+  const deg = lenC * O.maxTilt, cosT = tiltFactor(deg, 1.33), centre = O.filmNm * cosT;
+  let line;
+  if (O.live) {
+    let dx = 1, dy = 0;
+    if (len > 1e-4) { dx = O.tx / len; dy = O.ty / len; }
+    // wedge along the tilt direction, never quite flat so it reads as a film
+    const wedge = O.wedgeNm * (0.2 + 0.8 * lenC);
+    const g = ctx.createLinearGradient(c.cx - dx * c.r, c.cy - dy * c.r, c.cx + dx * c.r, c.cy + dy * c.r);
+    for (let i = 0; i <= 24; i++) {
+      const u = i / 24 * 2 - 1;
+      g.addColorStop(i / 24, css(film((O.filmNm + wedge * 0.5 * u) * cosT)));
+    }
+    ctx.fillStyle = g;
+    ctx.fill(screwPath(c.cx, c.cy, c.r), "evenodd");
+    line = `FILM ${Math.round(centre)} NM · N 1.33 · ANGLE ${Math.round(deg)}° · LIVE ORIGINAL`;
+  } else {
+    line = "STATIC EXPORT · MONOCHROME";
+  }
+  label(ctx, line, cw / 2, y0 + DEV.h * s + 30, "center", O.live ? T.paper : T.text3);
+  $("o-settings").textContent = line;
+}
+
+// =====================================================================
+// 4 · Interference chart
+// =====================================================================
+const ORDER_EDGES = [0, 208, 396, 591, 793];
+const C = { axisMax: 1500, scrub: 0, from: 0, to: 308, t: 1, dragging: false, geo: null, order: "figma", started: false };
+const orderOf = nm => { let o = 1; for (let i = 1; i < ORDER_EDGES.length; i++) if (nm >= ORDER_EDGES[i]) o = i + 1; return o; };
+const phaseAt = nm => { for (const k of FILM_ORDER) if (Math.abs(PHASES[k].nm - nm) <= 6) return k; return ""; };
+function chartGo(nm) { C.from = C.scrub; C.to = clamp(nm, 0, C.axisMax); C.t = reduced ? 1 : 0; if (reduced) { C.scrub = C.to; chartPublish(); } }
+function chartPublish() {
+  const nm = Math.round(C.scrub), ph = phaseAt(nm);
+  let line = `FILM ${nm} NM · N 1.33 · ANGLE 0° · ORDER ${orderOf(nm)}`;
+  if (nm >= 1000) line += " · WASH";
+  if (ph) line += " · " + ph.toUpperCase();
+  const col = film(C.scrub);
+  $("c-sw").style.background = css(col);
+  $("c-big").textContent = `${nm} nm · ${hexOf(col)}`;
+  $("c-settings").textContent = line;
+  const cv = $("cv-c");
+  cv.setAttribute("aria-valuenow", nm);
+  cv.setAttribute("aria-valuetext", line.toLowerCase());
+  for (const b of $("c-bars").children) b.setAttribute("aria-pressed", b.dataset.k === ph);
+}
+function renderChartBars() {
+  const names = C.order === "film" ? FILM_ORDER : FIGMA_ORDER;
+  $("c-bars").innerHTML = names.map(k => {
+    const hx = T[PHASES[k].token];
+    return `<button class="bar" type="button" data-k="${k}" aria-pressed="false"><i style="background:${hx}"></i><span>${k}<br>${hx} · ${PHASES[k].nm} nm</span></button>`;
+  }).join("");
+  for (const b of $("c-bars").children) b.onclick = () => chartGo(PHASES[b.dataset.k].nm);
+  chartPublish();
+}
+{
+  const cv = $("cv-c");
+  const toNm = e => { const g = C.geo; if (!g) return C.scrub; const [x] = localPoint(cv, e); return clamp((x - g.X0) / (g.X1 - g.X0) * C.axisMax, 0, C.axisMax); };
+  cv.addEventListener("pointerdown", e => { C.dragging = true; C.t = 1; cv.setPointerCapture(e.pointerId); C.scrub = toNm(e); chartPublish(); });
+  cv.addEventListener("pointermove", e => { if (C.dragging) { C.scrub = toNm(e); chartPublish(); } });
+  const up = () => { C.dragging = false; };
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("keydown", e => {
+    const step = e.shiftKey ? 10 : 1;
+    let v = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowUp") v = Math.round(C.scrub) + step;
+    else if (e.key === "ArrowLeft" || e.key === "ArrowDown") v = Math.round(C.scrub) - step;
+    else if (e.key === "Home") v = 0; else if (e.key === "End") v = C.axisMax;
+    if (v === null) return;
+    e.preventDefault(); C.t = 1; C.scrub = clamp(v, 0, C.axisMax); chartPublish();
+  });
+  $("c-replay").onclick = () => { C.scrub = 0; chartGo(308); };
+  $("c-order").addEventListener("change", e => { C.order = e.target.value; renderChartBars(); });
+  renderChartBars();
+}
+function frameChart(dt) {
+  if (!C.started) { C.started = true; C.scrub = 0; chartGo(308); }
+  if (C.t < 1 && !C.dragging) {
+    // a reading moving into place: eight brand motion steps on the brand curve
+    C.t = Math.min(1, C.t + dt / (T.motionMs / 1000 * 8));
+    C.scrub = C.from + (C.to - C.from) * brandEase(C.t);
+    chartPublish();
+  }
+  const { ctx, cw, ch } = fit($("cv-c"));
+  const narrow = cw < 640;
+  const X0 = narrow ? 14 : 24, X1 = cw - X0, BAR_T = 58, BAR_B = BAR_T + (narrow ? 60 : 90);
+  C.geo = { X0, X1 };
+  const nmToX = nm => X0 + nm / C.axisMax * (X1 - X0);
+  ctx.fillStyle = T.ink; ctx.fillRect(0, 0, cw, ch);
+
+  // the axis as one gradient
+  const g = ctx.createLinearGradient(X0, 0, X1, 0);
+  for (let i = 0; i <= 300; i++) g.addColorStop(i / 300, css(film(i / 300 * C.axisMax)));
+  ctx.fillStyle = g; ctx.fillRect(X0, BAR_T, X1 - X0, BAR_B - BAR_T);
+
+  // declared scale: order brackets above, thickness ticks below
+  ctx.strokeStyle = T.warmGreyDark; ctx.lineWidth = 1;
+  ctx.beginPath();
+  const edges = [...ORDER_EDGES, Math.min(1000, C.axisMax)];
+  for (let i = 0; i < edges.length - 1; i++) {
+    const a = nmToX(edges[i]) + 2, b = nmToX(edges[i + 1]) - 2;
+    ctx.moveTo(a + .5, BAR_T - 8); ctx.lineTo(a + .5, BAR_T - 13.5); ctx.lineTo(b - .5, BAR_T - 13.5); ctx.lineTo(b - .5, BAR_T - 8);
+    const full = `ORDER ${i + 1}`;
+    label(ctx, labelW(ctx, full) < b - a - 4 ? full : String(i + 1), a, BAR_T - 34, "left", T.text3);
+  }
+  const wa = nmToX(1000) + 2, wb = nmToX(C.axisMax);
+  ctx.moveTo(wa + .5, BAR_T - 8); ctx.lineTo(wa + .5, BAR_T - 13.5); ctx.lineTo(wb, BAR_T - 13.5);
+  label(ctx, "WASH", wa, BAR_T - 34, "left", T.text3);
+  const labStep = (X1 - X0) / (C.axisMax / 100) >= 48 ? 100 : (X1 - X0) / (C.axisMax / 250) >= 48 ? 250 : 500;
+  for (let nm = 0; nm <= C.axisMax; nm += 50) {
+    const x = Math.min(nmToX(nm), X1 - .5), major = nm % 100 === 0;
+    ctx.moveTo(Math.round(x) + .5, BAR_B); ctx.lineTo(Math.round(x) + .5, BAR_B + (major ? 6 : 3));
+    if (nm % labStep === 0) label(ctx, nm === 0 ? "0 NM" : String(nm), x, BAR_B + 12, nm === 0 ? "left" : nm >= C.axisMax ? "right" : "center", T.text3);
+  }
+  ctx.stroke();
+
+  // the four blocks at their film thicknesses, thickest nearest the bar
+  FILM_ORDER.forEach((k, i) => {
+    const x = Math.round(nmToX(PHASES[k].nm)) + .5, y = BAR_B + 40 + (FILM_ORDER.length - 1 - i) * 24;
+    ctx.strokeStyle = T.warmGreyDark; ctx.beginPath(); ctx.moveTo(x, BAR_B); ctx.lineTo(x, y + 6); ctx.stroke();
+    ctx.fillStyle = T[PHASES[k].token]; ctx.fillRect(x - 6.5, y, 12, 12);
+    const txt = `${k.toUpperCase()}  ${PHASES[k].nm} NM`, w = labelW(ctx, txt);
+    if (x + 14 + w <= X1) label(ctx, txt, x + 14, y + 1, "left", T.paper);
+    else label(ctx, txt, x - 14, y + 1, "right", T.paper);
+  });
+
+  // scrubber: a hairline through the bar with a square handle at each end
+  const sx = Math.round(nmToX(C.scrub)) + .5;
+  ctx.strokeStyle = T.paper; ctx.beginPath(); ctx.moveTo(sx, BAR_T - 4); ctx.lineTo(sx, BAR_B + 4); ctx.stroke();
+  ctx.fillStyle = T.paper; ctx.fillRect(sx - 4.5, BAR_T - 10, 8, 8); ctx.fillRect(sx - 4.5, BAR_B + 2, 8, 8);
+}
+
+// =====================================================================
+// 5 · Seam
+// =====================================================================
+const S = { cut: false, target: false, t: 1, steps: 4, fromRight: true, gapNm: 1100 };
+function seamToggle() {
+  S.cut = !S.cut; S.target = S.cut;
+  S.t = reduced ? 1 : 1 - S.t; // reversing mid-cut continues from where B is now
+  $("s-cut").textContent = S.cut ? "Cut to URL" : "Cut to IRL";
+}
+{
+  $("cv-s").addEventListener("click", seamToggle);
+  $("s-cut").onclick = seamToggle;
+  $("s-dir").addEventListener("change", e => { S.fromRight = e.target.value === "right"; });
+  $("s-steps").addEventListener("change", e => { S.steps = +e.target.value; });
+  bindRange("s-gap", v => v + " nm", v => { S.gapNm = v; });
+}
+function frameSeam(dt) {
+  if (S.t < 1) S.t = Math.min(1, S.t + dt / (T.motionMs / 1000 * S.steps));
+  const e = brandEase(S.t), off = S.target ? 1 - e : e; // 0 = B registered over A, 1 = B fully off
+  const gap = S.gapNm * Math.sqrt(off); // the gap closes ahead of the landing
+  const { ctx, cw, ch } = fit($("cv-s"));
+  const dir = S.fromRight ? 1 : -1, bx = off * cw * dir;
+
+  // Layer A, the URL
+  ctx.fillStyle = T.ink; ctx.fillRect(0, 0, cw, ch);
+  drawLockup(ctx, cw / 2, ch / 2, Math.min(cw * 0.62, 620), T.paper);
+  label(ctx, "LAYER A · URL", 14, ch - 26, "left", T.text3);
+
+  // Layer B, the IRL
+  if (off < 1) {
+    ctx.save(); ctx.translate(bx, 0);
+    ctx.fillStyle = T.paper; ctx.fillRect(0, 0, cw, ch);
+    const s = Math.min(cw * 0.34 / DEV.w, ch * 0.3 / DEV.h, 1.6);
+    drawDevice(ctx, (cw - DEV.w * s) / 2, ch / 2 - DEV.h * s / 2 - 18, s, T.ink);
+    const gs = Math.max(14, 26 * s), names = ["cross", "mono", "screw", "square"];
+    names.forEach((n, i) => glyph(ctx, n, cw / 2 + (i - 1.5) * gs * 1.9, ch / 2 + DEV.h * s / 2 + 22 + gs / 2, gs, T.warmGreyDark));
+    label(ctx, "LAYER B · IRL", 14, ch - 26, "left", T.warmGreyLight);
+    ctx.restore();
+  }
+
+  // the seam: a wedge of film at B's leading edge, closing to black
+  if (off > 0 && off < 1) {
+    const edge = S.fromRight ? off * cw : cw * (1 - off);
+    const w = Math.max(1.5, 160 * Math.min(1, cw / 1100) * Math.sqrt(off)), inner = edge + w * dir;
+    const g = ctx.createLinearGradient(edge, 0, inner, 0);
+    for (let i = 0; i <= 32; i++) g.addColorStop(i / 32, css(film(gap * (1 - i / 32))));
+    ctx.save();
+    ctx.globalAlpha = clamp(gap / 20, 0, 1); // below about 20 nm the film is black
+    ctx.fillStyle = g; ctx.fillRect(Math.min(edge, inner), 0, w, ch);
+    ctx.restore();
+  }
+  const where = S.target ? "IRL" : "URL", moving = S.t < 1;
+  $("s-settings").textContent = `${moving ? "CUTTING TO" : "ON"} ${where} · GAP ${Math.round(gap)} NM · ${S.steps} × ${T.motionMs} MS · BRAND EASE`;
+}
+
+// =====================================================================
+// 6 · Coated lens
+// =====================================================================
+const L = { coatingNm: 110, lightAngle: 225, glint: 0.9, mag: 2, x: null, y: null, ax: 0, ay: 0, vx: 0, on: false, time: 0, subject: null, key: "" };
+{
+  const cv = $("cv-l");
+  const move = e => { const [x, y] = localPoint(cv, e); L.ax = x; L.ay = y; L.on = true; };
+  cv.addEventListener("pointermove", move);
+  cv.addEventListener("pointerdown", move);
+  cv.addEventListener("pointerleave", () => { L.on = false; });
+  cv.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") L.on = false; });
+  bindRange("l-nm", v => v + " nm", v => { L.coatingNm = v; });
+  bindRange("l-ang", v => v + "°", v => { L.lightAngle = v; });
+  bindRange("l-gl", v => v.toFixed(2), v => { L.glint = v; });
+  $("l-mag").addEventListener("change", e => { L.mag = +e.target.value; });
+}
+// Greyscale subject: a glyph field in warm greys under the lockup.
+function hash(i, j) { let h = (i * 374761393 + j * 668265263) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; }
+function vnoise(x, y) {
+  const i = Math.floor(x), j = Math.floor(y), fx = x - i, fy = y - j;
+  const sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+  const a = hash(i, j), b = hash(i + 1, j), c = hash(i, j + 1), d = hash(i + 1, j + 1);
+  return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
+}
+const RAMP = [null, "cross", "mono", "screw", "square"];
+function drawSubject(ctx, cw, ch) {
+  ctx.fillStyle = T.panel; ctx.fillRect(0, 0, cw, ch);
+  const cell = clamp(cw / 24, 22, 42), cols = Math.ceil(cw / cell) + 1, rows = Math.ceil(ch / cell) + 1;
+  const ox = (cw - (cols - 1) * cell) / 2, oy = (ch - (rows - 1) * cell) / 2;
+  for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+    const n = vnoise(i * 0.16, j * 0.16) * 0.75 + vnoise(i * 0.45 + 9, j * 0.45 + 3) * 0.25;
+    const g = RAMP[clamp(Math.floor(n * 5), 0, 4)];
+    if (g) glyph(ctx, g, ox + i * cell, oy + j * cell, cell * 0.56, n > 0.55 ? T.warmGreyLight : T.warmGreyDark);
+  }
+  const lw = Math.min(cw * 0.62, 560), lh = lw * LOCKUP.h / LOCKUP.w;
+  ctx.fillStyle = T.panel; ctx.fillRect(cw / 2 - lw / 2 - cell * 0.7, ch / 2 - lh / 2 - cell * 0.7, lw + cell * 1.4, lh + cell * 1.4);
+  drawLockup(ctx, cw / 2, ch / 2, lw, T.paper);
+}
+function frameLens(dt) {
+  const cv = $("cv-l"), { ctx, cw, ch } = fit(cv);
+  L.time += dt;
+  const hx = cw / 2, hy = ch / 2;
+  if (L.x === null) { L.x = hx; L.y = hy; }
+  let ax = L.ax, ay = L.ay;
+  if (!L.on) { ax = hx + (reduced ? 0 : Math.cos(L.time * 0.4) * 40); ay = hy + (reduced ? 0 : Math.sin(L.time * 0.31) * 24); }
+  const k = 1 - Math.exp(-dt * 9), nx = L.x + (ax - L.x) * k;
+  L.vx = (nx - L.x) / Math.max(dt, 1e-3); L.x = nx; L.y += (ay - L.y) * k;
+
+  // cache the subject at device resolution
+  const key = `${cv.width}x${cv.height}`;
+  if (L.key !== key) {
+    L.key = key;
+    L.subject = document.createElement("canvas");
+    L.subject.width = cv.width; L.subject.height = cv.height;
+    const sc = L.subject.getContext("2d"), d = cv.width / cw;
+    sc.setTransform(d, 0, 0, d, 0, 0); drawSubject(sc, cw, ch);
+  }
+  ctx.drawImage(L.subject, 0, 0, cw, ch);
+
+  const R = clamp(Math.min(cw, ch) * 0.22, 64, 130), x = L.x, y = L.y, m = Math.max(1, L.mag);
+  // magnified subject inside the lens, redrawn as vectors so it stays sharp
+  ctx.save();
+  ctx.beginPath(); ctx.arc(x, y, R, 0, Math.PI * 2); ctx.clip();
+  ctx.translate(x * (1 - m), y * (1 - m)); ctx.scale(m, m);
+  drawSubject(ctx, cw, ch);
+  ctx.restore();
+
+  // rim and reticle in paper: the screw circle drawn as an outline
+  ctx.strokeStyle = T.paper; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(x, y, R, 0, Math.PI * 2);
+  const l = R * 0.12;
+  ctx.moveTo(x - l, y); ctx.lineTo(x + l, y); ctx.moveTo(x, y - l); ctx.lineTo(x, y + l);
+  ctx.stroke();
+
+  // coating glint: an arc facing the light; the hue shifts along it as the angle grows
+  const light = L.lightAngle * Math.PI / 180, tilt = clamp(L.vx / 4000, -0.35, 0.35);
+  const segs = 36, span = 70 * Math.PI / 180, ar = R + 2.5;
+  ctx.lineWidth = 3; ctx.lineCap = "round";
+  for (let i = 0; i < segs; i++) {
+    const a0 = light - span + (i / segs) * 2 * span, a1 = light - span + ((i + 1) / segs) * 2 * span;
+    const off = ((a0 + a1) / 2 - light) / span;
+    const inc = Math.abs(off) * 55 + tilt * 40 * off;
+    const c = coat(L.coatingNm * tiltFactor(clamp(inc, 0, 80), 1.38));
+    const fall = Math.cos(off * Math.PI / 2), alpha = clamp(L.glint * fall * fall * fall, 0, 1);
+    if (alpha <= 0.01) continue;
+    ctx.strokeStyle = `rgba(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])},${alpha.toFixed(3)})`;
+    ctx.beginPath(); ctx.moveTo(x + Math.cos(a0) * ar, y + Math.sin(a0) * ar); ctx.lineTo(x + Math.cos(a1) * ar, y + Math.sin(a1) * ar); ctx.stroke();
+  }
+  ctx.lineCap = "butt";
+  const centre = coat(L.coatingNm);
+  $("l-sw").style.background = css(centre);
+  $("l-big").textContent = hexOf(centre);
+  $("l-settings").textContent = `COATING ${L.coatingNm} NM MGF2 · N 1.38 · LIGHT ${L.lightAngle}° · ${m}× · SUBJECT GREYSCALE`;
+}
+
+// ---------- Tabs and loop ----------
+const PANELS = { original: frameOriginal, chart: frameChart, seam: frameSeam, lens: frameLens };
+let active = "original";
+function show(name) {
+  active = name;
+  for (const k of Object.keys(PANELS)) {
+    $("tab-" + k).setAttribute("aria-selected", k === name);
+    $("p-" + k).hidden = k !== name;
+  }
+  try { history.replaceState(null, "", "#" + name); } catch (e) {}
+}
+for (const k of Object.keys(PANELS)) $("tab-" + k).onclick = () => show(k);
+const h = location.hash.slice(1);
+show(PANELS[h] ? h : "original");
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (!document.hidden) PANELS[active](dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+</body></html>
