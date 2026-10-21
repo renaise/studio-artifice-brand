@@ -361,6 +361,27 @@
   .film .mk span i { width:8px; height:8px; border:1px solid var(--register); }
   .filmaxis { display:flex; justify-content:space-between; font-size:11px; color:var(--text-3); margin-top:30px; font-variant-numeric:tabular-nums; }
 
+  /* references (15): external images, credits, readings */
+  .rfs { display:flex; flex-direction:column; border-top:var(--hairline) solid var(--line); margin-top:var(--sp-5); }
+  .rf { display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:28px; padding:28px 0; border-bottom:var(--hairline) solid var(--line); }
+  .rf-plate { display:flex; flex-direction:column; gap:var(--sp-2); min-width:0; }
+  .rf-img { aspect-ratio:4/3; background:var(--plate); border:var(--hairline) solid var(--line); border-radius:var(--r-xs); overflow:hidden; display:grid; place-items:center; }
+  .rf-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .rf-img.rf-contain img { object-fit:contain; }
+  .rf-credit { font-size:12px; color:var(--text-3); line-height:1.45; }
+  .rf-credit a { color:var(--text-3); }
+  .rf-lic { display:inline-block; padding:1px 6px; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); font-size:11px; letter-spacing:.04em; color:var(--text-2); margin-right:6px; }
+  .rf-body { display:flex; flex-direction:column; gap:var(--sp-4); min-width:0; }
+  .rf-body h3 { margin:0; font-weight:400; font-size:22px; letter-spacing:-0.015em; color:var(--text); }
+  .rf-meta { margin-top:-8px; }
+  .rf-why { margin:0; max-width:60ch; color:var(--text-2); font-size:15px; line-height:1.5; }
+  .rf-reads { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; border-top:var(--hairline) solid var(--line); }
+  .rf-reads li { display:grid; grid-template-columns:118px minmax(0,1fr); gap:var(--sp-3); padding:var(--sp-3) 0; border-bottom:var(--hairline) solid var(--line); }
+  .rf-kind { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); padding-top:3px; }
+  .rf-cite { color:var(--text-2); font-size:14px; line-height:1.45; }
+  .rf-cite .rf-t { color:var(--text); }
+  .rf-cite .rf-n { display:block; margin-top:4px; font-size:13px; color:var(--text-3); }
+  @media (max-width:760px) { .rf { grid-template-columns:1fr; gap:18px; } .rf-reads li { grid-template-columns:1fr; gap:2px; } }
   .vgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:var(--sp-4); margin-top:var(--sp-4); }
   .vcard { border:var(--hairline) solid var(--line); background:var(--panel); text-decoration:none; display:flex; flex-direction:column;
            transition:border-color var(--dur) var(--ease); }
@@ -942,8 +963,84 @@
     <section class="card" id="refs">
       <div class="lab"><span class="n">15</span><span>R&amp;D</span></div>
       <h2>References</h2>
-      <p class="sub">What the system is measured against: instruments that use color as a reading. Each one informed a study above.</p>
-      <div class="vgrid" id="refgrid"></div>
+      <p class="sub">What the system is measured against: instruments that use color as a reading. Each one informed a study above. Images are by outside authors under the licences shown; each comes with readings written for a general reader.</p>
+      <div class="rfs">
+        <article class="rf">
+      <div class="rf-plate">
+        <div class="rf-img rf-contain"><img src="img/ext-thermal.jpg" loading="lazy" alt="Thermogram of a Passivhaus building beside an older building, with a temperature scale bar from 3 to 9 degrees Celsius"></div>
+        <div class="rf-credit"><span class="rf-lic">CC BY-SA 3.0</span>Passivhaus Institut. <a href="https://commons.wikimedia.org/wiki/File:Passivhaus_thermogram_gedaemmt_ungedaemmt.png" target="_blank" rel="noopener">Passivhaus thermogram</a>, Wikimedia Commons.</div>
+      </div>
+      <div class="rf-body">
+        <h3>Thermal imaging</h3>
+        <div class="lab rf-meta">False color · isotherms</div>
+        <p class="rf-why">The image carries its own scale bar, so every color is a temperature you can read off. The insulated house reads cold; the old building behind it leaks heat. That is the brand's idea in one picture: color reports a condition against a declared scale.</p>
+        <ul class="rf-reads">
+          <li><span class="rf-kind">Open-access review</span><span class="rf-cite"><a class="rf-t" href="https://www.mdpi.com/1424-8220/14/7/12305" target="_blank" rel="noopener">Infrared Thermography for Temperature Measurement and Non-Destructive Testing</a>. Usamentiaga, Venegas, Guerediaga, Vega, Molleda and Bulnes. <i>Sensors</i> 14(7), 12305–12348, 2014. CC BY 3.0.<span class="rf-n">Opens with a plain introduction to how a camera turns infrared into a temperature reading, then shows it at work on buildings, machines and people.</span></span></li>
+          <li><span class="rf-kind">Open-access paper</span><span class="rf-cite"><a class="rf-t" href="https://doi.org/10.1038/s41467-020-19160-7" target="_blank" rel="noopener">The misuse of colour in science communication</a>. Crameri, Shephard and Heron. <i>Nature Communications</i> 11, 5444, 2020. CC BY 4.0.<span class="rf-n">Why rainbow scales mislead and how an even scale keeps a reading honest. The clearest argument for a declared, readable scale.</span></span></li>
+        </ul>
+      </div>
+        </article>
+        <article class="rf">
+      <div class="rf-plate">
+        <div class="rf-img"><img src="img/ext-film.jpg" loading="lazy" alt="Magnified soap film showing bands of blue, orange, magenta and cyan interference color around dark spots"></div>
+        <div class="rf-credit"><span class="rf-lic">CC BY-SA 3.0</span>Natural Philo. <a href="https://commons.wikimedia.org/wiki/File:Interference_colours_in_soap_film_1.jpg" target="_blank" rel="noopener">Interference colours in soap film</a>, Wikimedia Commons. Public-domain alternative: <a href="https://commons.wikimedia.org/wiki/File:Film_of_soap_interference_3.jpg" target="_blank" rel="noopener">Film of soap interference</a> (Patrick Nordmann).</div>
+      </div>
+      <div class="rf-body">
+        <h3>Thin-film interference</h3>
+        <div class="lab rf-meta">Soap film · temper colors</div>
+        <p class="rf-why">Every color here is a thickness. The film is a few hundred nanometres deep, and its hue changes wherever the gap between its two surfaces changes. The dark spots are where it is thinnest, just before it breaks.</p>
+        <ul class="rf-reads">
+          <li><span class="rf-kind">Peer-reviewed, for general readers</span><span class="rf-cite"><a class="rf-t" href="https://kids.frontiersin.org/articles/10.3389/frym.2024.1432589" target="_blank" rel="noopener">The “Recipe” for the Perfect Color</a>. <i>Frontiers for Young Minds</i>, 2024. doi:10.3389/frym.2024.1432589.<span class="rf-n">Written by scientists for young readers and reviewed by them. Explains structural color, soap bubbles included, without equations.</span></span></li>
+          <li><span class="rf-kind">Free paper</span><span class="rf-cite"><a class="rf-t" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2706472/" target="_blank" rel="noopener">Iridescence: views from many angles</a>. Meadows, Butler, Morehouse, Taylor, Toomey, McGraw and Rutowski. <i>Journal of the Royal Society Interface</i> 6, S107–S113, 2009.<span class="rf-n">A short overview that opens a special issue on iridescence, from the physics of thin films to how animals use it.</span></span></li>
+        </ul>
+      </div>
+        </article>
+        <article class="rf">
+      <div class="rf-plate">
+        <div class="rf-img"><img src="img/ext-bars.jpg" loading="lazy" alt="SMPTE color bars: seven vertical bars of grey, yellow, cyan, green, magenta, red and blue over a row of reverse bars and a black-level strip"></div>
+        <div class="rf-credit"><span class="rf-lic">Public domain</span>Denelson83. <a href="https://commons.wikimedia.org/wiki/File:SMPTE_Color_Bars.svg" target="_blank" rel="noopener">SMPTE Color Bars</a>, Wikimedia Commons.</div>
+      </div>
+      <div class="rf-body">
+        <h3>SMPTE color bars</h3>
+        <div class="lab rf-meta">Broadcast reference</div>
+        <p class="rf-why">A signal of known values sent ahead of the picture, so anyone downstream can check what the chain did to it. The strip along the bottom tests the near-blacks the same way the brand's black level check does.</p>
+        <ul class="rf-reads">
+          <li><span class="rf-kind">Library article</span><span class="rf-cite"><a class="rf-t" href="https://blogs.library.duke.edu/bitstreams/2016/06/23/color-bars-test-patterns/" target="_blank" rel="noopener">Color Bars &amp; Test Patterns</a>. Alex Marsh. Duke University Libraries, <i>Bitstreams</i>, 2016.<span class="rf-n">A digitization team explains what “bars and tone” at the head of a tape is for, and where test patterns came from.</span></span></li>
+          <li><span class="rf-kind">Standard · paid</span><span class="rf-cite"><span class="rf-t">SMPTE EG 1-1990, Alignment Color Bar Test Signal for Television Picture Monitors</span>. Society of Motion Picture and Television Engineers.<span class="rf-n">The source document for the pattern above. Technical and behind a paywall; listed so the card can cite the standard by name.</span></span></li>
+        </ul>
+      </div>
+        </article>
+        <article class="rf">
+      <div class="rf-plate">
+        <div class="rf-img"><img src="img/ext-registration.jpg" loading="lazy" alt="Extreme close-up of a printed sheet: a circle-and-cross registration target beside cyan, magenta and yellow control patches"></div>
+        <div class="rf-credit"><span class="rf-lic">CC BY 3.0</span>gratuit. <a href="https://freeimageslive.co.uk/free_stock_image/print-registration-marks-jpg" target="_blank" rel="noopener">Printer registration mark and color swatches</a>, freeimageslive.co.uk.</div>
+      </div>
+      <div class="rf-body">
+        <h3>Registration marks</h3>
+        <div class="lab rf-meta">Print · control marks</div>
+        <p class="rf-why">A registration target and the color control patches, photographed on a real printed sheet. Every plate prints the same target; when the plates land in register they stack into one mark, and when they drift the target splits into colored ghosts.</p>
+        <ul class="rf-reads">
+          <li><span class="rf-kind">Free museum reference</span><span class="rf-cite"><a class="rf-t" href="https://www.getty.edu/conservation/publications_resources/pdf_publications/pdf/atlas_halftone.pdf" target="_blank" rel="noopener">The Atlas of Analytical Signatures of Photographic Processes: Halftone</a>. Dusan C. Stulik and Art Kaplan. Getty Conservation Institute, 2013.<span class="rf-n">The Getty's illustrated guide to the halftone process: how a photograph becomes printable dots, with history and magnified examples.</span></span></li>
+          <li><span class="rf-kind">Museum exhibition</span><span class="rf-cite"><a class="rf-t" href="https://exhibits.oshermaps.org/pageant-of-spectacles/mapping/end-of-chromolithography/" target="_blank" rel="noopener">The End of Chromolithography</a>. Matthew H. Edney. <i>A Pageant of Spectacles</i>, Osher Map Library, University of Southern Maine, 2023–24.<span class="rf-n">How four-color process printing replaced hand-separated lithography after 1900, and why halftone screens made precise registration possible.</span></span></li>
+        </ul>
+      </div>
+        </article>
+        <article class="rf">
+      <div class="rf-plate">
+        <div class="rf-img rf-contain"><img src="img/ext-vectorscope.jpg" loading="lazy" alt="NTSC vectorscope graticule with SMPTE color bars plotted as green dots in their six target boxes"></div>
+        <div class="rf-credit"><span class="rf-lic">CC BY-SA 3.0</span>Denelson83. <a href="https://commons.wikimedia.org/wiki/File:SMPTE_color_bars_on_NTSC_vectorscope.png" target="_blank" rel="noopener">SMPTE color bars on NTSC vectorscope</a>, Wikimedia Commons.</div>
+      </div>
+      <div class="rf-body">
+        <h3>Vectorscope</h3>
+        <div class="lab rf-meta">Broadcast · color targets</div>
+        <p class="rf-why">The same color bars as the card above, read on the instrument. Angle is hue, distance from the centre is saturation, and each bar should land in its box. Grey sits at the centre, which is where the brand's monochrome lives.</p>
+        <ul class="rf-reads">
+          <li><span class="rf-kind">Free paper</span><span class="rf-cite"><a class="rf-t" href="https://www.alvyray.com/Papers/CG/color78.pdf" target="_blank" rel="noopener">Color Gamut Transform Pairs</a>. Alvy Ray Smith. <i>SIGGRAPH 78 Proceedings</i>, 12–19, 1978. Author's copy.<span class="rf-n">The paper that introduced HSV: describing color by hue, saturation and value instead of red, green and blue. It is the same idea the vectorscope draws as angle and radius.</span></span></li>
+          <li><span class="rf-kind">Library article</span><span class="rf-cite"><a class="rf-t" href="https://blogs.library.duke.edu/bitstreams/2016/06/23/color-bars-test-patterns/" target="_blank" rel="noopener">Color Bars &amp; Test Patterns</a>. Duke University Libraries, 2016.<span class="rf-n">Shared with the color bars card: why the bars exist is half of why the scope exists.</span></span></li>
+        </ul>
+      </div>
+        </article>
+      </div>
     </section>
 
     <footer>
@@ -1104,23 +1201,6 @@
           grid.append(b);
         }
         tr.append(grid);
-      }
-
-      // references (15)
-      const scope = `<svg viewBox="-60 -60 120 120" aria-hidden="true"><circle r="50" fill="none" stroke="#9A9A9A" stroke-width=".6"/><path d="M-50 0H50M0 -50V50" stroke="#9A9A9A" stroke-width=".5"/>${[[72,'#D2FF1E'],[312,'#FF1BD1'],[181,'#00EBEF'],[238,'#0009FF']].map(([h,c])=>{const a=(h-90)*Math.PI/180,x=Math.cos(a)*38,y=Math.sin(a)*38;return `<rect x="${(x-4).toFixed(1)}" y="${(y-4).toFixed(1)}" width="8" height="8" fill="none" stroke="${c}" stroke-width=".9"/>`}).join('')}<circle r="1.4" fill="#F4F1EA"/></svg>`;
-      const ramp = (() => { const seq = ['', 'cross', 'mono', 'screw', 'square']; let s = '<svg viewBox="0 0 240 180" aria-hidden="true">'; for (let y = 0; y < 9; y++) for (let x = 0; x < 12; x++) { const v = (Math.sin(x * .45 + y * .3) + Math.cos(y * .6 - x * .2) + 2) / 4; const k = seq[Math.min(4, Math.floor(v * 5))]; if (k) s += `<use href="#g-${k}" fill="#F4F1EA" transform="translate(${10 + x * 20} ${10 + y * 20}) scale(${k === 'cross' ? 10 : 14})"/>`; } return s + '</svg>'; })();
-      const REFS = [
-        ['img/ref-thermal.jpg', 'Thermal imaging', 'False color · isotherms', 'A palette stretched across a declared temperature window, meaningless without its scale bar. Isotherms color only what crosses a threshold.'],
-        ['img/ref-film.jpg', 'Thin-film interference', 'Soap film · temper colors', 'Color that is a distance, not a pigment. Its bands report a gap or a thickness.'],
-        ['img/ref-bars.jpg', 'SMPTE color bars', 'Broadcast reference', 'Known values sent ahead of the signal so everything after can be checked. In grey they step down a staircase.'],
-        ['img/ref-marks.png', 'Registration marks', 'Print · control strip', 'A circle and a crosshair printed on every plate. In register the plates stack to one black mark; drift splits it into colored ghosts.', true],
-        [scope, 'Vectorscope', 'Broadcast · color targets', 'Every pixel plotted by hue and saturation against target boxes. The circle is the graticule, the plus the axes.'],
-        [ramp, 'ASCII art', 'Tone by ink coverage', 'Characters sorted by how much of a cell they ink, so type can render any image. The ramp does the same with the primitives.'],
-      ];
-      const rg = $('#refgrid');
-      for (const [m, t, meta, d, paper] of REFS) {
-        const media = m.startsWith('<svg') ? m : `<img loading="lazy" src="${m}" alt="">`;
-        rg.append(el('div', 'vcard', `<span class="img${paper ? ' paper' : ''}">${media}</span><span class="t">${t}</span><span class="m">${meta}</span><span class="d">${d}</span>`));
       }
 
       // the field (12)
