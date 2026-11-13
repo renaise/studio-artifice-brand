@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The brand figure through a heat camera</title>
+<style>
+/* Same shell as the mannequin directions page: one instrument stage, controls and legend docked under it. */
+:root {
+  --ink: #0E0E0E; --panel: #171717; --line: #242424; --paper: #F4F1EA; --muted: #7A7871; --soft: #b9b5ab;
+  --sans: "Helvetica Now Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--ink); color: var(--paper); }
+body { font: 300 15px/1.5 var(--sans); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; }
+h1 { font: 300 clamp(26px, 4vw, 40px)/1.05 var(--sans); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.lbl { font: 11px/1.4 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.lede, .note { max-width: 72ch; color: var(--soft); margin: 0; }
+.lede b, .note b { color: var(--paper); font-weight: 500; }
+button:focus-visible, select:focus-visible { outline: 1px solid var(--paper); outline-offset: 2px; }
+.stage { position: relative; height: min(76vh, 720px); min-height: 420px; border: 1px solid var(--line); border-radius: 2px; overflow: hidden; touch-action: none;
+  background: #000; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#bars { pointer-events: none; }
+.hint { position: absolute; left: 14px; top: 12px; right: 14px; pointer-events: none; display: flex; flex-direction: column; gap: 4px; }
+.hint .read { color: var(--paper); font-variant-numeric: tabular-nums; }
+.split { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--paper); pointer-events: none; }
+.tag { position: absolute; bottom: 12px; pointer-events: none; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.dock { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 28px; }
+@media (max-width: 760px) { .dock { grid-template-columns: minmax(0, 1fr); } }
+.ctl { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
+.ctl label { display: flex; flex-direction: column; gap: 5px; }
+.ctl input[type=range] { width: 150px; accent-color: var(--paper); }
+.ctl output { color: var(--paper); font-variant-numeric: tabular-nums; }
+select, .ctl button { font: 12px var(--sans); color: var(--paper); background: var(--panel); border: 1px solid var(--line); border-radius: 2px; padding: 7px 9px; cursor: pointer; transition: border-color .2s cubic-bezier(.22,1,.36,1); }
+.ctl button:hover, select:hover { border-color: var(--muted); }
+.legend { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.bar { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.bar i { display: block; height: 26px; border-radius: 2px; }
+.bar span { font: 11px/1.3 var(--sans); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.bar.on span { color: var(--paper); }
+.settings { font: 11px/1.5 var(--sans); color: var(--paper); text-transform: uppercase; letter-spacing: .06em; border-top: 1px solid var(--line); padding-top: 8px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+[hidden] { display: none !important; }
+/* Embed: the stage is the whole page, every control is hidden and the preset is fixed. */
+html, body { height: 100%; overflow: hidden; }
+body { padding: 0; }
+body > .wrap { max-width: none; height: 100%; gap: 0; }
+body > .wrap > :not(.stage) { display: none !important; }
+.stage { height: 100%; min-height: 0; border: 0; border-radius: 0; touch-action: pan-y; }
+.hint { display: none; }
+</style>
+<script type="importmap">{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }</script>
+</head>
+<body>
+<div class="wrap">
+  <header class="wrap" style="gap:16px">
+    <div class="top">
+      <div>
+        <div class="lbl">Studio Artifice · exploration 2 · the mannequin</div>
+        <h1>One scale, two readings, in the round</h1>
+      </div>
+      <label class="lbl" style="display:flex;flex-direction:column;gap:5px">Legend order
+        <select id="order"><option value="figma">Figma (canonical)</option><option value="thermal">Thermal = film</option></select>
+      </label>
+    </div>
+    <p class="lede">The D1 study moved onto the wooden mannequin itself. The figure carries one temperature field: hot at the head and the heart, cooling through the trunk and arms to the hands and feet. <b>The heat order is blue, cyan, lime, magenta, which is the film order</b>, so the same field reads as a thermal image or as film thickness.</p>
+  </header>
+
+  <div class="stage" id="stage">
+    <canvas id="gl" aria-label="Mannequin rendered as a temperature field. Move over the figure to temper it."></canvas>
+    <canvas id="bars" aria-hidden="true"></canvas>
+    <div class="split" id="split" hidden></div>
+    <div class="tag lbl" id="tag-l" hidden>Thermal</div><div class="tag lbl" id="tag-r" hidden>Film</div>
+    <div class="hint lbl"><span id="hint">Move over the figure to temper it · drag to turn</span><span class="read" id="read">&nbsp;</span></div>
+    <div class="loading lbl" id="loading">Loading the figure</div>
+  </div>
+
+  <div class="dock">
+    <div class="ctl">
+      <label class="lbl">Reading<select id="m-ramp"><option value="film">Film thickness</option><option value="thermal">Thermal</option><option value="split">Split</option></select></label>
+      <label class="lbl">Floor<select id="m-floor"><option value="black">Black below blue</option><option value="film">Full film from 0 nm</option></select></label>
+      <label class="lbl">Heating <output id="m-heat-v"></output><input type="range" id="m-heat" min="100" max="1500" step="10" value="180"></label>
+      <label class="lbl">Radiance <output id="m-glow-v"></output><input type="range" id="m-glow" min="0" max="2" step="0.05" value="2"></label>
+      <label class="lbl">Bloom <output id="m-bloom-v"></output><input type="range" id="m-bloom" min="0" max="2" step="0.05" value="0.6"></label>
+      <label class="lbl">Grain size <output id="m-gsize-v"></output><input type="range" id="m-gsize" min="0.5" max="24" step="0.25" value="0.5"></label>
+      <label class="lbl">Grain blur <output id="m-gblur-v"></output><input type="range" id="m-gblur" min="0" max="1" step="0.05" value="1"></label>
+      <label class="lbl">Cooling <output id="m-cool-v"></output><input type="range" id="m-cool" min="0" max="3" step="0.05" value="0.1"></label>
+      <label class="lbl">Edges<select id="m-edge"><option value="on">Emissivity falloff</option><option value="off">Flat</option></select></label>
+      <label class="lbl">Turn<select id="m-turn"><option value="still">Still</option><option value="spin">Turntable</option></select></label>
+      <button id="m-reset">Clear tempering</button>
+    </div>
+    <div class="legend">
+      <div class="bars" id="m-bars"></div>
+      <div class="settings" id="m-settings">&nbsp;</div>
+    </div>
+  </div>
+  <p class="note"><b>Reading it.</b> Every point on the surface has a reading between 0 and 1. Thermal shows it through the original ramp. Film reads it as thickness on the Film Spectrum: blue at 222 nm, cyan at 275, lime at 308 and magenta at 398. Moving over the figure tempers it there (on a touch screen, press on it). Heat adds thickness, so the color walks on along the scale: in film it keeps going through the higher orders, and in thermal it climbs to magenta and clips to white past 440 nm. Heating sets how fast hovering adds thickness and cooling sets how fast it fades, so the two compete: a slow pass climbs to magenta, and lingering builds rings through the higher film orders. At zero it holds, which is the temper record from D1. Higher values turn it into the heat trace from the field study, which cools at 1.2 per second. Emissivity falloff lowers the reading where the surface turns away, the way a thermal camera sees grazing surfaces as colder. That gives the figure its form without any lighting, so hue still only reports a reading. The ground is the cold end of the same scale. Every surface gives off its heat, front and back, so the halo follows the figure as it turns, rises a little like warm air, and stays between black and Production blue under heavy grain. It brightens as tempering adds heat. Bloom spreads the figure's own colors past its contour under the same grain, so the edge frays the way it does in the original image. The readout names the reading and the band under the pointer.</p>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const $ = id => document.getElementById(id);
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ---- brand: the same scale as D1 ------------------------------------------
+const PHASES = {
+  Strategy:    { hex: "#D2FF1E" },
+  Identity:    { hex: "#FF1BD1" },
+  Application: { hex: "#00EBEF" },
+  Production:  { hex: "#0009FF" },
+};
+const FIGMA_ORDER = ["Strategy", "Identity", "Application", "Production"];
+const THERMAL_ORDER = ["Production", "Application", "Strategy", "Identity"]; // = film order
+const ANCHOR = { Production: 0.196, Application: 0.369, Strategy: 0.597, Identity: 0.822 };
+const BANDS = THERMAL_ORDER.map(k => ({ k, hex: PHASES[k].hex, at: ANCHOR[k] }));
+const EDGE = [(BANDS[0].at + BANDS[1].at) / 2, (BANDS[1].at + BANDS[2].at) / 2, (BANDS[2].at + BANDS[3].at) / 2];
+const bandOf = r => r < EDGE[0] ? 0 : r < EDGE[1] ? 1 : r < EDGE[2] ? 2 : 3;
+const RAMP = [[0, [0, 0, 0]], [0.196, [0, 9, 255]], [0.369, [0, 235, 239]], [0.597, [210, 255, 30]], [0.822, [255, 27, 209]], [1, [255, 255, 255]]];
+const FILM_NM = [[0, 0], [0.196, 222], [0.369, 275], [0.597, 308], [0.822, 398], [1, 440]];
+const FILM_STOPS = [[0, "#000000"], [2, "#020203"], [22, "#4D505F"], [46, "#9395A9"], [71, "#C7C3CF"], [96, "#E6D7CE"], [118, "#F0D3AD"], [139, "#EABC70"], [158, "#D8960E"], [175, "#BC6504"], [186, "#A43C4D"], [196, "#880075"], [212, "#4E00A5"], [217, "#3324B1"], [222, "#003CBB"], [248, "#0091D6"], [275, "#72C5C4"], [289, "#9FD4AA"], [308, "#CCD973"], [330, "#EFCB07"], [350, "#FDAA30"], [373, "#F67088"], [398, "#CF18BF"], [420, "#8C3BD1"], [428, "#6757D1"], [438, "#0075CB"], [468, "#00B89A"], [497, "#53D352"], [520, "#B5CE50"], [546, "#EFB08C"], [573, "#FF7DB9"], [598, "#F154C4"], [623, "#BE63B3"], [640, "#88829B"], [651, "#57958A"], [660, "#03A37D"], [686, "#00BE70"], [716, "#6EC391"], [744, "#C1B1AE"], [768, "#E598B5"], [790, "#EF82AB"], [811, "#E77999"], [832, "#CE8089"], [868, "#8B9E8C"], [899, "#5BB1A2"], [939, "#88B3AA"], [1000, "#D6938F"]];
+const hexRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const lerpTab = (tab, x) => {
+  if (x <= tab[0][0]) return tab[0][1];
+  for (let i = 1; i < tab.length; i++) if (x <= tab[i][0]) {
+    const [x0, a] = tab[i - 1], [x1, b] = tab[i], f = (x - x0) / (x1 - x0);
+    return Array.isArray(a) ? a.map((v, j) => v + (b[j] - v) * f) : a + (b - a) * f;
+  }
+  return tab[tab.length - 1][1];
+};
+const filmNM = r => r > 1 ? 440 : lerpTab(FILM_NM, r);
+const invFilm = nm => nm >= 440 ? 1 + (nm - 440) / 440 : lerpTab(FILM_NM.map(([r, n]) => [n, r]), nm);
+let order = "figma";
+const legendOrder = () => order === "figma" ? FIGMA_ORDER : THERMAL_ORDER;
+
+// ---- LUT textures ----------------------------------------------------------
+const filmLUT = new Uint8Array(1101 * 4), stops = FILM_STOPS.map(([nm, h]) => [nm, hexRgb(h)]);
+for (let nm = 0; nm <= 1100; nm++) { const c = lerpTab(stops, nm); filmLUT.set([...c.map(Math.round), 255], nm * 4); }
+const thermLUT = new Uint8Array(256 * 4);
+for (let i = 0; i < 256; i++) { const c = lerpTab(RAMP, i / 255); thermLUT.set([...c.map(Math.round), 255], i * 4); }
+const lutTex = (data, w) => { const t = new THREE.DataTexture(data, w, 1, THREE.RGBAFormat); t.magFilter = t.minFilter = THREE.LinearFilter; t.needsUpdate = true; return t; };
+
+// ---- the temperature field --------------------------------------------------
+// Model space (metres, Y up, face toward +Z). Readings follow the thermal image:
+// head and chest lime, the heart and the head's core magenta, pelvis and legs cyan,
+// hands and feet down toward blue.
+const BODY = [[0, .22], [.10, .25], [.46, .32], [.89, .38], [1.02, .43], [1.17, .50], [1.30, .58], [1.44, .62], [1.52, .60], [1.65, .63], [1.80, .60]];
+const ARM  = [[.74, .24], [.80, .28], [.89, .36], [1.16, .50], [1.40, .58], [1.52, .61]];
+const SPOTS = [ { p: [0, 1.665, .03], s: .042, a: .34 },   // head
+                { p: [0, 1.36, .075], s: .048, a: .32 } ]; // heart
+function hash3(x, y, z) { let h = (x * 374761393 + y * 668265263 + z * 1274126177) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967295; }
+function vnoise(x, y, z) {
+  const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z), fx = x - xi, fy = y - yi, fz = z - zi;
+  const sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy), sz = fz * fz * (3 - 2 * fz), l = (a, b, t) => a + (b - a) * t, c = (a, b, d) => hash3(xi + a, yi + b, zi + d);
+  return l(l(l(c(0,0,0), c(1,0,0), sx), l(c(0,1,0), c(1,1,0), sx), sy), l(l(c(0,0,1), c(1,0,1), sx), l(c(0,1,1), c(1,1,1), sx), sy), sz) * 2 - 1;
+}
+const smooth = (a, b, x) => { const u = Math.min(1, Math.max(0, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
+function fieldAt(x, y, z) {
+  const arm = y > .7 ? smooth(.15, .185, Math.abs(x)) : 0;
+  let r = lerpTab(BODY, y) * (1 - arm) + lerpTab(ARM, y) * arm;
+  for (const s of SPOTS) { const d2 = (x - s.p[0]) ** 2 + (y - s.p[1]) ** 2 + (z - s.p[2]) ** 2; r += s.a * Math.exp(-d2 / (2 * s.s * s.s)); }
+  r += 0.03 * vnoise(x * 28, y * 28, z * 28) + 0.015 * vnoise(x * 70 + 9, y * 70, z * 70);
+  return Math.min(1, Math.max(0, r));
+}
+
+// Voxel grids over the figure's bounds: base reading (static) and temper in nm (painted).
+const VOX = 0.0125, PAD = 0.03;
+let G = null; // { min, n:[nx,ny,nz], base:Float32Array, temper:Float32Array, baseTex, temTex, temBytes }
+function makeGrid(box) {
+  const min = box.min.clone().subScalar(PAD), size = box.getSize(new THREE.Vector3()).addScalar(PAD * 2);
+  const n = [0, 1, 2].map(i => Math.ceil(size.getComponent(i) / VOX) + 1);
+  const N = n[0] * n[1] * n[2], base = new Float32Array(N), bytes = new Uint8Array(N);
+  for (let k = 0; k < n[2]; k++) for (let j = 0; j < n[1]; j++) for (let i = 0; i < n[0]; i++) {
+    const idx = i + n[0] * (j + n[1] * k), v = fieldAt(min.x + i * VOX, min.y + j * VOX, min.z + k * VOX);
+    base[idx] = v; bytes[idx] = Math.round(v * 255);
+  }
+  const tex = (data) => { const t = new THREE.Data3DTexture(data, n[0], n[1], n[2]); t.format = THREE.RedFormat; t.type = THREE.UnsignedByteType; t.minFilter = t.magFilter = THREE.LinearFilter; t.unpackAlignment = 1; t.needsUpdate = true; return t; };
+  const temBytes = new Uint8Array(N);
+  G = { min, n, ext: new THREE.Vector3(n[0] - 1, n[1] - 1, n[2] - 1).multiplyScalar(VOX), base, temper: new Float32Array(N), temBytes, baseTex: tex(bytes), temTex: tex(temBytes) };
+}
+function sampleGrid(arr, p) {
+  const { min, n } = G, f = [(p.x - min.x) / VOX, (p.y - min.y) / VOX, (p.z - min.z) / VOX];
+  const i0 = f.map((v, a) => Math.min(n[a] - 2, Math.max(0, Math.floor(v)))), t = f.map((v, a) => Math.min(1, Math.max(0, v - i0[a])));
+  let s = 0;
+  for (let c = 0; c < 8; c++) { const dx = c & 1, dy = (c >> 1) & 1, dz = (c >> 2) & 1, w = (dx ? t[0] : 1 - t[0]) * (dy ? t[1] : 1 - t[1]) * (dz ? t[2] : 1 - t[2]); s += w * arr[(i0[0] + dx) + n[0] * ((i0[1] + dy) + n[1] * (i0[2] + dz))]; }
+  return s;
+}
+const TMAX = 790, SIG = 0.045; // nm cap (lime 308 + 790 reaches the end of the film spectrum), brush sigma in metres
+let RATE = 650; // nm per second at the brush centre, set by the Heating slider
+let maxT = 0, temDirty = false;
+function temper(p, dt) {
+  const { min, n, temper: T, temBytes: B } = G, R = SIG * 3, lo = [p.x - R, p.y - R, p.z - R], hi = [p.x + R, p.y + R, p.z + R];
+  const a = lo.map((v, k) => Math.max(0, Math.floor((v - min.getComponent(k)) / VOX))), b = hi.map((v, k) => Math.min(n[k] - 1, Math.ceil((v - min.getComponent(k)) / VOX)));
+  for (let k = a[2]; k <= b[2]; k++) for (let j = a[1]; j <= b[1]; j++) for (let i = a[0]; i <= b[0]; i++) {
+    const d2 = (min.x + i * VOX - p.x) ** 2 + (min.y + j * VOX - p.y) ** 2 + (min.z + k * VOX - p.z) ** 2;
+    const idx = i + n[0] * (j + n[1] * k), v = Math.min(TMAX, T[idx] + RATE * dt * Math.exp(-d2 / (2 * SIG * SIG)));
+    T[idx] = v; B[idx] = Math.round(v / TMAX * 255); if (v > maxT) maxT = v;
+  }
+  temDirty = true;
+}
+function cool(dt, rate) {
+  const T = G.temper, B = G.temBytes, k = Math.exp(-rate * dt); let m = 0;
+  for (let i = 0; i < T.length; i++) { if (!T[i]) continue; const v = T[i] * k < 0.5 ? 0 : T[i] * k; T[i] = v; B[i] = Math.round(v / TMAX * 255); if (v > m) m = v; }
+  maxT = m; temDirty = true;
+}
+
+// ---- shader -----------------------------------------------------------------
+const vert = /* glsl */`
+  varying vec3 vP; varying vec3 vN; varying vec3 vV;
+  void main() {
+    vP = position;
+    vec4 wp = modelMatrix * vec4(position, 1.0);
+    vN = normalize(mat3(modelMatrix) * normal);
+    vV = cameraPosition - wp.xyz;
+    gl_Position = projectionMatrix * viewMatrix * wp;
+  }`;
+const frag = /* glsl */`
+  precision highp sampler3D;
+  uniform sampler3D uBase, uTemper; uniform sampler2D uFilm, uThermal;
+  uniform vec3 uMin, uExt; uniform float uTMax, uSplit, uMode, uBlack, uEdges, uPass;
+  varying vec3 vP; varying vec3 vN; varying vec3 vV;
+  float h3(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+  float vn(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(mix(h3(i), h3(i + vec3(1,0,0)), f.x), mix(h3(i + vec3(0,1,0)), h3(i + vec3(1,1,0)), f.x), f.y),
+               mix(mix(h3(i + vec3(0,0,1)), h3(i + vec3(1,0,1)), f.x), mix(h3(i + vec3(0,1,1)), h3(i + vec3(1,1,1)), f.x), f.y), f.z) * 2.0 - 1.0; }
+  float seg(float x, float x0, float x1, float y0, float y1) { return y0 + (y1 - y0) * clamp((x - x0) / (x1 - x0), 0.0, 1.0); }
+  float filmNM(float r) {
+    if (r < 0.196) return seg(r, 0.0, 0.196, 0.0, 222.0);
+    if (r < 0.369) return seg(r, 0.196, 0.369, 222.0, 275.0);
+    if (r < 0.597) return seg(r, 0.369, 0.597, 275.0, 308.0);
+    if (r < 0.822) return seg(r, 0.597, 0.822, 308.0, 398.0);
+    return seg(r, 0.822, 1.0, 398.0, 440.0);
+  }
+  float invFilm(float nm) {
+    if (nm < 222.0) return seg(nm, 0.0, 222.0, 0.0, 0.196);
+    if (nm < 275.0) return seg(nm, 222.0, 275.0, 0.196, 0.369);
+    if (nm < 308.0) return seg(nm, 275.0, 308.0, 0.369, 0.597);
+    if (nm < 398.0) return seg(nm, 308.0, 398.0, 0.597, 0.822);
+    return nm < 440.0 ? seg(nm, 398.0, 440.0, 0.822, 1.0) : 1.0;
+  }
+  void main() {
+    vec3 uvw = (vP - uMin) / uExt;
+    float r = texture(uBase, uvw).r + 0.02 * vn(vP * 140.0);
+    float tp = texture(uTemper, uvw).r * uTMax;
+    // Radiance pass: every surface, front and back, adds the heat it gives off, so the halo follows the figure in 3D.
+    if (uPass > 0.5) { float e = 0.09 * smoothstep(0.1, 0.9, r) + 0.6 * tp / uTMax; gl_FragColor = vec4(e, e, e, 1.0); return; }
+    vec3 n = normalize(vN); if (!gl_FrontFacing) n = -n;
+    float ndv = clamp(dot(n, normalize(vV)), 0.0, 1.0);
+    if (uEdges > 0.5) r *= mix(0.42, 1.0, pow(ndv, 0.6));
+    bool thermal = uMode == 1.0 || (uMode == 2.0 && gl_FragCoord.x < uSplit);
+    vec3 col;
+    if (thermal) {
+      float rt = invFilm(filmNM(clamp(r, 0.0, 1.0)) + tp);
+      col = texture(uThermal, vec2((clamp(rt, 0.0, 1.0) * 255.0 + 0.5) / 256.0, 0.5)).rgb;
+    } else {
+      // On a black floor the cold end holds the blue film color and fades to black instead of passing through grey and gold.
+      float nm = clamp((uBlack > 0.5 && r < 0.196 ? 222.0 : filmNM(r)) + tp, 0.0, 1100.0);
+      float k = uBlack > 0.5 ? clamp((r - 0.04) / 0.156 + tp / 60.0, 0.0, 1.0) : 1.0;
+      col = texture(uFilm, vec2((nm + 0.5) / 1101.0, 0.5)).rgb * k;
+    }
+    gl_FragColor = vec4(col, 1.0);
+  }`;
+
+// ---- scene -------------------------------------------------------------------
+const stageEl = $("stage"), cv = $("gl");
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+renderer.setClearColor(0x000000, 1); renderer.autoClear = false;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(28, 1, 0.05, 30);
+camera.position.set(0, 0.95, 4.1);
+const controls = new OrbitControls(camera, cv);
+controls.target.set(0, 0.9, 0); controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.minDistance = 1.2; controls.maxDistance = 6; controls.rotateSpeed = 0.7;
+controls.enableZoom = false; controls.autoRotate = false;
+cv.style.touchAction = "pan-y"; // a vertical swipe still scrolls the page around the embed
+let over = false; // pointer on the stage: the figure turns, easing in and out on the speed
+const uniforms = {
+  uBase: { value: null }, uTemper: { value: null }, uFilm: { value: lutTex(filmLUT, 1101) }, uThermal: { value: lutTex(thermLUT, 256) },
+  uMin: { value: new THREE.Vector3() }, uExt: { value: new THREE.Vector3(1, 1, 1) }, uTMax: { value: TMAX },
+  uSplit: { value: 0 }, uMode: { value: 0 }, uBlack: { value: 1 }, uEdges: { value: 1 }, uPass: { value: 0 },
+};
+const material = new THREE.ShaderMaterial({ uniforms, vertexShader: vert, fragmentShader: frag, side: THREE.DoubleSide });
+let mesh = null;
+
+// ---- radiance: the cold end of the same scale ---------------------------------
+// The figure's heat is rendered additively into a small buffer, spread through a blur pyramid,
+// and read back through the thermal ramp clamped to black→blue (0–0.196), with heavy grain.
+const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1), quadGeo = new THREE.PlaneGeometry(2, 2);
+const quadVert = `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+const pass = (fs, u) => { const m = new THREE.ShaderMaterial({ uniforms: u, vertexShader: quadVert, fragmentShader: fs, depthTest: false, depthWrite: false }); const sc = new THREE.Scene(); sc.add(new THREE.Mesh(quadGeo, m)); return { m, sc }; };
+const blurP = pass(`uniform sampler2D tSrc; uniform vec2 uStep; varying vec2 vUv;
+  void main() { float w[5]; w[0] = .227; w[1] = .195; w[2] = .122; w[3] = .054; w[4] = .016;
+    vec4 c = texture(tSrc, vUv) * w[0];
+    for (int i = 1; i < 5; i++) { c += (texture(tSrc, vUv + uStep * float(i)) + texture(tSrc, vUv - uStep * float(i))) * w[i]; }
+    gl_FragColor = c; }`, { tSrc: { value: null }, uStep: { value: new THREE.Vector2() } });
+// Grain: random cells of a set size. Blur 0 gives hard cells (the original grain); higher values
+// smooth each cell into its neighbours, up to soft value noise. It changes 14 times a second.
+const GRAIN = `
+  float hash(vec2 p) { vec3 q = fract(vec3(p.xyx) * .1031); q += dot(q, q.yzx + 33.33); return fract((q.x + q.y) * q.z); }
+  float grain(vec2 fc, float size, float blur, vec2 seed) {
+    vec2 p = fc / size, i = floor(p), f = fract(p);
+    vec2 w = smoothstep(vec2(0.5 - 0.5 * blur), vec2(0.5 + 0.5 * blur + 1e-4), f);
+    return mix(mix(hash(i + seed), hash(i + vec2(1, 0) + seed), w.x), mix(hash(i + vec2(0, 1) + seed), hash(i + vec2(1, 1) + seed), w.x), w.y);
+  }`;
+const compU = { l0: { value: null }, l1: { value: null }, l2: { value: null }, l3: { value: null }, l4: { value: null }, uThermal: uniforms.uThermal, uGain: { value: 1 }, uTime: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) }, uGSize: { value: 1.5 }, uGBlur: { value: 0 } };
+const compP = pass(`uniform sampler2D l0, l1, l2, l3, l4, uThermal; uniform float uGain, uTime, uGSize, uGBlur; uniform vec2 uRes; varying vec2 vUv;
+  ${GRAIN}
+  void main() {
+    vec2 up = vec2(0.0, 0.03);
+    float g = .30 * texture(l0, vUv).r + .45 * texture(l1, vUv).r + .55 * texture(l2, vUv).r + .65 * texture(l3, vUv).r + .75 * texture(l4, vUv).r;
+    g += .35 * texture(l3, vUv - up).r + .45 * texture(l4, vUv - up * 2.5).r;   // heat rises
+    float p = 1.0 - exp(-g * 9.0 * uGain);
+    float t = floor(uTime * 14.0);
+    float n = grain(gl_FragCoord.xy, uGSize, uGBlur, t * vec2(37.0, 17.0)), n2 = grain(gl_FragCoord.xy, uGSize * 2.0, uGBlur, t * vec2(11.0, 53.0));
+    p *= 0.35 + 1.3 * n * (0.6 + 0.4 * n2);                                     // heavy grain, film-like flicker
+    p = clamp(p, 0.0, 1.0) * 0.196;                                              // blue range only: black → Production blue
+    gl_FragColor = vec4(texture(uThermal, vec2((p * 255.0 + 0.5) / 256.0, 0.5)).rgb, 1.0);
+  }`, compU);
+// Bloom: the colored figure is rendered off screen, spread through its own pyramid, and laid back over
+// itself with a screen blend, jittered by grain so the contour frays like the reference image.
+const bloomU = { tModel: { value: null }, b0: { value: null }, b1: { value: null }, b2: { value: null }, b3: { value: null }, tBg: { value: null }, uBloom: { value: 1 }, uTime: compU.uTime, uRes: compU.uRes, uGSize: compU.uGSize, uGBlur: compU.uGBlur };
+const finalP = pass(`uniform sampler2D tModel, b0, b1, b2, b3, tBg; uniform float uBloom, uTime, uGSize, uGBlur; uniform vec2 uRes; varying vec2 vUv;
+  ${GRAIN}
+  void main() {
+    float t = floor(uTime * 14.0);
+    vec2 fc = gl_FragCoord.xy;
+    vec2 j = (vec2(hash(fc + t * 3.1), hash(fc.yx + t * 7.7)) - 0.5) * 9.0 / uRes;       // fibrous fray at the contour
+    vec4 m = texture(tModel, vUv);
+    vec4 s0 = texture(b0, vUv + j), s1 = texture(b1, vUv + j * 2.0), s2 = texture(b2, vUv), s3 = texture(b3, vUv);
+    vec3 bg = texture(tBg, vUv).rgb;
+    // soften the figure itself toward its nearest blur, then lay the wider bloom over everything
+    vec3 fig = mix(m.rgb, s0.rgb / max(s0.a, 1e-3), 0.35 * min(uBloom, 1.0));
+    vec3 c = mix(bg, fig, m.a);
+    vec3 b = (0.55 * s0.rgb + 0.45 * s1.rgb + 0.35 * s2.rgb + 0.25 * s3.rgb) * uBloom;
+    float n = grain(fc, uGSize, uGBlur, t * vec2(19.0, 41.0));
+    b *= 0.4 + 1.0 * n;                                                                  // same heavy grain as the ground
+    c = 1.0 - (1.0 - c) * (1.0 - clamp(b * (1.0 - 0.85 * m.a), 0.0, 1.0));               // screen blend, gentler on the body
+    gl_FragColor = vec4(c, 1.0);
+  }`, bloomU);
+let bloomRT = null, modelRT = null, bgRT = null;
+function makeBloom(w, h) {
+  if (bloomRT) { bloomRT.forEach(l => { l.a.dispose(); l.b.dispose(); }); modelRT.dispose(); bgRT.dispose(); }
+  const opt = { type: THREE.HalfFloatType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false };
+  modelRT = new THREE.WebGLRenderTarget(w, h, { ...opt, depthBuffer: true, samples: 4 });
+  bgRT = new THREE.WebGLRenderTarget(w, h, opt);
+  bloomRT = []; let lw = Math.max(8, w >> 1), lh = Math.max(8, h >> 1);
+  for (let i = 0; i < 4; i++) { bloomRT.push({ a: new THREE.WebGLRenderTarget(lw, lh, opt), b: new THREE.WebGLRenderTarget(lw, lh, opt), w: lw, h: lh }); lw = Math.max(4, lw >> 1); lh = Math.max(4, lh >> 1); }
+  bloomU.tModel.value = modelRT.texture; bloomU.tBg.value = bgRT.texture; bloomU.uRes.value.set(w, h);
+  bloomRT.forEach((l, i) => bloomU["b" + i].value = l.a.texture);
+}
+function pyramid(levels, srcTex) {
+  const blur = (src, dst, dx, dy) => { blurP.m.uniforms.tSrc.value = src; blurP.m.uniforms.uStep.value.set(dx, dy); renderer.setRenderTarget(dst); renderer.render(blurP.sc, quadCam); };
+  levels.forEach((l, i) => {
+    blur(i ? levels[i - 1].a.texture : srcTex, l.a, 0, 0);
+    blur(l.a.texture, l.b, 1.5 / l.w, 0); blur(l.b.texture, l.a, 0, 1.5 / l.h);
+  });
+}
+let glowRT = null;
+function makeGlow(w, h) {
+  if (glowRT) glowRT.forEach(l => { l.a.dispose(); l.b.dispose(); });
+  const opt = { type: THREE.HalfFloatType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false };
+  glowRT = []; let lw = Math.max(8, w >> 2), lh = Math.max(8, h >> 2);
+  for (let i = 0; i < 5; i++) { glowRT.push({ a: new THREE.WebGLRenderTarget(lw, lh, opt), b: new THREE.WebGLRenderTarget(lw, lh, opt), w: lw, h: lh }); lw = Math.max(4, lw >> 1); lh = Math.max(4, lh >> 1); }
+  glowRT.forEach((l, i) => compU["l" + i].value = l.a.texture);
+}
+function renderGlow() {
+  const L0 = glowRT[0];
+  material.blending = THREE.AdditiveBlending; material.depthTest = false; material.depthWrite = false; uniforms.uPass.value = 1;
+  renderer.setRenderTarget(L0.a); renderer.setClearColor(0x000000, 1); renderer.clear(); renderer.render(scene, camera);
+  material.blending = THREE.NormalBlending; material.depthTest = true; material.depthWrite = true; uniforms.uPass.value = 0;
+  const blur = (src, dst, dx, dy) => { blurP.m.uniforms.tSrc.value = src.texture; blurP.m.uniforms.uStep.value.set(dx, dy); renderer.setRenderTarget(dst); renderer.render(blurP.sc, quadCam); };
+  glowRT.forEach((l, i) => {
+    if (i > 0) blur(glowRT[i - 1].a, l.a, 0, 0);          // downsample (linear filter averages)
+    blur(l.a, l.b, 1.5 / l.w, 0); blur(l.b, l.a, 0, 1.5 / l.h);
+  });
+  renderer.setRenderTarget(null);
+}
+
+new GLTFLoader().load("mannequin.glb", gltf => {
+  gltf.scene.traverse(o => { if (o.isMesh && !mesh) mesh = o; });
+  mesh.geometry.applyMatrix4(mesh.matrixWorld); mesh.position.set(0, 0, 0); mesh.rotation.set(0, 0, 0); mesh.scale.set(1, 1, 1);
+  mesh.geometry.computeBoundingBox();
+  mesh.material = material; scene.add(mesh);
+  makeGrid(mesh.geometry.boundingBox);
+  uniforms.uBase.value = G.baseTex; uniforms.uTemper.value = G.temTex;
+  uniforms.uMin.value.copy(G.min); uniforms.uExt.value.copy(G.ext);
+  $("loading").hidden = true;
+}, undefined, () => { $("loading").textContent = "The figure didn't load"; });
+
+// ---- interaction ---------------------------------------------------------------
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+let pressing = false, pressPos = null, hoverHit = null, pointer = null;
+function hitAt(e) {
+  if (!mesh) return null;
+  const r = cv.getBoundingClientRect();
+  ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  return ray.intersectObject(mesh, false)[0] || null;
+}
+// A mouse tempers wherever it hovers on the figure. Touch has no hover, so a finger on the figure
+// tempers instead of turning it (capture phase stops OrbitControls before it starts a turn).
+cv.addEventListener("pointerdown", e => {
+  if (e.pointerType === "mouse") return;
+  over = true;
+  if (hitAt(e)) { pressing = true; pointer = e; controls.enabled = false; cv.setPointerCapture(e.pointerId); }
+}, { capture: true });
+cv.addEventListener("pointermove", e => { pointer = e; });
+cv.addEventListener("pointerenter", () => { over = true; });
+cv.addEventListener("pointerleave", () => { over = false; });
+const release = e => { if (e.pointerType !== "mouse") over = false; pressing = false; controls.enabled = true; if (e.pointerType !== "mouse") pointer = null; };
+cv.addEventListener("pointerup", release); cv.addEventListener("pointercancel", release);
+cv.addEventListener("pointerleave", () => { if (!pressing) pointer = null; });
+const coolRate = () => +$("m-cool").value;
+const coolOut = () => { const v = coolRate(); $("m-cool-v").textContent = v ? v.toFixed(2) + " /s" : "Off · holds"; };
+$("m-cool").addEventListener("input", coolOut); coolOut();
+const heatOut = () => { RATE = +$("m-heat").value; $("m-heat-v").textContent = RATE + " nm/s"; };
+$("m-heat").addEventListener("input", heatOut); heatOut();
+const glowOut = () => { compU.uGain.value = +$("m-glow").value; $("m-glow-v").textContent = (+$("m-glow").value).toFixed(2); };
+$("m-glow").addEventListener("input", glowOut); glowOut();
+const bloomOut = () => { bloomU.uBloom.value = +$("m-bloom").value; $("m-bloom-v").textContent = (+$("m-bloom").value).toFixed(2); };
+$("m-bloom").addEventListener("input", bloomOut); bloomOut();
+// Grain size is in screen pixels; the shader works in device pixels.
+const grainOut = () => { const sz = +$("m-gsize").value, bl = +$("m-gblur").value; compU.uGSize.value = sz * renderer.getPixelRatio(); compU.uGBlur.value = bl; $("m-gsize-v").textContent = sz + " px"; $("m-gblur-v").textContent = bl ? bl.toFixed(2) : "Off"; };
+$("m-gsize").addEventListener("input", grainOut); $("m-gblur").addEventListener("input", grainOut); grainOut();
+$("m-reset").onclick = () => { if (!G) return; G.temper.fill(0); G.temBytes.fill(0); maxT = 0; temDirty = true; };
+for (const id of ["m-ramp", "m-floor", "m-edge", "m-turn"]) $(id).addEventListener("change", sync);
+$("order").addEventListener("change", e => { order = e.target.value; legend(); });
+
+function sync() {
+  const mode = $("m-ramp").value;
+  uniforms.uMode.value = mode === "film" ? 0 : mode === "thermal" ? 1 : 2;
+  uniforms.uBlack.value = $("m-floor").value === "black" ? 1 : 0;
+  uniforms.uEdges.value = $("m-edge").value === "on" ? 1 : 0;
+  
+  $("split").hidden = $("tag-l").hidden = $("tag-r").hidden = mode !== "split";
+  bars.dirty = true;
+}
+
+// ---- legend and readout --------------------------------------------------------
+let activeBand = -1;
+function legend() {
+  $("m-bars").innerHTML = legendOrder().map(k => { const b = BANDS.findIndex(x => x.k === k), nm = Math.round(filmNM(ANCHOR[k])); return `<div class="bar${b === activeBand ? " on" : ""}"><i style="background:${PHASES[k].hex}"></i><span>${k}<br>${nm} nm · ${ANCHOR[k].toFixed(2)}</span></div>`; }).join("");
+}
+legend();
+function readout(h) {
+  if (!h || !G) { $("read").innerHTML = "&nbsp;"; if (activeBand !== -1) { activeBand = -1; legend(); } return null; }
+  const n = h.face.normal.clone(), v = camera.position.clone().sub(h.point).normalize();
+  let ndv = Math.abs(n.dot(v)); let r = sampleGrid(G.base, h.point);
+  if ($("m-edge").value === "on") r *= 0.42 + 0.58 * Math.pow(ndv, 0.6);
+  const tp = sampleGrid(G.temper, h.point), nm = filmNM(r) + tp, rt = invFilm(nm), b = bandOf(Math.min(1, rt));
+  $("read").textContent = `Reading ${Math.min(1, rt).toFixed(2)}${rt > 1 ? " (clipped)" : ""} · ${Math.round(nm)} nm · ${BANDS[b].k} band${tp > 1 ? ` · tempered +${Math.round(tp)} nm` : ""}`;
+  if (b !== activeBand) { activeBand = b; legend(); }
+  return Math.min(1, rt);
+}
+
+// The two declared scales, side by side: thermal ramp and film at the mapped thickness.
+const bars = { cv: $("bars"), dirty: true };
+function drawBars() {
+  const c = bars.cv, W = stageEl.clientWidth, H = stageEl.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
+  if (c.width !== Math.round(W * dpr) || c.height !== Math.round(H * dpr)) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
+  const x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, W, H);
+  const narrow = W < 520, bw = narrow ? 10 : 14, by = 60, bh = H - 120, bx = W - (narrow ? 2 * bw + 16 : 2 * bw + 70);
+  for (let i = 0; i < 120; i++) {
+    const r = i / 119, yy = by + bh - (i + 1) * bh / 120;
+    x.fillStyle = `rgb(${lerpTab(RAMP, r).map(Math.round)})`; x.fillRect(bx, yy, bw, bh / 120 + .6);
+    const nm = Math.round(filmNM(r)); x.fillStyle = `rgb(${filmLUT[nm * 4]},${filmLUT[nm * 4 + 1]},${filmLUT[nm * 4 + 2]})`; x.fillRect(bx + bw + 4, yy, bw, bh / 120 + .6);
+  }
+  x.font = "11px 'Helvetica Now Display', 'Helvetica Neue', Helvetica, Arial, sans-serif"; x.textBaseline = "middle"; x.textAlign = "left";
+  for (const b of BANDS) { const yy = by + bh - b.at * bh; x.fillStyle = b.hex; x.fillRect(bx - 6, Math.round(yy), 4, 1); if (!narrow) { x.fillStyle = "#7A7871"; x.fillText(Math.round(filmNM(b.at)) + " NM", bx + bw * 2 + 10, yy); } }
+  if (pointerReading != null) { const yy = Math.round(by + bh - Math.min(1, pointerReading) * bh) + .5; x.strokeStyle = "#F4F1EA"; x.lineWidth = 1; x.beginPath(); x.moveTo(bx - 8, yy); x.lineTo(bx + bw * 2 + 6, yy); x.stroke(); }
+}
+let pointerReading = null;
+
+// ---- loop -----------------------------------------------------------------------
+function resize() {
+  const W = stageEl.clientWidth, H = stageEl.clientHeight;
+  renderer.setSize(W, H, false); camera.aspect = W / H;
+  camera.updateProjectionMatrix();
+  uniforms.uSplit.value = W / 2 * renderer.getPixelRatio();
+  makeGlow(Math.round(W * renderer.getPixelRatio()), Math.round(H * renderer.getPixelRatio()));
+  makeBloom(Math.round(W * renderer.getPixelRatio()), Math.round(H * renderer.getPixelRatio()));
+  $("split").style.left = Math.round(W / 2) + "px"; $("tag-l").style.right = (W / 2 + 10) + "px"; $("tag-r").style.left = (W / 2 + 10) + "px";
+  bars.dirty = true;
+}
+new ResizeObserver(resize).observe(stageEl); resize(); sync();
+let last = performance.now();
+let visible = true, queued = false;
+new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !queued) { last = performance.now(); queued = true; requestAnimationFrame(frame); } }).observe(stageEl);
+function frame(now) {
+  queued = false;
+  if (!visible) return;
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  controls.update();
+  if (mesh && G) {
+    const h = pointer ? hitAt(pointer) : null;
+    const heating = h && (pointer.pointerType === "mouse" || pressing);
+    if (heating) temper(h.point, dt);
+    if (coolRate() > 0 && maxT > 0) cool(dt, coolRate());
+    if (temDirty) { G.temTex.needsUpdate = true; temDirty = false; }
+    const pr = readout(h);
+    if (pr !== pointerReading) { pointerReading = pr; bars.dirty = true; }
+    cv.style.cursor = h ? "crosshair" : "grab";
+  }
+  if (bars.dirty) { drawBars(); bars.dirty = false; }
+  compU.uTime.value = now / 1000;
+  if (mesh) renderGlow();
+  renderer.setRenderTarget(bgRT); renderer.render(compP.sc, quadCam);              // grained blue ground
+  renderer.setRenderTarget(modelRT); renderer.setClearColor(0x000000, 0); renderer.clear(); renderer.render(scene, camera);
+  renderer.setClearColor(0x000000, 1);
+  pyramid(bloomRT, modelRT.texture);
+  renderer.setRenderTarget(null); renderer.clear(); renderer.render(finalP.sc, quadCam);
+  $("m-settings").textContent = `Film n 1.33 · ramp 0→0 nm, 0.20→222, 0.37→275, 0.60→308, 0.82→398 · floor ${$("m-floor").value === "black" ? "black" : "0 nm"} · heating ${RATE} nm/s · cooling ${coolRate() ? coolRate().toFixed(2) + "/s" : "off, holds"} · edges ${$("m-edge").value === "on" ? "emissivity" : "flat"} · temper max +${Math.round(maxT)} nm · radiance ${compU.uGain.value.toFixed(2)}, black→blue only · bloom ${bloomU.uBloom.value.toFixed(2)} · grain ${$("m-gsize").value} px, blur ${(+$("m-gblur").value).toFixed(2)} · voxel ${VOX * 1000} mm`;
+  queued = true; requestAnimationFrame(frame);
+}
+queued = true; requestAnimationFrame(frame);
+</script>
+</body>
+</html>
