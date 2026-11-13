@@ -117,12 +117,12 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const PHASES = {
   Strategy:    { hex: "#D2FF1E" },
   Identity:    { hex: "#FF1BD1" },
-  Application: { hex: "#00EBEF" },
+  Applications: { hex: "#00EBEF" },
   Production:  { hex: "#0009FF" },
 };
-const FIGMA_ORDER = ["Strategy", "Identity", "Application", "Production"];
-const THERMAL_ORDER = ["Production", "Application", "Strategy", "Identity"]; // = film order
-const ANCHOR = { Production: 0.196, Application: 0.369, Strategy: 0.597, Identity: 0.822 };
+const FIGMA_ORDER = ["Strategy", "Identity", "Applications", "Production"];
+const THERMAL_ORDER = ["Production", "Applications", "Strategy", "Identity"]; // = film order
+const ANCHOR = { Production: 0.196, Applications: 0.369, Strategy: 0.597, Identity: 0.822 };
 const BANDS = THERMAL_ORDER.map(k => ({ k, hex: PHASES[k].hex, at: ANCHOR[k] }));
 const EDGE = [(BANDS[0].at + BANDS[1].at) / 2, (BANDS[1].at + BANDS[2].at) / 2, (BANDS[2].at + BANDS[3].at) / 2];
 const bandOf = r => r < EDGE[0] ? 0 : r < EDGE[1] ? 1 : r < EDGE[2] ? 2 : 3;
