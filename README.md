@@ -42,4 +42,4 @@ This repository is connected to Cloudflare Pages (project `studio-artifice-brand
 - Corners are 2px, lines are 1px.
 - Clear space is measured from the wordmark; the Ⓐ monogram's height is not counted.
 
-The page names Helvetica Now Display but does not embed it, since embedding needs a web license. Without one, visitors who don't have the font installed see Helvetica Neue or Arial.
+The page names Helvetica Now Display but does not embed it, since embedding needs a web license. Until then, the page falls back to Helvetica Neue for visitors who don't have the font installed.
