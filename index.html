@@ -1,0 +1,1600 @@
+<!doctype html>
+<!-- Studio Artifice brand guidelines. -->
+<!-- 2026-11-02: the cover image is now the live board (assets/motion/board-heat-pass.riv, signed export of Rive file safx-board-heat-pass 2695700, script included); assets/cover.png stays as its poster and as og:image. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Studio Artifice Brand</title>
+<meta name="color-scheme" content="dark light" />
+<script>try{var t=localStorage.getItem("safx-rnd-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<meta name="description" content="Studio Artifice is a strategic visual studio in New York, designing durable artifacts for AI companies, cultural institutions, and consumer brands." />
+<meta property="og:title" content="Studio Artifice Brand" />
+<meta property="og:description" content="Studio Artifice is a strategic visual studio in New York, designing durable artifacts for AI companies, cultural institutions, and consumer brands." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://safx-rnd.taox.workers.dev/assets/cover.png" />
+<meta property="og:image:width" content="2400" />
+<meta property="og:image:height" content="1260" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/svg+xml" href="assets/marks/safx-favicon-production.svg" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<style>
+  /* safx-radii-2px: every box (cards, plates, chips, tiles, buttons, image frames) uses --r-xs. */
+  :root {
+    /* Surfaces, from the Brand Story. */
+    --ink:#0e0e0e;      /* the ground */
+    --paper:#f4f1ea;    /* the text on it */
+    --linen:#fcfaf5;    /* the light sections */
+    --panel:#171717;    /* the raised surface */
+    --line:#242424;     /* the hairline */
+    --bg:var(--ink);
+    --surface:var(--panel);
+    --border:var(--line);
+    --border-2:#3a3a3a;
+    --text:var(--paper);
+    /* Text greys. --text-4 is the quietest that still meets WCAG AA (4.6:1 on ink). */
+    --text-2:#b4b4b4;
+    --text-3:#8f8f8f;
+    --text-4:#7c7c7c;
+    /* Incorrect-use marking only. Warning, never brand color. */
+    --err:#e0736a;
+    --err-edge:#3a2020;
+    --sans:"Helvetica Now Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+    /* Tracking has three jobs and only three, plus the control exception. */
+    --tr-display:-0.022em;
+    --tr-read:-0.01em;
+    --tr-label:0.08em;
+    --tr-ctl:0.02em;
+
+    /* Spacing: one even scale, and nothing off it. A block after prose opens at --sp-5,
+       a block after a label at --sp-4. Subsections open at --sp-6, sections at --sp-8. */
+    --sp-1:4px;
+    --sp-2:8px;
+    --sp-3:12px;
+    --sp-4:16px;
+    --sp-5:24px;
+    --sp-6:40px;
+    --sp-7:64px;
+    --sp-8:96px;
+    --pad-cell:var(--sp-4);
+
+    /* Brand Story: rules and borders are 1px, radius is 2px, one easing curve. */
+    --hairline:1px;
+    --r-xs:2px;
+    --ease:cubic-bezier(.22,1,.36,1);
+    --dur:.2s;
+    --fw-display:400;
+    --ctl-wash:rgba(244,241,234,.05);
+    --misuse-glow:rgba(255,255,255,.85); /* the "Effects" misuse tile: a halo in the mark's own tone */
+    --plate:#0b0b0b;
+    --scale-grey:linear-gradient(180deg,#555,#111);
+    --fav-shadow:rgba(244,241,234,.08); /* a barely-there halo that lifts the favicons off the panel */
+    color-scheme:dark;
+  }
+  /* Light mode: the same system on linen. Ink becomes the text; brand surface values
+     in the swatches stay literal. */
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+    --bg:#fcfaf5; --panel:#f4f1ea; --line:#dedad0; --border-2:#c4bfb3; --text:#0e0e0e;
+    --text-2:#3e3e3e; --text-3:#5c5c5c; --text-4:#6a6a6a; --err:#b3412f; --err-edge:#ebcfc9;
+    --ctl-wash:rgba(14,14,14,.05); --misuse-glow:rgba(14,14,14,.6); --plate:#f4f1ea; --scale-grey:linear-gradient(180deg,#b8b8b8,#f4f1ea);
+    --fav-shadow:rgba(14,14,14,.14);
+    color-scheme:light; } }
+  :root[data-theme="light"] {
+    --bg:#fcfaf5; --panel:#f4f1ea; --line:#dedad0; --border-2:#c4bfb3; --text:#0e0e0e;
+    --text-2:#3e3e3e; --text-3:#5c5c5c; --text-4:#6a6a6a; --err:#b3412f; --err-edge:#ebcfc9;
+    --ctl-wash:rgba(14,14,14,.05); --misuse-glow:rgba(14,14,14,.6); --plate:#f4f1ea; --scale-grey:linear-gradient(180deg,#b8b8b8,#f4f1ea);
+    --fav-shadow:rgba(14,14,14,.14);
+    color-scheme:light; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  :where([id]) { scroll-margin-top:1.25rem; }
+  /* Sections land flush: the snap and the nav both put a section's top on the screen's top edge. */
+  section.card[id] { scroll-margin-top:0; }
+  body { background:var(--bg); color:var(--text-2); font-family:var(--sans);
+         font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; letter-spacing:var(--tr-read); }
+  a { color:inherit; }
+  strong { color:var(--text); font-weight:400; }
+  img { max-width:100%; }
+  :focus-visible { outline:2px solid var(--text); outline-offset:2px; }
+
+  .app { display:flex; align-items:flex-start; overflow-x:clip; }
+
+  /* ---- sidebar ---- */
+  .side { position:sticky; top:0; height:100vh; width:224px; flex-shrink:0;
+          border-right:var(--hairline) solid var(--line); padding:var(--sp-5) var(--sp-4); display:flex;
+          flex-direction:column; gap:var(--sp-4); background:var(--bg); z-index:10; }
+  .side .brand { display:block; text-decoration:none; }
+  /* Desktop: the menu wrapper adds nothing to layout and the burger stays hidden. */
+  .menu { display:contents; }
+  .burger { display:none; }
+  /* The device alone (square and circle), masked so it takes the text color and follows the theme. */
+  .brandmark { display:block; width:53px; height:26px; margin-bottom:var(--sp-3); background:var(--text);
+               -webkit-mask:url(assets/marks/safx-device-white.svg) left center/contain no-repeat;
+               mask:url(assets/marks/safx-device-white.svg) left center/contain no-repeat;
+               transition:background var(--dur) var(--ease); }
+  .brand-t { display:block; font-size:21px; line-height:1.12; font-weight:var(--fw-display); letter-spacing:var(--tr-display); color:var(--text);
+             transition:color var(--dur) var(--ease); }
+  .toc { display:flex; flex-direction:column; }
+  .toc a { font-size:12px; letter-spacing:var(--tr-read); color:var(--text-3); text-decoration:none;
+           padding:var(--sp-2) 0; transition:color var(--dur) var(--ease); }
+  .toc a:hover, .toc a.active { color:var(--text); }
+  .toc .n { color:var(--text-4); margin-right:var(--sp-2); font-variant-numeric:tabular-nums; }
+  /* The section in view: its number lit. One weight everywhere, so no bolder cut. */
+  .toc a.active .n { color:var(--text-2); }
+  .acts { display:flex; gap:var(--sp-1); margin-top:auto; }
+  /* The one utility control: sidebar pair, phase chips, download chips, copy chips. */
+  .btn, .chips span, .dlmark, .cpbtn {
+         font-family:var(--sans); font-size:11px; letter-spacing:var(--tr-ctl); text-transform:uppercase;
+         font-weight:400; line-height:1; color:var(--text-3); background:transparent;
+         border:var(--hairline) solid var(--border); border-radius:var(--r-xs); cursor:pointer;
+         text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
+         min-height:28px; padding:0 var(--sp-3);
+         transition-property:color,background-color,border-color; transition-duration:var(--dur); transition-timing-function:var(--ease); }
+  .btn:hover, .dlmark:hover, .cpbtn:hover {
+         color:var(--text); border-color:var(--text); background:var(--ctl-wash); }
+  .btn { flex:1; color:var(--text); border-color:var(--border-2); white-space:nowrap; }
+  .chips span { cursor:default; color:var(--text); border-color:var(--border-2); }
+
+
+  /* ---- content ---- */
+  .wrap { flex:1; min-width:0; max-width:1080px; margin:0 auto;
+          padding:0 clamp(var(--sp-4),3vw,var(--sp-6)) var(--sp-5); display:flex; flex-direction:column; min-height:100vh; }
+  /* The only rules on the page sit between sections, and run from the sidebar to the screen edge. */
+  .card { position:relative; padding:clamp(var(--sp-7),6.7vw,var(--sp-8)) 0; }
+  .card::before, .lede::before, footer::before { content:""; position:absolute; top:0; left:-100vw; right:-100vw;
+           border-top:var(--hairline) solid var(--line); pointer-events:none; }
+  .card:first-child::before { display:none; }
+  .card:first-child { padding-top:0; }
+
+  .lab { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3);
+         display:flex; gap:var(--sp-3); margin-bottom:var(--sp-4); }
+  .lab .n { color:var(--text-4); font-variant-numeric:tabular-nums; }
+  h2 { font-size:clamp(20px,2.3vw,27px); line-height:1.12; letter-spacing:var(--tr-display);
+       font-weight:var(--fw-display); color:var(--text); max-width:32ch; }
+  .sh { font-size:11px; line-height:1.4; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3);
+       font-weight:400; margin-bottom:var(--sp-2); }
+  .card > .sh { margin-top:var(--sp-6); margin-bottom:0; }
+  .card > .sh + *, .card > .sh + .srcbox.bp { margin-top:var(--sp-4); }
+  .sub { color:var(--text-2); font-size:15px; line-height:1.5; max-width:62ch; margin-top:var(--sp-2); }
+  .note { color:var(--text-3); font-size:13px; line-height:1.5; max-width:62ch; margin-top:var(--sp-3); }
+  .x { color:var(--err); margin-right:var(--sp-1); }
+
+  /* ---- opening plate ---- */
+  /* The cover bleeds past the column to the sidebar and the screen edge. The column is centered in
+     the space beside the sidebar, so centering a box that wide on the column lands it edge to edge. */
+  .cover { padding:0; margin:0 0 0 50%; width:calc(100vw - 224px); transform:translateX(-50%); }
+  .cover img { width:100%; height:auto; display:block; }
+  /* The cover is the live board (C v2 heat pass, Rive). The PNG stays underneath as the poster:
+     it holds the box and shows until the board's first frame, and stays if the runtime fails. */
+  .cover { position:relative; }
+  .cover canvas { position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0; touch-action:pan-y; cursor:pointer; }
+  .cover.live canvas { opacity:1; }
+  .lede { position:relative; padding:clamp(var(--sp-5),3.4vw,var(--sp-6)) 0; }
+  .lede p.statement { font-size:clamp(17px,1.9vw,21px); line-height:1.42; color:var(--text);
+                      max-width:44ch; letter-spacing:var(--tr-display); }
+  .lede p.sub { margin-top:var(--sp-4); }
+  .chips { display:flex; flex-wrap:wrap; gap:var(--sp-1); }
+
+  /* ---- tiles: marks, primitives, misuse ---- */
+  .marks { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:var(--sp-4); margin-top:var(--sp-5); }
+  .mark { display:flex; flex-direction:column; gap:var(--sp-2); margin:0; }
+  .tile { border:var(--hairline) solid var(--line); height:132px; display:flex; align-items:center;
+          justify-content:center; padding:var(--pad-cell); background:var(--panel); border-radius:var(--r-xs); }
+  .tile img { max-height:72%; max-width:78%; width:auto; height:auto; object-fit:contain; }
+  .cap { font-size:11px; color:var(--text-2); line-height:1.4; }
+  .cap span { display:block; color:var(--text-3); }
+  .prim svg { width:56px; height:56px; color:var(--text); overflow:visible; }
+  .prim.rule svg { width:140px; }
+  .pname { font-size:13px; color:var(--text); }
+  .pdesc { font-size:12.5px; line-height:1.45; color:var(--text-3); margin-top:var(--sp-1); }
+
+  /* Clear space for the three lockups, drawn as live vectors so they scale and follow
+     the theme. Labels are HTML so they stay legible at every width. */
+  .clear { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-1); }
+  .clear .cs-h { grid-column:1 / -1; }
+  .note + .clear { margin-top:var(--sp-4); }
+  .cs { position:relative; width:100%; background:var(--surface); border:var(--hairline) solid var(--line); border-radius:var(--r-xs); color:var(--text); }
+  .cs > svg { display:block; width:100%; height:100%; overflow:visible; }
+  .cs-mark { fill:currentColor; }
+  .cs-sq rect { fill:var(--text-4); opacity:.16; }
+  .cs-guide line, .cs-guide rect { fill:none; stroke:var(--text-4); stroke-width:1; stroke-dasharray:3 3; vector-effect:non-scaling-stroke; }
+  .cs-dot circle { fill:var(--text-4); }
+  .cs span { position:absolute; transform:translate(-50%,-50%); font-size:11px; line-height:1;
+             letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); white-space:nowrap; }
+  @media (max-width:680px) { .clear { grid-template-columns:1fr; } .cs span { font-size:9px; }
+    .cs span.st-t { margin-top:-11px; } .cs span.st-b { margin-top:11px; }
+    .cs span.rt { left:auto !important; right:3px; transform:translateY(-50%); } }
+
+  .wrongs { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:var(--sp-4); margin-top:var(--sp-4); }
+  .wrong figure { margin:0; }
+  .wrong .tile { border-color:var(--err-edge); }
+  .wrong figcaption { font-size:11px; color:var(--text-3); margin-top:var(--sp-2); }
+  .w-glow  img { filter:drop-shadow(0 0 9px var(--misuse-glow)); }
+  .w-color img { filter:brightness(0) invert(38%) sepia(96%) saturate(3000%) hue-rotate(200deg); }
+  .w-low   img { opacity:.18; }
+
+  /* ---- mark cards: light and dark plates, downloads on hover ---- */
+  .mcards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-2); margin-top:var(--sp-5); }
+  .mcard { position:relative; margin:0; display:flex; flex-direction:column; align-items:center; gap:var(--sp-4);
+           padding:var(--sp-6) var(--sp-4) var(--sp-4); border-radius:var(--r-xs); overflow:hidden; outline:none; isolation:isolate; }
+  .mcard.lt { background:#F4F1EA; border:1px solid #DEDAD0; color:#0E0E0E; --fr:rgba(14,14,14,.28); --fr2:rgba(14,14,14,.2); }
+  .mcard.dk { background:#0E0E0E; border:1px solid #242424; color:#F4F1EA; --fr:rgba(244,241,234,.28); --fr2:rgba(244,241,234,.2); }
+  .mframe { border:1px dashed var(--fr2); max-width:100%; display:flex; justify-content:center; }
+  .mframe.fd { border-color:var(--fr); }
+  .mframe img { display:block; max-width:100%; height:auto; }
+  .mcard figcaption { font-size:10.5px; line-height:14px; letter-spacing:.08em; text-transform:uppercase; color:inherit; text-align:center; }
+  .mcards.fav { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .mcard.th { background:var(--panel); border:1px solid var(--line); color:var(--text); }
+  .mcard.th img { display:block; width:84px; height:84px; filter:drop-shadow(0 0 6px var(--fav-shadow)); }
+  .mcard.th .mdl { background:color-mix(in srgb, var(--panel) 42%, transparent); box-shadow:inset 0 0 40px color-mix(in srgb, var(--text) 6%, transparent); }
+  .mcard.th .mbtn { color:var(--text); }
+  .mcard.th .mbtn:hover, .mcard.th .mbtn:focus-visible { background:var(--text); color:var(--bg); }
+  @media (max-width:680px) { .mcards.fav { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  /* hover: the plate blurs from the inside, two buttons ease in on the brand curve */
+  .mdl { position:absolute; inset:0; z-index:1; display:flex; align-items:center; justify-content:center; gap:var(--sp-3);
+         border-radius:inherit; opacity:0; pointer-events:none;
+         -webkit-backdrop-filter:blur(18px) saturate(1.4); backdrop-filter:blur(18px) saturate(1.4);
+         transition:opacity .45s var(--ease); }
+  .mcard.lt .mdl { background:rgba(244,241,234,.42); box-shadow:inset 0 0 0 1px rgba(255,255,255,.5), inset 0 0 40px rgba(14,14,14,.06); }
+  .mcard.dk .mdl { background:rgba(14,14,14,.38); box-shadow:inset 0 0 0 1px rgba(255,255,255,.08), inset 0 0 40px rgba(255,255,255,.04); }
+  .mbtn { min-width:76px; padding:var(--sp-3) var(--sp-4); border-radius:var(--r-xs); font-family:var(--sans); font-size:11px; background:transparent; border:1px solid currentColor; letter-spacing:var(--tr-label);
+          line-height:1.55; font-weight:400; cursor:pointer; -webkit-appearance:none; appearance:none;
+          text-transform:uppercase; text-align:center; text-decoration:none; opacity:0; transform:translateY(10px);
+          transition:opacity .45s var(--ease), transform .45s var(--ease), background-color var(--dur) var(--ease), color var(--dur) var(--ease); }
+  .mbtn + .mbtn { transition-delay:.06s; }
+  .mcard.lt .mbtn { color:#0E0E0E; }
+  .mcard.dk .mbtn { color:#F4F1EA; }
+  .mcard.lt .mbtn:hover, .mcard.lt .mbtn:focus-visible { background:#0E0E0E; color:#F4F1EA; }
+  .mcard.dk .mbtn:hover, .mcard.dk .mbtn:focus-visible { background:#F4F1EA; color:#0E0E0E; }
+  .mbtn:focus-visible { outline:1px solid currentColor; outline-offset:2px; }
+  .mcard:hover .mdl, .mcard:has(:focus-visible) .mdl, .mcard.open .mdl { opacity:1; pointer-events:auto; }
+  .mcard:hover .mbtn, .mcard:has(:focus-visible) .mbtn, .mcard.open .mbtn { opacity:1; transform:none; }
+  @media (max-width:560px) {
+    .mcards { grid-template-columns:1fr; }
+  }
+  /* ---- copy on hover: every copiable value uses the mark cards' layer, blur and outlined buttons.
+     .lt / .dk follow the block's own value (a light swatch takes the light layer); no class follows the theme. ---- */
+  .cpx { position:relative; isolation:isolate; }
+  .cpx .mdl { background:color-mix(in srgb, var(--panel) 42%, transparent); box-shadow:inset 0 0 40px color-mix(in srgb, var(--text) 6%, transparent); }
+  .cpx .mbtn { color:var(--text); }
+  .cpx .mbtn:hover, .cpx .mbtn:focus-visible { background:var(--text); color:var(--bg); }
+  .cpx.lt .mdl { background:rgba(244,241,234,.42); box-shadow:inset 0 0 0 1px rgba(255,255,255,.5), inset 0 0 40px rgba(14,14,14,.06); }
+  .cpx.dk .mdl { background:rgba(14,14,14,.38); box-shadow:inset 0 0 0 1px rgba(255,255,255,.08), inset 0 0 40px rgba(255,255,255,.04); }
+  .cpx.lt .mbtn { color:#0E0E0E; }
+  .cpx.dk .mbtn { color:#F4F1EA; }
+  .cpx.lt .mbtn:hover, .cpx.lt .mbtn:focus-visible { background:#0E0E0E; color:#F4F1EA; }
+  .cpx.dk .mbtn:hover, .cpx.dk .mbtn:focus-visible { background:#F4F1EA; color:#0E0E0E; }
+  .cpx.film .mdl { background:rgba(14,14,14,.5); }
+  .cpx:hover .mdl, .cpx:has(:focus-visible) .mdl, .cpx.open .mdl { opacity:1; pointer-events:auto; }
+  .cpx:hover .mbtn, .cpx:has(:focus-visible) .mbtn, .cpx.open .mbtn { opacity:1; transform:none; }
+
+  /* ---- color ---- */
+  .swatches { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:var(--sp-4); margin-top:var(--sp-5); }
+  .sw .chip { height:96px; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); }
+  .sw .nm { font-size:15px; color:var(--text); margin-top:var(--sp-3); }
+  .sw .rl { font-size:13px; color:var(--text-3); margin-top:var(--sp-1); line-height:1.45; }
+  .cprow { display:flex; gap:var(--sp-1); margin-top:var(--sp-2); }
+  .cpbtn { color:var(--text-2); font-variant-numeric:tabular-nums; text-transform:none;
+           letter-spacing:var(--tr-ctl); font-size:11px; }
+
+  /* ---- type ---- */
+  .faces { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4); margin-top:var(--sp-5); }
+  .face { border:var(--hairline) solid var(--line); border-radius:var(--r-xs); padding:var(--pad-cell); }
+  .face .big { font-size:52px; line-height:1; letter-spacing:var(--tr-display); color:var(--text); font-weight:var(--fw-display); }
+  .face.none .big { color:var(--text-4); }
+  .face .nm { font-size:13px; color:var(--text); margin-top:var(--sp-4); }
+  .face .ds { font-size:12.5px; color:var(--text-3); line-height:1.45; margin-top:var(--sp-1); }
+  .ladder { border-top:var(--hairline) solid var(--line); margin-top:var(--sp-5); }
+  .rung { display:flex; align-items:baseline; gap:var(--sp-5); padding:var(--sp-3) 0; border-bottom:var(--hairline) solid var(--line); }
+  .rung .s { flex:1; min-width:0; line-height:1.05; letter-spacing:var(--tr-display); color:var(--text);
+             white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .rung .s.display { font-size:clamp(28px,4.4vw,48px); font-weight:var(--fw-display); }
+  .rung .s.label { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); }
+  .rung .meta { font-size:11.5px; color:var(--text-3); white-space:nowrap; text-align:right;
+                font-variant-numeric:tabular-nums; }
+
+  /* ---- motion + artifact ---- */
+  .loop { margin:var(--sp-5) 0 0; }
+  .loop .tile { height:auto; aspect-ratio:21/9; }
+  .loop figcaption, .photogrid figcaption { font-size:11.5px; color:var(--text-3); margin-top:var(--sp-2); line-height:1.4; }
+  /* Motion: the sting loops in a 16:9 plate */
+  .sting { margin:var(--sp-5) 0 0; }
+  .sting .plate { position:relative; aspect-ratio:16/9; background:#0E0E0E; border:var(--hairline) solid var(--line);
+                  border-radius:var(--r-xs); overflow:hidden; }
+  .mspec { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-4); margin-top:var(--sp-4); }
+  .mtile { display:flex; flex-direction:column; gap:var(--sp-1); border:var(--hairline) solid var(--line); border-radius:var(--r-xs); padding:var(--sp-4); overflow:hidden; }
+  .mtile .vis { display:flex; align-items:flex-end; height:64px; margin-bottom:var(--sp-3); color:var(--text); }
+  .mtile .vis svg { width:64px; height:64px; overflow:visible; }
+  .mtile .vis path { fill:none; stroke:currentColor; stroke-width:1; vector-effect:non-scaling-stroke; }
+  .mtile .vis .ax { stroke:var(--line); }
+  .mtile .vis b { font-weight:400; font-size:clamp(28px,4.4vw,48px); line-height:1; letter-spacing:var(--tr-display); }
+  .mtile .k { font-size:13px; color:var(--text); }
+  .mtile .v { font-size:12px; color:var(--text-3); }
+  @media (max-width:560px) { .mspec { grid-template-columns:1fr; } }
+  .sting canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+  /* ---- Motion: three live controls on the left, the curve they run on at the right ---- */
+  .mo { margin-top:var(--sp-5); display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-4); }
+  .mo > * { min-width:0; }
+  .mo-uses { display:flex; flex-direction:column; justify-content:center; gap:var(--sp-3); }
+  .mo-use { display:grid; grid-template-columns:96px minmax(0,1fr); align-items:center; gap:var(--sp-4); min-height:88px; padding:var(--sp-3) 0; }
+  .mo-k { font-size:13px; color:var(--text); }
+  .mo-vis { display:flex; align-items:center; min-width:0; }
+  .mo-crop { position:relative; font-family:var(--sans); font-size:11px; letter-spacing:var(--tr-ctl); text-transform:uppercase; line-height:1.55;
+             color:var(--text-2); background:transparent; border:0; border-radius:var(--r-xs); padding:12px 20px; margin:0 14px; cursor:pointer;
+             transition:color var(--dur) var(--ease), background-color var(--dur) var(--ease); }
+  .mo-crop i { position:absolute; width:9px; height:9px; border:0 solid currentColor; opacity:.45; transition:transform var(--dur) var(--ease), opacity var(--dur) var(--ease); }
+  .mo-crop i:nth-of-type(1) { left:0; top:0; border-left-width:1px; border-top-width:1px; transform:translate(-12px,-12px); }
+  .mo-crop i:nth-of-type(2) { right:0; top:0; border-right-width:1px; border-top-width:1px; transform:translate(12px,-12px); }
+  .mo-crop i:nth-of-type(3) { left:0; bottom:0; border-left-width:1px; border-bottom-width:1px; transform:translate(-12px,12px); }
+  .mo-crop i:nth-of-type(4) { right:0; bottom:0; border-right-width:1px; border-bottom-width:1px; transform:translate(12px,12px); }
+  .mo-crop:hover, .mo-crop:focus-visible { color:var(--text); background:var(--ctl-wash); outline:none; }
+  .mo-crop:hover i, .mo-crop:focus-visible i { transform:none; opacity:1; }
+  .mo-seg { position:relative; display:inline-grid; grid-template-columns:1fr 1fr; border:var(--hairline) solid var(--border-2); border-radius:var(--r-xs); padding:3px; }
+  .mo-mk { position:absolute; top:3px; bottom:3px; left:3px; width:calc(50% - 3px); border-radius:var(--r-xs); background:var(--text); transition:transform var(--dur) var(--ease); }
+  .mo-seg[data-on="1"] .mo-mk { transform:translateX(100%); }
+  .mo-seg button { position:relative; font-family:var(--sans); font-size:11px; letter-spacing:var(--tr-ctl); text-transform:uppercase; line-height:1;
+                   min-height:28px; min-width:72px; padding:0 var(--sp-3); background:transparent; border:0; color:var(--text-3); cursor:pointer; transition:color var(--dur) var(--ease); }
+  .mo-seg button[aria-pressed="true"] { color:var(--bg); }
+  /* The panel hangs below the row, out of the flow, so the row never moves. */
+  .mo-disc { position:relative; width:min(240px,100%); }
+  .mo-disc button { width:100%; display:flex; justify-content:space-between; align-items:center; gap:var(--sp-2); padding:var(--sp-1) 0;
+                    font-family:var(--sans); font-size:13px; letter-spacing:var(--tr-read); color:var(--text); background:none; border:0; cursor:pointer; text-align:left; }
+  .mo-pm { position:relative; width:10px; height:10px; flex:none; }
+  .mo-pm::before, .mo-pm::after { content:""; position:absolute; left:0; right:0; top:50%; height:1px; margin-top:-.5px; background:currentColor; transition:transform var(--dur) var(--ease); }
+  .mo-pm::after { transform:rotate(90deg); }
+  .mo-disc[data-open="1"] .mo-pm::after { transform:rotate(0deg); }
+  .mo-body { position:absolute; left:0; right:0; top:100%; display:grid; grid-template-rows:0fr; transition:grid-template-rows var(--dur) var(--ease); }
+  .mo-disc[data-open="1"] .mo-body { grid-template-rows:1fr; }
+  .mo-body > div { overflow:hidden; }
+  .mo-body p { margin:0; padding:var(--sp-1) 0 0; font-size:12px; line-height:1.5; color:var(--text-3); opacity:0; transform:translateY(-4px);
+               transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+  .mo-disc[data-open="1"] .mo-body p { opacity:1; transform:none; }
+  .mo-curve { border-radius:var(--r-xs); padding:var(--sp-5); display:grid; place-items:center; min-height:300px; overflow:hidden; }
+  .mo-curve svg { width:100%; max-width:360px; height:auto; display:block; overflow:visible; }
+  .mo-curve path, .mo-curve rect { vector-effect:non-scaling-stroke; }
+  .mo-ax { stroke:var(--line); stroke-width:1; fill:none; }
+  .mo-grid { stroke:var(--line); stroke-width:1; stroke-dasharray:2 4; fill:none; }
+  .mo-hd { stroke:var(--text-3); stroke-width:1; fill:none; }
+  .mo-c0 { stroke:var(--text-4); stroke-width:1; fill:none; }
+  .mo-c1 { stroke:var(--text); stroke-width:1.5; fill:none; }
+  .mo-hp { fill:var(--bg); stroke:var(--text-2); stroke-width:1; }
+  .mo-ep { fill:var(--text-3); }
+  .mo-dot { fill:var(--text); }
+  .mo-curve text { fill:var(--text-3); font-family:var(--sans); font-size:10px; letter-spacing:.02em; font-variant-numeric:tabular-nums; }
+  .mo-curve .mo-hl { fill:var(--text-4); }
+  .mo-curve .mo-rd { fill:var(--text); font-size:11px; }
+  #motion .ssh + .sting { margin-top:var(--sp-4); }
+  @media (max-width:720px) {
+    .mo { grid-template-columns:minmax(0,1fr); }
+    .mo-curve { min-height:240px; order:-1; }
+    .mo-use { grid-template-columns:72px minmax(0,1fr); }
+  }
+  .photogrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:var(--sp-4); margin-top:var(--sp-5); }
+  .photogrid figure { margin:0; }
+  .photogrid .tile { height:auto; aspect-ratio:16/10; }
+  /* Artifact: the live figure reads as a plate; the stills below reuse the mark cards */
+  .artifact { margin:var(--sp-5) 0 0; }
+  .artifact .plate { position:relative; aspect-ratio:16/10; background:#000; border:var(--hairline) solid var(--line);
+                     border-radius:var(--r-xs); overflow:hidden; }
+  .artifact iframe { position:absolute; inset:0; width:100%; height:100%; border:0; display:block; }
+  .artifact .use { margin-top:var(--sp-2); }
+  .stills { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-5) var(--sp-2); align-items:start; margin-top:var(--sp-5); }
+  .use { font-size:13px; line-height:1.45; color:var(--text-2); margin-top:var(--sp-2); max-width:60ch; }
+  .mcard.ph { padding:0 0 var(--sp-4); gap:var(--sp-4); }
+  .mcard.ph img { display:block; width:100%; height:auto; aspect-ratio:1602/2402; }
+  @media (max-width:680px) { .artifact .plate { aspect-ratio:4/5; } }
+  @media (max-width:420px) { .stills { grid-template-columns:1fr; } }
+
+  .srcbox { border:var(--hairline) solid var(--line); border-radius:var(--r-xs); background:var(--panel); margin-top:var(--sp-5); }
+  .srchead { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3);
+             padding:var(--sp-2) var(--sp-4); border-bottom:var(--hairline) solid var(--line); }
+  .srchead .t { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); }
+
+  /* ---- rules columns ---- */
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4) var(--sp-6); margin-top:var(--sp-5); }
+  .cols ul { list-style:none; }
+  .cols li { font-size:13.5px; line-height:1.45; color:var(--text-2); padding:var(--sp-2) 0; }
+
+  footer { position:relative; margin-top:auto; padding:var(--sp-5) 0 0;
+           font-size:12px; color:var(--text-3); display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--sp-3); }
+
+  /* 01 About: facts as a two-column definition grid; boilerplate reuses .srcbox. */
+  .facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:var(--sp-5);
+           border-top:var(--hairline) solid var(--line); column-gap:var(--sp-6); }
+  .facts div { display:grid; grid-template-columns:7rem minmax(0,1fr); gap:var(--sp-3); align-items:start;
+               padding:var(--sp-2) 0; border-bottom:var(--hairline) solid var(--line); font-size:13px; }
+  .facts dt { color:var(--text-3); font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; padding-top:2px; }
+  .facts dd { color:var(--text); }
+  /* Boilerplate rows sit on the phase grid's quarters: the label on the column edge, the text from the
+     second quarter (the Identity tile's edge). Copy waits under the label and fades in on hover. */
+  .bprows { display:grid; gap:var(--sp-6); margin-top:var(--sp-5); }
+  .bprow { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .bpside { display:flex; flex-direction:column; align-items:flex-start; gap:var(--sp-2); padding-right:var(--sp-4); }
+  .bpside .t { font-size:12px; line-height:calc(15px * 1.55); letter-spacing:var(--tr-read); color:var(--text-3); }
+  .bpside .mbtn { color:var(--text); }
+  .bpside .mbtn:hover, .bpside .mbtn:focus-visible { background:var(--text); color:var(--bg); }
+  .bprow:hover .mbtn, .bprow:has(:focus-visible) .mbtn { opacity:1; transform:none; }
+  @media (hover:none) { .bpside .mbtn { opacity:1; transform:none; } }
+  .bptext { grid-column:2 / -1; color:var(--text); font-size:15px; line-height:1.55; max-width:72ch; }
+  .bptext p + p { margin-top:1em; }
+  @media (max-width:720px) {
+    .bprow { grid-template-columns:1fr; gap:var(--sp-2); }
+    .bpside { flex-direction:row; align-items:center; justify-content:space-between; padding-right:0; }
+    .bptext { grid-column:1; }
+  }
+
+
+  /* ================= Color system =================
+     Same vocabulary as the base: 1px lines, 2px radius, 11px labels, one ease. */
+  :root {
+    --strategy:#D2FF1E; --identity:#FF1BD1; --applications:#00EBEF; --production:#0009FF;
+    --phase-gradient:radial-gradient(70% 70% at 9% 53%,#0009FF 26%,#00EBEF 49%,#FF1BD1 68%,#D2FF1E 100%);
+    --ground-gradient:linear-gradient(180deg,#EBEBEB 0%,#BFBFBF 55%,#EEEEEE 100%);
+    --register:#9A9A9A;
+    --grey-ground-1:#F6F6F6; --grey-ground-2:#EBEBEB; --grey-ground-3:#CACACA; --grey-warm-06:#7A7871; --grey-warm-05:#5C5A54;
+    --grey-ramp-mid:#BFBFBF; --grey-muted:#969696;
+    --film:linear-gradient(90deg,#000000 0.0%,#020203 0.2%,#4D505F 2.2%,#9395A9 4.6%,#C7C3CF 7.1%,#E6D7CE 9.6%,#F0D3AD 11.8%,#EABC70 13.9%,#D8960E 15.8%,#BC6504 17.5%,#A43C4D 18.6%,#880075 19.6%,#4E00A5 21.2%,#3324B1 21.7%,#003CBB 22.2%,#0091D6 24.8%,#72C5C4 27.5%,#9FD4AA 28.9%,#CCD973 30.8%,#EFCB07 33.0%,#FDAA30 35.0%,#F67088 37.3%,#CF18BF 39.8%,#8C3BD1 42.0%,#6757D1 42.8%,#0075CB 43.8%,#00B89A 46.8%,#53D352 49.7%,#B5CE50 52.0%,#EFB08C 54.6%,#FF7DB9 57.3%,#F154C4 59.8%,#BE63B3 62.3%,#88829B 64.0%,#57958A 65.1%,#03A37D 66.0%,#00BE70 68.6%,#6EC391 71.6%,#C1B1AE 74.4%,#E598B5 76.8%,#EF82AB 79.0%,#E77999 81.1%,#CE8089 83.2%,#8B9E8C 86.8%,#5BB1A2 89.9%,#88B3AA 93.9%,#D6938F 100.0%);
+  }
+  .toc .rule-r { height:0; border-top:var(--hairline) solid var(--border-2); margin:var(--sp-3) 0 0; }
+  .toc .grp { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-4); padding:var(--sp-3) 0 var(--sp-2); border-bottom:var(--hairline) solid var(--line); }
+  .rnd { display:inline-flex; align-items:center; min-height:20px; padding:0 var(--sp-2); margin-left:var(--sp-2); vertical-align:2px;
+         font-size:10.5px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-2);
+         border:var(--hairline) solid var(--border-2); border-radius:var(--r-xs); font-weight:400; }
+  .rndbox { margin-top:var(--sp-6); }
+  .rndbox > .sh:first-child { margin-top:0; }
+  .rndbox .sh { margin-top:var(--sp-6); }
+  .rndbox .sh + * { margin-top:var(--sp-4); }
+  .rulequote { font-size:clamp(17px,1.9vw,21px); line-height:1.35; color:var(--text); letter-spacing:var(--tr-display);
+               max-width:40ch; border-left:2px solid var(--text); padding-left:var(--sp-4); margin-top:var(--sp-5); }
+  .legend4 { display:inline-grid; grid-template-columns:repeat(4,22px); height:14px; border:1px solid var(--register); border-radius:var(--r-xs); overflow:hidden; vertical-align:middle; }
+  .legend4 i { border-left:1px solid var(--register); }
+  .legend4 i:first-child { border-left:0; }
+  /* Thesis phase chips fill with their phase color on hover; ink or paper text, whichever reads. */
+  .chips.phased span:hover { color:var(--ink); }
+  .chips.phased .ph-strategy:hover    { background:var(--strategy);    border-color:var(--strategy); }
+  .chips.phased .ph-identity:hover    { background:var(--identity);    border-color:var(--identity); }
+  .chips.phased .ph-application:hover { background:var(--applications); border-color:var(--applications); }
+  .chips.phased .ph-production:hover  { background:var(--production);  border-color:var(--production); color:var(--paper); }
+
+  .num { font-variant-numeric:tabular-nums; }
+  .sw11 { display:inline-block; width:11px; height:11px; vertical-align:-1px; margin-right:var(--sp-2); border:1px solid var(--register); border-radius:var(--r-xs); }
+
+  .phases { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--sp-4); margin-top:var(--sp-4); }
+  .phase .chip { height:120px; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); }
+  .phase .nm { font-size:15px; color:var(--text); margin-top:var(--sp-3); }
+  .phase .rl { font-size:12.5px; color:var(--text-3); margin-top:var(--sp-1); line-height:1.45; font-variant-numeric:tabular-nums; }
+  .orders { display:grid; grid-template-columns:max-content minmax(0,1fr); gap:var(--sp-4) var(--sp-5); align-items:center; margin-top:var(--sp-4); }
+  .orders .legend4 { grid-template-columns:repeat(4,30px); height:18px; }
+  .orders .t { font-size:13.5px; color:var(--text-2); line-height:1.45; }
+  .orders .t b { font-weight:400; color:var(--text); display:block; }
+
+  .greys { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:var(--sp-3); margin-top:var(--sp-4); }
+  .grey .chip { height:48px; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); }
+  .grey .k { font-size:11px; color:var(--text-3); margin-top:var(--sp-1); }
+  .grey .v { font-size:11.5px; color:var(--text); font-variant-numeric:tabular-nums; }
+  .greys { row-gap:var(--sp-4); }
+  .pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-5); align-items:start; margin-top:var(--sp-3); }
+  .pair .sub { margin-top:0; }
+  .phasegrad { aspect-ratio:1709/622; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); overflow:hidden; }
+  .phasegrad svg { display:block; width:100%; height:100%; }
+  .s2s + .note + .pair { margin-top:var(--sp-6); }
+  .groundgrad { height:110px; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); background:var(--ground-gradient); }
+  .stops { display:flex; justify-content:space-between; gap:var(--sp-2); margin-top:var(--sp-2); font-size:11px; color:var(--text-3); font-variant-numeric:tabular-nums; }
+  .pluge { display:grid; grid-template-columns:repeat(3,1fr); height:110px; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); overflow:hidden; }
+  .pluge div { display:flex; align-items:flex-end; padding:var(--sp-2) var(--sp-3); font-size:11px; color:#8a8a8a; }
+
+  .matrix { display:grid; grid-template-columns:84px repeat(5,minmax(0,1fr)); border:var(--hairline) solid var(--line); border-radius:var(--r-xs); background:var(--panel); margin-top:var(--sp-4); }
+  .matrix > div { border-right:var(--hairline) solid var(--line); border-bottom:var(--hairline) solid var(--line); padding:var(--sp-3) var(--sp-2);
+                  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--sp-2); text-align:center; min-width:0; }
+  .matrix > div:nth-child(6n) { border-right:0; }
+  .matrix > div:nth-last-child(-n+6) { border-bottom:0; }
+  .matrix .h { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); }
+  .matrix .rh { align-items:flex-start; }
+  .matrix svg { width:48px; height:48px; color:var(--text); }
+  .matrix .n { font-size:12.5px; color:var(--text); }
+  .matrix .c { font-size:11px; color:var(--text-3); font-variant-numeric:tabular-nums; }
+  .cov { display:block; width:100%; max-width:100px; height:5px; background:repeating-linear-gradient(to right,var(--border-2) 0 1px,transparent 1px 4px); position:relative; }
+  .cov i { position:absolute; inset:0 auto 0 0; background:var(--text-2); }
+
+  .fieldwrap { display:grid; grid-template-columns:minmax(0,1fr) max-content; gap:var(--sp-4); margin-top:var(--sp-5); }
+  .fieldplate { position:relative; background:var(--plate); border:var(--hairline) solid var(--line); border-radius:var(--r-xs); aspect-ratio:16/10; touch-action:none; cursor:crosshair; overflow:hidden; }
+  .fieldplate canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .scale { display:flex; flex-direction:column; min-width:0; }
+  .scalebar { flex:1; min-height:0; display:grid; grid-template-rows:repeat(4,1fr) 4fr; border:1px solid var(--register); border-radius:var(--r-xs); overflow:hidden; }
+  .scalebar i { display:flex; white-space:nowrap; align-items:center; gap:0 var(--sp-2); padding:0 var(--sp-2); overflow:hidden; border-top:1px solid var(--register);
+                font-style:normal; font-size:11px; line-height:1.15; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .scalebar i:first-child { border-top:0; }
+  .scalebar .ph-strategy { background:var(--strategy); }
+  .scalebar .ph-identity { background:var(--identity); }
+  .scalebar .ph-application { background:var(--applications); }
+  .scalebar .ph-production { background:var(--production); color:var(--paper); }
+  .scalebar i.grey { background:var(--scale-grey); }
+  .scale input { width:100%; accent-color:var(--text); }
+  .film { position:relative; height:48px; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); background:var(--film); margin-top:var(--sp-4); }
+  .film .mk { position:absolute; top:-5px; bottom:-5px; width:1px; background:var(--text); }
+  .film .mk span { position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%); font-size:11px; white-space:nowrap; color:var(--text-2); display:flex; align-items:center; gap:var(--sp-1); font-variant-numeric:tabular-nums; }
+  .film .mk span i { width:8px; height:8px; border:1px solid var(--register); border-radius:var(--r-xs); }
+  .filmaxis { display:flex; justify-content:space-between; font-size:11px; color:var(--text-3); margin-top:var(--sp-6); font-variant-numeric:tabular-nums; }
+
+  /* ---- Color: subsections without eyebrows, copyable swatches, scale to strip ---- */
+  .ssh { font-size:clamp(17px,1.9vw,21px); line-height:1.25; letter-spacing:var(--tr-display); font-weight:var(--fw-display);
+         color:var(--text); margin-top:var(--sp-6); }
+  .ssh + .sub { margin-top:var(--sp-3); }
+  .pair + .pair { margin-top:var(--sp-5); }
+  .ssh + .mcards, .ssh + .clear, .ssh + .wrongs { margin-top:var(--sp-4); }
+  .cols .ssh { margin-top:0; }
+  .cols .ssh + ul { margin-top:var(--sp-2); }
+  .grey .k, .grey .v { display:block; }
+  .greys.mono { grid-template-columns:repeat(5,minmax(0,1fr)); margin-top:var(--sp-4); margin-bottom:var(--sp-5); }
+  .greys.mono .chip { height:80px; }
+  .ggwrap .stops { display:flex; }
+  .pluge > div { height:100%; }
+
+  .s2s { margin-top:var(--sp-5); }
+  .s2s-head { position:relative; height:46px; font-size:11px; color:var(--text-3); font-variant-numeric:tabular-nums; }
+  .s2s-head > span:not(.s2s-ord) { position:absolute; bottom:4px; transform:translateX(-50%); white-space:nowrap; }
+  .s2s-head > span.a0 { transform:none; }
+  .s2s-head > span.a1 { transform:translateX(-100%); }
+  .s2s-ord { position:absolute; top:16px; height:8px; border:var(--hairline) solid var(--text-3); border-bottom:0; }
+  .s2s-ord > span { position:absolute; bottom:calc(100% + 3px); left:0; font-size:11px; color:var(--text-2); white-space:nowrap; }
+  .s2s-ticks { height:8px; border-right:1px solid var(--text-3);
+               background:repeating-linear-gradient(90deg,var(--text-3) 0 1px,transparent 1px 10%) top left/100% 8px no-repeat,
+                          repeating-linear-gradient(90deg,var(--text-4) 0 1px,transparent 1px 5%) bottom left/100% 4px no-repeat; }
+  .s2s-film { height:56px; background:var(--film); margin-top:2px; border-radius:var(--r-xs); }
+  .s2s-map { position:relative; height:150px; }
+  .s2s-map > i { position:absolute; top:8px; width:10px; height:10px; margin-left:-5px; }
+  .s2s-map svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  .s2s-map path { fill:none; stroke:var(--text); stroke-width:1; vector-effect:non-scaling-stroke; }
+  .s2s-map > span { position:absolute; bottom:6px; margin-left:var(--sp-2); font-size:11px; color:var(--text-3); white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .s2s-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-radius:var(--r-xs); overflow:hidden; }
+  .s2s-c { display:flex; flex-direction:column; justify-content:flex-end; gap:var(--sp-1); height:clamp(150px,22vw,240px);
+           padding:var(--sp-4) var(--sp-4); color:var(--ink); font-size:12px; font-variant-numeric:tabular-nums; }
+  .s2s-c.dk, .s2s-w.dk { color:var(--paper); }
+  .s2s-nm { font-size:13.5px; }
+  .s2s-i { margin-right:var(--sp-2); }
+  .s2s-w { display:flex; align-items:center; height:40px; padding:0 var(--sp-4); font-size:12px; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .s2s-bar:hover .s2s-c { box-shadow:inset 0 0 0 1px rgba(14,14,14,.35); }
+  @media (max-width:680px) {
+    .s2s-c { padding:var(--sp-3); }
+    .s2s-nm { font-size:12px; }
+    .s2s-i { display:none; }
+    .s2s-w { padding:0 var(--sp-3); font-size:11px; }
+    .s2s-c .fb, .s2s-map > span { font-size:10.5px; }
+    .s2s-map > span { margin-left:var(--sp-1); }
+    .s2s-head > span:not(.s2s-ord):nth-child(odd):not(.a0):not(.a1) { display:none; }
+  }
+
+  /* References: external images, credits, readings */
+  .rfs { display:flex; flex-direction:column; border-top:var(--hairline) solid var(--line); margin-top:var(--sp-5); }
+  .rf { display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--sp-5); padding:var(--sp-5) 0; border-bottom:var(--hairline) solid var(--line); }
+  .rf-plate { display:flex; flex-direction:column; gap:var(--sp-2); min-width:0; }
+  .rf-img { aspect-ratio:4/3; background:var(--plate); border:var(--hairline) solid var(--line); border-radius:var(--r-xs); overflow:hidden; display:grid; place-items:center; }
+  .rf-img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .rf-img.rf-contain img { object-fit:contain; }
+  .rf-credit { font-size:12px; color:var(--text-3); line-height:1.45; }
+  .rf-credit a { color:var(--text-3); }
+  .rf-lic { display:inline-block; padding:1px var(--sp-2); border:var(--hairline) solid var(--line); border-radius:var(--r-xs); font-size:11px; letter-spacing:.04em; color:var(--text-2); margin-right:var(--sp-2); }
+  .rf-body { display:flex; flex-direction:column; gap:var(--sp-4); min-width:0; }
+  .rf-body h3 { margin:0; font-weight:400; font-size:22px; letter-spacing:-0.015em; color:var(--text); }
+  .rf-meta { margin-top:-8px; }
+  .rf-why { margin:0; max-width:60ch; color:var(--text-2); font-size:15px; line-height:1.5; }
+  .rf-reads { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; border-top:var(--hairline) solid var(--line); }
+  .rf-reads li { display:grid; grid-template-columns:118px minmax(0,1fr); gap:var(--sp-3); padding:var(--sp-3) 0; border-bottom:var(--hairline) solid var(--line); }
+  .rf-kind { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); padding-top:3px; }
+  .rf-cite { color:var(--text-2); font-size:14px; line-height:1.45; }
+  .rf-cite .rf-t { color:var(--text); }
+  .rf-cite .rf-n { display:block; margin-top:var(--sp-1); font-size:13px; color:var(--text-3); }
+  @media (max-width:760px) { .rf { grid-template-columns:1fr; gap:var(--sp-4); } .rf-reads li { grid-template-columns:1fr; gap:2px; } }
+  .vgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:var(--sp-4); margin-top:var(--sp-4); }
+  .vcard { border:var(--hairline) solid var(--line); border-radius:var(--r-xs); overflow:hidden; background:var(--panel); text-decoration:none; display:flex; flex-direction:column;
+           transition:border-color var(--dur) var(--ease); }
+  a.vcard:hover { border-color:var(--text-3); }
+  .vcard .img { aspect-ratio:4/3; background:var(--plate); overflow:hidden; display:grid; place-items:center; border-bottom:var(--hairline) solid var(--line); }
+  .vcard .img img { width:100%; height:100%; object-fit:cover; display:block; }
+  .vcard .img.paper { background:#f6f6f6; }
+  .vcard .img.paper img { object-fit:contain; width:84%; height:auto; }
+  .vcard .img svg { width:72%; height:72%; }
+  .vcard .t { font-size:14px; color:var(--text); margin:var(--sp-3) var(--sp-3) var(--sp-1); line-height:1.3; }
+  .vcard .m { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; color:var(--text-3); margin:0 var(--sp-3) var(--sp-1); }
+  .vcard .d { font-size:12.5px; color:var(--text-3); margin:0 var(--sp-3) var(--sp-4); line-height:1.45; }
+  .grouph { margin-top:var(--sp-6); }
+  .rgrid .vcard .t { margin-bottom:var(--sp-2); }
+  .rcredit { margin-top:var(--sp-5); font-size:12px; color:var(--text-3); }
+  .rcredit a { color:var(--text-3); }
+
+
+  @media (max-width:900px) {
+    .fieldwrap { gap:var(--sp-3); }
+    .greys, .greys.mono { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  }
+  @media (max-width:680px) {
+    .pair { grid-template-columns:1fr; gap:var(--sp-3); }
+    .phases { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .orders { grid-template-columns:1fr; gap:var(--sp-2) 0; }
+    .orders .t { margin-bottom:var(--sp-3); }
+    .matrix { grid-template-columns:56px repeat(5,minmax(0,1fr)); }
+    .matrix svg { width:30px; height:30px; }
+    .matrix .n { font-size:10.5px; }
+    .rndbox { padding-left:var(--sp-3); }
+    .fieldwrap { gap:var(--sp-2); }
+    .scalebar i { letter-spacing:.02em; padding:0 var(--sp-2); }
+    .fieldplate { aspect-ratio:3/4; }
+  }
+
+  @media (max-width:900px) {
+    .app { flex-direction:column; }
+    /* Mobile: a sticky 56px bar, brand left and menu button right; the menu drops below it.
+       Sections land under the bar, so their snap and nav offset is the bar's height. */
+    .side { position:sticky; top:0; width:100%; height:56px; border-right:0;
+            border-bottom:var(--hairline) solid var(--line); flex-direction:row; align-items:center;
+            justify-content:space-between; gap:var(--sp-4); padding:0 var(--sp-4); z-index:20; }
+    section.card[id] { scroll-margin-top:56px; }
+    .side .brand { display:flex; align-items:center; gap:var(--sp-3); }
+    .brandmark { width:41px; height:20px; margin:0; }
+    .brand-t { font-size:15px; line-height:1; }
+    .brand-t br { display:none; }
+    .burger { display:flex; flex-direction:column; justify-content:center; gap:6px; width:44px; height:44px; margin-right:calc(-1 * var(--sp-3));
+              padding:0 var(--sp-3); background:transparent; border:0; cursor:pointer; color:var(--text); -webkit-appearance:none; appearance:none; }
+    .burger i { display:block; height:1px; background:currentColor; transition:transform var(--dur) var(--ease); }
+    .side.open .burger i:first-child { transform:translateY(3.5px) rotate(45deg); }
+    .side.open .burger i:last-child { transform:translateY(-3.5px) rotate(-45deg); }
+    .menu { display:flex; flex-direction:column; gap:var(--sp-5); position:absolute; top:100%; left:0; right:0;
+            max-height:calc(100dvh - 56px); overflow-y:auto; overscroll-behavior:contain;
+            padding:var(--sp-3) var(--sp-4) var(--sp-5); background:var(--bg); border-bottom:var(--hairline) solid var(--line);
+            opacity:0; visibility:hidden; transform:translateY(-6px);
+            transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease), visibility 0s linear var(--dur); }
+    .side.open .menu { opacity:1; visibility:visible; transform:none; transition-delay:0s; }
+    .toc a { font-size:15px; padding:var(--sp-3) 0; }
+    .acts { margin-top:0; }
+    .wrap { max-width:none; align-self:stretch; margin:0; }
+    .cover { width:100vw; }
+  }
+  @media (max-width:680px) {
+    .faces, .cols, .facts { grid-template-columns:1fr; }
+    .facts div { grid-template-columns:5.5rem minmax(0,1fr); }
+    .marks, .wrongs, .swatches { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    * { transition:none !important; animation:none !important; }
+  }
+  /* Browsers drop backgrounds when printing by default, which leaves paper type and
+     paper marks on white paper. Force the ink ground through. Cards are taller than a
+     page, so only the objects inside them stay whole. */
+  @media print {
+    html, body { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .side { display:none; } .app { display:block; } .wrap { max-width:none; padding:0; }
+    .cover { width:auto; margin:0; transform:none; }
+    .cover canvas { display:none; }
+    figure, .tile, .srcbox, .bprow, .sw, .face, .rung, .facts div, .clear, .loop { break-inside:avoid; }
+    h2, .sh, .lab { break-after:avoid; }
+  }
+  /* Typography */
+  #type .ssh { margin-top:var(--sp-6); }
+  .tspec { background:#0e0e0e; color:#fcfaf5; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); padding:var(--sp-6); margin-top:var(--sp-5); display:grid; grid-template-columns:minmax(0,1fr); gap:var(--sp-5); }
+  .tspec .aa { font-size:clamp(30px,4.4vw,52px); line-height:1.05; letter-spacing:var(--tr-display); font-weight:var(--fw-display); }
+  /* name left, weight flush right on the name's baseline; once the gap between them would drop
+     under --sp-6 the weight wraps to its own line, left-aligned */
+  .tspec .aa { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:var(--sp-3) var(--sp-6); }
+  .tspec .aa .wt { font-size:13px; line-height:1.4; letter-spacing:var(--tr-read); color:#969696; }
+  /* the size is set by script so A–Z runs edge to edge; this is only the pre-script fallback */
+  .tspec .glyphs { font-size:clamp(15px,2.3vw,27px); line-height:1.15; letter-spacing:var(--tr-read); }
+  .tspec .glyphs .fit { white-space:nowrap; }
+  /* editable like the scale rows; while typing, the size holds and long lines wrap instead of running off the plate */
+  .tspec .glyphs { cursor:text; outline:none; caret-color:#fcfaf5; overflow-wrap:anywhere; }
+  .tspec .glyphs:focus .fit { white-space:normal; }
+  .tscale { margin-top:var(--sp-4); }
+  .trow { display:grid; grid-template-columns:180px 1fr; align-items:baseline; gap:var(--sp-4); padding:var(--sp-5) 0; }
+  .trow .tk { display:flex; align-items:baseline; gap:var(--sp-3); }
+  .trow .tk span:first-child { font-size:13px; color:var(--text); }
+  .trow .tk span:last-child { font-size:12px; color:var(--text-3); }
+  .trow .ts { color:var(--text); min-width:0; letter-spacing:var(--tr-read); cursor:text; outline:none; caret-color:var(--text); overflow-wrap:anywhere; }
+  /* The copy layer sits over the label column only, and only the label opens it, so typing in a sample never does. */
+  .trow { position:relative; isolation:isolate; }
+  .trow .tk { cursor:default; outline:none; }
+  /* like the mark cards: the veil takes the row's own ground, so hover only blurs, never darkens */
+  .trow .mdl { right:auto; width:180px; background:color-mix(in srgb, var(--bg) 42%, transparent); box-shadow:none; }
+  .trow .mbtn { color:var(--text); }
+  .trow .mbtn:hover, .trow .mbtn:focus-visible { background:var(--text); color:var(--bg); }
+  .trow:has(.tk:hover) .mdl, .trow .mdl:hover, .trow:has(.tk:focus-visible) .mdl, .trow:has(.mbtn:focus-visible) .mdl, .trow.open .mdl { opacity:1; pointer-events:auto; }
+  .trow:has(.tk:hover) .mbtn, .trow .mdl:hover .mbtn, .trow:has(.tk:focus-visible) .mbtn, .trow:has(.mbtn:focus-visible) .mbtn, .trow.open .mbtn { opacity:1; transform:none; }
+  @media (max-width:720px) { .trow .mdl { width:auto; right:0; } }
+  .ts-display { font-size:clamp(28px,4.4vw,48px); line-height:1.05; font-weight:var(--fw-display); letter-spacing:var(--tr-display); }
+  .ts-heading { font-size:clamp(20px,2.3vw,27px); line-height:1.12; letter-spacing:var(--tr-display); }
+  .ts-lede { font-size:clamp(17px,1.9vw,21px); line-height:1.25; }
+  .ts-body { font-size:15px; line-height:1.5; }
+  .ts-small { font-size:12.5px; line-height:1.45; }
+  .ts-label { font-size:11px; letter-spacing:var(--tr-label); text-transform:uppercase; }
+  .trules { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4); margin-top:var(--sp-4); }
+  .trules div { border:var(--hairline) solid var(--line); border-radius:var(--r-xs); padding:var(--sp-4); font-size:14px; color:var(--text); }
+  @media (max-width:720px) { .trow { grid-template-columns:1fr; } .trules { grid-template-columns:1fr; } .tspec { padding:var(--sp-5); } }
+  /* About: phases */
+  #about .ssh { margin-top:var(--sp-6); }
+  #about .ssh + .note { margin-top:var(--sp-2); }
+  .phgrid { display:grid; grid-template-columns:repeat(4,1fr); margin-top:var(--sp-4); border-radius:var(--r-xs); overflow:hidden; }
+  .phgrid > div { min-height:120px; padding:var(--sp-4); display:flex; flex-direction:column; justify-content:flex-end; gap:var(--sp-1); color:#0e0e0e; }
+  .phgrid .ph-strategy { background:var(--strategy); } .phgrid .ph-identity { background:var(--identity); }
+  .phgrid .ph-application { background:var(--applications); } .phgrid .ph-production { background:var(--production); color:#fff; }
+  .phgrid .pn { font-size:15px; } .phgrid .pd { font-size:12.5px; }
+  @media (max-width:720px) { .phgrid { grid-template-columns:1fr 1fr; } }
+
+  /* 07 Origins: one row per idea, the tool on the left and what it became in the brand on the right */
+  /* Four source → brand pairs, one even gap between every row. */
+  .osteps { margin-top:var(--sp-6); display:grid; gap:var(--sp-7); }
+  .ostep { display:grid; grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr); gap:var(--sp-5); container-type:inline-size; }
+  .ofig { margin:0; display:flex; flex-direction:column; text-decoration:none; min-width:0; }
+  .oimg { position:relative; aspect-ratio:16/10; background:var(--plate); border:var(--hairline) solid var(--line); border-radius:var(--r-xs); overflow:hidden;
+          transition:border-color var(--dur) var(--ease); }
+  .oimg > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .oimg.scope { background:#000; }
+  .oimg.scope > img { object-fit:contain; padding:5%; }
+  .oimg.print { background:#fff; }
+  .oimg.print > img { object-fit:contain; }
+  .ofig .t { font-size:14px; color:var(--text); margin-top:var(--sp-3); line-height:1.3; }
+  .ofig .d { font-size:12.5px; color:var(--text-3); line-height:1.45; margin-top:var(--sp-1); max-width:46ch; }
+  /* outside link: the arrow after the title only shows on hover */
+  .ofig .ext { display:inline-block; margin-left:var(--sp-1); opacity:0; transform:translate(-3px,3px);
+               transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+  a.ofig:hover .ext, a.ofig:focus-visible .ext { opacity:1; transform:none; }
+  @media (hover:none) { .ofig .ext { opacity:1; transform:none; } }
+  /* centred on the 16:10 images: half of one column's image height, less half a line */
+  .oarrow { color:var(--text-4); font-size:15px; line-height:1; padding-top:calc((100cqi - 16px - 2 * var(--sp-5)) / 2 * 10 / 16 / 2 - .5em); }
+  /* the figure with its two scales beside it, read under the pointer */
+  .oimg.otherm { background:#000; cursor:crosshair; }
+  .oimg.otherm > img { object-position:50% 12%; }
+  .oimg.otherm canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .vh { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+  /* the four colors as the studio's strip, names underneath */
+  .ostrip { position:absolute; left:9%; right:9%; top:50%; transform:translateY(-50%); display:grid; grid-template-columns:repeat(4,1fr); }
+  .ostrip span { display:flex; flex-direction:column; gap:var(--sp-2); font-size:11px; color:var(--text-3); min-width:0; white-space:nowrap; }
+  .ostrip span i { display:block; aspect-ratio:74.5/96; border:1px solid var(--register); }
+  .ostrip span + span i { border-left:0; }
+  .ostrip span:first-child i { border-radius:var(--r-xs) 0 0 var(--r-xs); }
+  .ostrip span:last-child i { border-radius:0 var(--r-xs) var(--r-xs) 0; }
+  /* the mark, drawn from the device file so it follows the theme */
+  .omark { position:absolute; inset:0; margin:auto; width:61%; height:54%; background:var(--text);
+           -webkit-mask:url(assets/marks/safx-device-white.svg) center/contain no-repeat; mask:url(assets/marks/safx-device-white.svg) center/contain no-repeat; }
+  /* the film scale from 150 to 450 nm, where the four colors sit */
+  .ofilm { position:absolute; left:8%; right:8%; top:50%; height:40px; margin-top:-20px; background:var(--film);
+           background-size:333.333% 100%; background-position:21.43% 0; border:var(--hairline) solid var(--line); border-radius:var(--r-xs); }
+  .ofilm .mk { position:absolute; top:-8px; bottom:-8px; width:1px; background:var(--text); }
+  .ofilm .mk span { position:absolute; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:var(--sp-1);
+                    font-size:11px; color:var(--text-2); white-space:nowrap; }
+  .ofilm .mk.up span { bottom:calc(100% + 6px); }
+  .ofilm .mk.dn span { top:calc(100% + 6px); }
+  .ofilm .mk span i { width:8px; height:8px; border:1px solid var(--register); border-radius:var(--r-xs); }
+  .oaxis { position:absolute; left:8%; right:8%; bottom:12px; display:flex; justify-content:space-between; font-size:11px; color:var(--text-4); }
+  @media (max-width:760px) {
+    .osteps { gap:var(--sp-6); }
+    .ostep { grid-template-columns:1fr; gap:var(--sp-4); }
+    .oarrow { display:none; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <path id="g-square" d="M-0.5 -0.5L0.5 -0.5L0.5 0.5L-0.5 0.5L-0.5 -0.5Z"/>
+  <path id="g-screw" fill-rule="evenodd" d="M0 -0.5C0.27614 -0.5 0.5 -0.27614 0.5 0C0.5 0.27614 0.27614 0.5 0 0.5C-0.27614 0.5 -0.5 0.27614 -0.5 0C-0.5 -0.27614 -0.27614 -0.5 0 -0.5ZM-0.03857 -0.26667L-0.03857 -0.03857L-0.26667 -0.03857L-0.26667 0.03857L-0.03857 0.03857L-0.03857 0.26667L0.03857 0.26667L0.03857 0.03857L0.26667 0.03857L0.26667 -0.03857L0.03857 -0.03857L0.03857 -0.26667L-0.03857 -0.26667Z"/>
+  <path id="g-cross" d="M-0.07231 -0.5L0.07231 -0.5L0.07231 -0.07231L0.5 -0.07231L0.5 0.07231L0.07231 0.07231L0.07231 0.5L-0.07231 0.5L-0.07231 0.07231L-0.5 0.07231L-0.5 -0.07231L-0.07231 -0.07231L-0.07231 -0.5Z"/>
+  <path id="g-mono" fill-rule="evenodd" d="M-0.00001 -0.5C0.27614 -0.5 0.5 -0.27615 0.5 -0.00001L0.49984 0.0129C0.493 0.28308 0.27182 0.5 -0.00001 0.5L-0.0129 0.49984C-0.28308 0.493 -0.5 0.27182 -0.5 -0.00001C-0.5 -0.27614 -0.27614 -0.5 -0.00001 -0.5ZM-0.00001 -0.43228C-0.23874 -0.43227 -0.43227 -0.23874 -0.43228 -0.00001C-0.43228 0.23873 -0.23874 0.43227 -0.00001 0.43228C0.23873 0.43228 0.43228 0.23873 0.43228 -0.00001C0.43227 -0.23874 0.23873 -0.43228 -0.00001 -0.43228ZM0.24338 0.22766L0.17857 0.22766L0.11813 0.07691L-0.11781 0.07691L-0.17753 0.22766L-0.24161 0.22766L-0.03479 -0.29083L0.03365 -0.29083L0.24338 0.22766ZM-0.0013 -0.22457C-0.03188 -0.14301 -0.06271 -0.06291 -0.09378 0.01574L-0.09597 0.02157L0.09628 0.02157L0.09337 0.01502C0.07007 -0.04275 0.03851 -0.12262 -0.0013 -0.22457Z"/>
+</defs></svg>
+ <div class="app">
+  <aside class="side">
+    <a class="brand" href="https://studioartifice.com" target="_blank" rel="noopener">
+      <span class="brandmark" role="img" aria-label="Studio Artifice"></span><span class="brand-t">Brand<br> Guidelines</span>
+    </a>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+    <div class="menu" id="menu">
+    <nav class="toc" aria-label="Sections">
+      <a href="#about"><span class="n">01</span>About</a>
+      <a href="#mark"><span class="n">02</span>Mark</a>
+      <a href="#color"><span class="n">03</span>Color</a>
+      <a href="#type"><span class="n">04</span>Typography</a>
+      <a href="#motion"><span class="n">05</span>Motion</a>
+      <a href="#artifact"><span class="n">06</span>Artifact</a>
+      <a href="#origins"><span class="n">07</span>Origins</a>
+      <a href="#voice"><span class="n">08</span>Voice</a>
+    </nav>
+    <div class="acts">
+      <button class="btn" id="printBtn" title="Opens the print dialog; choose Save as PDF">Save PDF</button>
+      <button class="btn" id="theme" type="button">Light mode</button>
+    </div>
+    </div>
+  </aside>
+
+  <main class="wrap">
+
+    <figure class="card cover">
+      <canvas id="board" width="1200" height="630" aria-hidden="true"></canvas>
+      <img src="assets/cover.png" width="1200" height="630" alt="Studio Artifice cover: the device, the wordmark with the Ⓐ monogram, and register marks, with the lines URL to IRL worldsite projects and Strategic visual studio of Renaise" />
+    </figure>
+
+    <!-- 01 · ABOUT -->
+    <section class="card" id="about">
+      <h2>About</h2>
+      <div class="bprows">
+        <div class="bprow">
+          <div class="bpside"><span class="t">Short</span><button type="button" class="mbtn copysrc" data-src="bp-short">Copy</button></div>
+          <div class="bptext" id="bp-short"><p>Studio Artifice is a strategic visual studio in New York, designing durable artifacts for AI companies, cultural institutions, and consumer brands.</p></div>
+        </div>
+        <div class="bprow">
+          <div class="bpside"><span class="t">Standard</span><button type="button" class="mbtn copysrc" data-src="bp-std">Copy</button></div>
+          <div class="bptext" id="bp-std"><p>Studio Artifice is a strategic visual studio in New York, designing durable artifacts for AI companies, cultural institutions, and consumer brands. The studio builds identity, websites and live experiences as one system, across four phases: strategy, identity, applications and production.</p></div>
+        </div>
+        <div class="bprow">
+          <div class="bpside"><span class="t">Extended</span><button type="button" class="mbtn copysrc" data-src="bp-ext">Copy</button></div>
+          <div class="bptext" id="bp-ext">
+            <p>Studio Artifice is a strategic visual studio in New York, designing durable artifacts for AI companies, cultural institutions, and consumer brands. The studio builds identity, websites and live experiences as one system, across four phases: strategy, identity, applications and production.</p>
+            <p>Studio Artifice is led by Renaise, a visual prototyper and producer with eight years of identity work, from strategy through production. She works from New York with clients in consumer media, creative tools and deep tech, and leads creative direction at Artifice, a cultural nonprofit.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="ssh">Phases</h3>
+      <div class="phgrid">
+        <div class="ph-strategy cpx lt" tabindex="0"><span class="pn">Strategy</span><span class="pd">Narratives + Outcomes</span><span class="mdl"><button type="button" class="mbtn" data-copy="#D2FF1E" title="Copy Strategy, #D2FF1E">Hex</button></span></div>
+        <div class="ph-identity cpx lt" tabindex="0"><span class="pn">Identity</span><span class="pd">Brand Guidelines</span><span class="mdl"><button type="button" class="mbtn" data-copy="#FF1BD1" title="Copy Identity, #FF1BD1">Hex</button></span></div>
+        <div class="ph-application cpx lt" tabindex="0"><span class="pn">Applications</span><span class="pd">Websites + Systems</span><span class="mdl"><button type="button" class="mbtn" data-copy="#00EBEF" title="Copy Applications, #00EBEF">Hex</button></span></div>
+        <div class="ph-production cpx dk" tabindex="0"><span class="pn">Production</span><span class="pd">Activations + Experiences</span><span class="mdl"><button type="button" class="mbtn" data-copy="#0009FF" title="Copy Production, #0009FF">Hex</button></span></div>
+      </div>
+    </section>
+
+    <!-- 02 · MARK -->
+    <section class="card" id="mark">
+      <h2>Mark</h2>
+      <div class="mcards">
+        <figure class="mcard lt" tabindex="0" aria-label="Brand mark, light: download SVG or PNG">
+          <div class="mframe fd" style="padding:19px 19px"><img data-fixed src="assets/marks/safx-device-black.svg" alt="Studio Artifice device on light" style="width:138.3px" /></div>
+          <figcaption>Brand mark · Light</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-device-black.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-device-black.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard dk" tabindex="0" aria-label="Brand mark, dark: download SVG or PNG">
+          <div class="mframe fd" style="padding:19px 19px"><img data-fixed src="assets/marks/safx-device-white.svg" alt="Studio Artifice device on dark" style="width:138.3px" /></div>
+          <figcaption>Brand mark · Dark</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-device-white.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-device-white.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard lt" tabindex="0" aria-label="Wordmark, light: download SVG or PNG">
+          <div class="mframe ft" style="padding:19px 19px"><img data-fixed src="assets/marks/safx-wordmark-black.svg" alt="Studio Artifice wordmark on light" style="width:248.24px" /></div>
+          <figcaption>Wordmark · Light</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-wordmark-black.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-wordmark-black.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard dk" tabindex="0" aria-label="Wordmark, dark: download SVG or PNG">
+          <div class="mframe ft" style="padding:19px 19px"><img data-fixed src="assets/marks/safx-wordmark-white.svg" alt="Studio Artifice wordmark on dark" style="width:248.24px" /></div>
+          <figcaption>Wordmark · Dark</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-wordmark-white.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-wordmark-white.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard lt" tabindex="0" aria-label="Ⓐ monogram, light: download SVG or PNG">
+          <div class="mframe ft" style="padding:13.75px 13.75px"><img data-fixed src="assets/marks/safx-monogram-black.svg" alt="Studio Artifice Ⓐ monogram on light" style="width:84px" /></div>
+          <figcaption>Ⓐ monogram · Light</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-monogram-black.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-monogram-black.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard dk" tabindex="0" aria-label="Ⓐ monogram, dark: download SVG or PNG">
+          <div class="mframe ft" style="padding:13.75px 13.75px"><img data-fixed src="assets/marks/safx-monogram-white.svg" alt="Studio Artifice Ⓐ monogram on dark" style="width:84px" /></div>
+          <figcaption>Ⓐ monogram · Dark</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-monogram-white.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-monogram-white.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard lt" tabindex="0" aria-label="Horizontal lockup, light: download SVG or PNG">
+          <div class="mframe ft" style="padding:12.71px 20.93px 20.93px"><img data-fixed src="assets/marks/safx-lockup-black.svg" alt="Studio Artifice horizontal lockup on light" style="width:351px" /></div>
+          <figcaption>Horizontal lockup · Light</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-lockup-black.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-lockup-black.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard dk" tabindex="0" aria-label="Horizontal lockup, dark: download SVG or PNG">
+          <div class="mframe ft" style="padding:12.71px 20.93px 20.93px"><img data-fixed src="assets/marks/safx-lockup-white.svg" alt="Studio Artifice horizontal lockup on dark" style="width:351px" /></div>
+          <figcaption>Horizontal lockup · Dark</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-lockup-white.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-lockup-white.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard lt" tabindex="0" aria-label="Vertical lockup, light: download SVG or PNG">
+          <div class="mframe ft" style="padding:18.25px 19px"><img data-fixed src="assets/marks/safx-lockup-vertical-black.svg" alt="Studio Artifice vertical lockup on light" style="width:130px" /></div>
+          <figcaption>Vertical lockup · Light</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-lockup-vertical-black.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-lockup-vertical-black.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard dk" tabindex="0" aria-label="Vertical lockup, dark: download SVG or PNG">
+          <div class="mframe ft" style="padding:18.25px 19px"><img data-fixed src="assets/marks/safx-lockup-vertical-white.svg" alt="Studio Artifice vertical lockup on dark" style="width:130px" /></div>
+          <figcaption>Vertical lockup · Dark</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-lockup-vertical-white.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-lockup-vertical-white.png" download>PNG</a></div>
+        </figure>
+      </div>
+      <h3 class="ssh">Favicons</h3>
+      <div class="mcards fav">
+        <figure class="mcard th" tabindex="0" aria-label="Strategy favicon: download SVG or PNG">
+          <img data-fixed src="assets/marks/safx-favicon-strategy.svg" alt="Ⓐ favicon on Strategy color" width="84" height="84" />
+          <figcaption>Strategy</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-favicon-strategy.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-favicon-strategy.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard th" tabindex="0" aria-label="Identity favicon: download SVG or PNG">
+          <img data-fixed src="assets/marks/safx-favicon-identity.svg" alt="Ⓐ favicon on Identity color" width="84" height="84" />
+          <figcaption>Identity</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-favicon-identity.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-favicon-identity.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard th" tabindex="0" aria-label="Applications favicon: download SVG or PNG">
+          <img data-fixed src="assets/marks/safx-favicon-applications.svg" alt="Ⓐ favicon on Applications color" width="84" height="84" />
+          <figcaption>Applications</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-favicon-applications.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-favicon-applications.png" download>PNG</a></div>
+        </figure>
+        <figure class="mcard th" tabindex="0" aria-label="Production favicon: download SVG or PNG">
+          <img data-fixed src="assets/marks/safx-favicon-production.svg" alt="Ⓐ favicon on Production color" width="84" height="84" />
+          <figcaption>Production</figcaption>
+          <div class="mdl"><a class="mbtn" href="assets/marks/safx-favicon-production.svg" download>SVG</a><a class="mbtn" href="assets/marks/safx-favicon-production.png" download>PNG</a></div>
+        </figure>
+      </div>
+      <h3 class="ssh">Clear space</h3>
+      <p class="note">On the horizontal lockup, clear space is measured from the wordmark. The height of the Ⓐ monogram is not counted.</p>
+      <div class="clear">
+        <div class="cs cs-h" style="aspect-ratio:648/216" role="img" aria-label="Horizontal lockup clear space: 2x on all sides, measured from the wordmark, so the height of the Ⓐ monogram is not counted. 1.5x between the device and the wordmark, 1x before the Ⓐ. x is one third of the wordmark height."><svg viewBox="250 80 648 216" aria-hidden="true"><g class="cs-sq"><rect x="310.5" y="139" width="28" height="28"/><rect x="807.98" y="139" width="28" height="17"/><rect x="310.5" y="209" width="28" height="28"/><rect x="807.98" y="209" width="28" height="28"/></g><g class="cs-guide"><line x1="310.5" y1="139" x2="310.5" y2="237"/><line x1="338.5" y1="139" x2="338.5" y2="237"/><line x1="423.5" y1="139" x2="423.5" y2="237"/><line x1="444.5" y1="139" x2="444.5" y2="237"/><line x1="765.98" y1="139" x2="765.98" y2="237"/><line x1="779.98" y1="139" x2="779.98" y2="237"/><line x1="807.98" y1="139" x2="807.98" y2="237"/><line x1="835.98" y1="139" x2="835.98" y2="237"/><line x1="310.5" y1="139" x2="835.98" y2="139"/><line x1="310.5" y1="167" x2="765.98" y2="167"/><line x1="779.98" y1="156" x2="835.98" y2="156"/><line x1="779.98" y1="184" x2="835.98" y2="184"/><line x1="310.5" y1="209" x2="835.98" y2="209"/><line x1="310.5" y1="237" x2="835.98" y2="237"/></g><g class="cs-dot"><circle cx="310.5" cy="139" r="2"/><circle cx="310.5" cy="167" r="2"/><circle cx="310.5" cy="209" r="2"/><circle cx="310.5" cy="237" r="2"/><circle cx="338.5" cy="139" r="2"/><circle cx="338.5" cy="237" r="2"/><circle cx="423.5" cy="139" r="2"/><circle cx="423.5" cy="237" r="2"/><circle cx="444.5" cy="139" r="2"/><circle cx="444.5" cy="237" r="2"/><circle cx="765.98" cy="139" r="2"/><circle cx="765.98" cy="237" r="2"/><circle cx="779.98" cy="139" r="2"/><circle cx="779.98" cy="237" r="2"/><circle cx="807.98" cy="139" r="2"/><circle cx="807.98" cy="237" r="2"/><circle cx="835.98" cy="139" r="2"/><circle cx="835.98" cy="156" r="2"/><circle cx="835.98" cy="209" r="2"/><circle cx="835.98" cy="237" r="2"/></g><g class="cs-mark"><g transform="translate(338.5 167)"><path d="M39.4174 42L0 42L3.66841e-06 0L39.4174 3.67176e-06L39.4174 42Z"/><path d="M64.1077 0C75.6462 0 85 9.40202 85 21C85 32.598 75.6462 42 64.1077 42C52.5693 42 43.2155 32.598 43.2155 21C43.2155 9.40202 52.5693 0 64.1077 0ZM62.4957 9.79992V19.3802H52.9646V22.6198H62.4957V32.2001H65.7187V22.6198H75.2498V19.3802H65.7187V9.79992H62.4957Z"/></g><g transform="translate(444.5 167)"><path d="M16.56 41.5C11.53 41.5 7.52 40.36 4.53 38.08C1.55 35.77 0.04 32.23 0 27.45H4.87C4.98 33.98 8.88 37.24 16.56 37.24C19.77 37.24 22.25 36.61 24 35.34C25.76 34.07 26.63 32.23 26.63 29.8C26.63 27.9 25.91 26.43 24.45 25.38C23 24.3 20.53 23.5 16.99 22.72L13.47 21.93C9.62 21.07 6.64 19.79 4.51 18.07C2.43 16.32 1.38 13.76 1.38 10.41C1.38 7.24 2.61 4.72 5.07 2.85C7.54 0.95 10.84 0 14.98 0C17.81 0 20.25 0.34 22.31 1.01C24.36 1.68 25.96 2.63 27.12 3.86C28.27 5.05 29.11 6.36 29.64 7.78C30.2 9.19 30.49 10.76 30.53 12.48H25.72C25.5 9.72 24.58 7.67 22.98 6.32C21.41 4.94 18.74 4.25 14.98 4.25C12.14 4.25 9.98 4.81 8.49 5.93C6.99 7.01 6.25 8.5 6.25 10.41C6.25 12.38 6.88 13.91 8.15 14.99C9.46 16.04 11.94 16.97 15.59 17.79L19.12 18.58C23.59 19.55 26.78 20.94 28.68 22.77C30.59 24.6 31.5 27.45 31.5 30.4C31.5 33.98 30.18 36.24 27.53 38.36C24.92 40.45 21.26 41.5 16.56 41.5Z"/><path d="M47.48 16.37H41.55V35.12C41.55 36.76 42.65 37.58 44.85 37.58H47.48V41.33C46.25 41.44 45.19 41.5 44.29 41.5C39.48 41.5 37.08 39.5 37.08 35.51V16.37H32.32V12.46H37.08V4.29H41.55V12.46H47.48V16.37Z"/><path d="M69.72 12.46H74.2V41.33H69.95V37.02C67.78 40.34 64.76 42 60.88 42C57.67 42 55.18 41.12 53.38 39.37C51.59 37.62 50.7 35.16 50.7 31.98V12.46H55.18V31.54C55.18 35.83 57.38 37.97 61.78 37.97C63.87 37.97 65.71 37.19 67.32 35.62C68.92 34.06 69.72 31.78 69.72 28.8V12.46Z"/><path d="M100.51 1.49H104.99V41.33H100.74V36.85C98.46 40.28 95.16 42 90.83 42C86.77 42 83.5 40.64 81.04 37.92C78.62 35.16 77.41 31.48 77.41 26.89C77.41 22.31 78.62 18.65 81.04 15.93C83.5 13.17 86.77 11.79 90.83 11.79C95.01 11.79 98.24 13.39 100.51 16.6V1.49ZM84.62 35.12C86.3 37.02 88.56 37.97 91.39 37.97C94.23 37.97 96.48 37 98.16 35.06C99.84 33.09 100.68 30.36 100.68 26.89C100.68 23.42 99.84 20.72 98.16 18.78C96.48 16.8 94.23 15.81 91.39 15.81C88.6 15.81 86.34 16.84 84.62 18.89C82.94 20.91 82.11 23.65 82.11 27.12C82.11 30.55 82.94 33.22 84.62 35.12Z"/><path d="M110.02 8.09V3.41H114.77V8.09H110.02ZM110.18 41.33V12.46H114.66V41.33H110.18Z"/><path d="M142.53 37.86C139.92 40.62 136.56 42 132.46 42C128.35 42 125 40.62 122.39 37.86C119.78 35.1 118.47 31.44 118.47 26.89C118.47 22.34 119.78 18.69 122.39 15.93C125 13.17 128.35 11.79 132.46 11.79C136.56 11.79 139.92 13.17 142.53 15.93C145.14 18.69 146.45 22.34 146.45 26.89C146.45 31.44 145.14 35.1 142.53 37.86ZM125.69 35.06C127.37 37 129.62 37.97 132.46 37.97C135.29 37.97 137.55 37 139.23 35.06C140.91 33.09 141.75 30.36 141.75 26.89C141.75 23.42 140.91 20.72 139.23 18.78C137.55 16.8 135.29 15.81 132.46 15.81C129.62 15.81 127.37 16.8 125.69 18.78C124.01 20.72 123.17 23.42 123.17 26.89C123.17 30.36 124.01 33.09 125.69 35.06Z"/><path d="M189.17 41.33L184.53 29.75H166.4L161.81 41.33H156.89L172.78 1.49H178.04L194.15 41.33H189.17ZM168.08 25.49H182.85L182.62 24.99C180.83 20.55 178.41 14.42 175.35 6.58C173 12.85 170.63 19 168.24 25.05L168.08 25.49Z"/><path d="M209.47 11.95C210.48 11.86 210.96 11.86 211.85 11.91V16.34H210.74C207.81 16.34 205.52 17.06 203.85 18.52C202.18 19.98 201.35 22.09 201.35 24.85V41.33H196.9V12.41H201.12V17.51C203.09 13.81 205.3 12.3 209.47 11.95Z"/><path d="M228.13 16.37H222.2V35.12C222.2 36.76 223.3 37.58 225.5 37.58H228.13V41.33C226.9 41.44 225.84 41.5 224.94 41.5C220.13 41.5 217.72 39.5 217.72 35.51V16.37H212.97V11.86H217.72V4.29H222.2V11.86H228.13V16.37Z"/><path d="M231.77 8.09V3.21H236.53V8.09H231.77ZM231.94 41.33V12.46H236.42V41.33H231.94Z"/><path d="M243.87 9.49C243.87 4.08 246.55 1.38 251.92 1.38C252.93 1.38 253.88 1.42 254.78 1.49V5.3H252.2C249.63 5.3 248.34 6.66 248.34 9.38V12.46H254.5V16.37H248.34V41.33H243.87V16.37H239.11V12.46H243.87V9.49ZM258.21 3.21H262.96V8.09H258.21V3.21ZM258.38 41.33V12.46H262.85V41.33H258.38Z"/><path d="M280.01 42C276.02 42 272.8 40.64 270.33 37.92C267.87 35.16 266.64 31.48 266.64 26.89C266.64 22.27 267.85 18.59 270.28 15.87C272.74 13.15 275.99 11.79 280.01 11.79C283.45 11.79 286.26 12.74 288.46 14.64C290.66 16.51 291.99 19.04 292.43 22.25H287.79C287.42 20.16 286.5 18.58 285.05 17.49C283.63 16.37 281.95 15.81 280.01 15.81C277.44 15.81 275.35 16.77 273.75 18.67C272.14 20.53 271.34 23.28 271.34 26.89C271.34 30.51 272.14 33.27 273.75 35.17C275.39 37.04 277.48 37.97 280.01 37.97C281.95 37.97 283.65 37.41 285.11 36.29C286.56 35.17 287.47 33.55 287.85 31.43H292.43C291.95 34.71 290.57 37.3 288.29 39.2C286.06 41.07 283.3 42 280.01 42Z"/><path d="M321.48 26.89V28.46H299.54C299.77 31.63 300.64 34 302.17 35.57C303.74 37.13 305.83 37.92 308.44 37.92C312.43 37.92 314.99 36.13 316.11 32.54H320.75C320 35.38 318.57 37.67 316.44 39.43C314.35 41.14 311.65 42 308.33 42C304.34 42 301.09 40.64 298.59 37.92C296.13 35.19 294.9 31.52 294.9 26.89C294.9 22.34 296.11 18.69 298.54 15.93C301 13.17 304.23 11.79 308.22 11.79C312.36 11.79 315.6 13.22 317.95 16.09C320.3 18.97 321.48 22.57 321.48 26.89ZM308.22 15.87C305.9 15.87 303.98 16.6 302.45 18.05C300.96 19.51 300.03 21.63 299.66 24.43H316.67C316.44 21.93 315.58 19.88 314.09 18.28C312.64 16.67 310.68 15.87 308.22 15.87Z"/></g><g transform="translate(779.98 156)"><path d="M14.4414 0.0437012L14.7959 0.057373C22.2165 0.430573 28.1182 6.56553 28.1182 14.0789L28.1143 14.4412C27.922 22.0273 21.7116 28.1179 14.0791 28.1179H14.0781L13.7168 28.114C6.36758 27.9277 0.421916 22.0935 0.0576172 14.7898L0.0439453 14.4412L0.0400391 14.0789L0.0439453 13.7166C0.23611 6.13027 6.44651 0.0397949 14.0791 0.0397949L14.4414 0.0437012ZM14.0791 2.0144C7.41623 2.0144 2.01465 7.41598 2.01465 14.0789C2.01466 20.7417 7.41623 26.1433 14.0791 26.1433C20.742 26.1433 26.1435 20.7417 26.1436 14.0789C26.1436 7.41599 20.742 2.01441 14.0791 2.0144ZM15.0479 5.89624L15.0576 5.92065L20.9297 20.4382L20.9521 20.4919H19.0518L19.042 20.4675L17.3604 16.2722H10.8076L9.14551 20.4675L9.13574 20.4919H7.25586L7.27734 20.4382L13.0684 5.92065L13.0781 5.89624H15.0479ZM14.0439 7.90015C13.1994 10.1507 12.347 12.3617 11.4893 14.533L11.4492 14.6433H16.7148L16.6572 14.5144L16.6562 14.5134C16.011 12.9137 15.1409 10.709 14.0439 7.90015Z"/></g></g></svg><span style="left:11.50%;top:22.22%">2x</span><span style="left:28.40%;top:22.22%">1.5x</span><span class="st-t" style="left:80.71%;top:22.22%">1x</span><span style="left:83.95%;top:22.22%">2x</span><span style="left:88.27%;top:22.22%">2x</span><span style="left:11.50%;top:77.78%">2x</span><span style="left:28.40%;top:77.78%">1.5x</span><span class="st-b" style="left:80.71%;top:77.78%">1x</span><span style="left:83.95%;top:77.78%">2x</span><span style="left:88.27%;top:77.78%">2x</span><span style="left:7.33%;top:33.80%">2x</span><span style="left:7.33%;top:50.00%">3x</span><span style="left:7.33%;top:66.20%">2x</span><span class="rt" style="left:93.10%;top:31.25%">1.214x</span><span style="left:92.44%;top:41.67%">2x</span><span style="left:92.44%;top:66.20%">2x</span></div>
+        <div class="cs cs-v" style="aspect-ratio:320/320" role="img" aria-label="Vertical lockup clear space: 3x on all sides and between the device and the wordmark, 1x before the Ⓐ monogram. x is one third of the wordmark height."><svg viewBox="414 28.33 320 320" aria-hidden="true"><g class="cs-sq"><rect x="462.5" y="101.58" width="21" height="21"/><rect x="665" y="101.58" width="21" height="21"/><rect x="462.5" y="254.08" width="21" height="21"/><rect x="665" y="254.08" width="21" height="21"/></g><g class="cs-guide"><line x1="462.5" y1="101.58" x2="462.5" y2="275.08"/><line x1="483.5" y1="101.58" x2="483.5" y2="275.08"/><line x1="644.24" y1="101.58" x2="644.24" y2="275.08"/><line x1="651" y1="101.58" x2="651" y2="275.08"/><line x1="665" y1="101.58" x2="665" y2="275.08"/><line x1="686" y1="101.58" x2="686" y2="275.08"/><line x1="462.5" y1="101.58" x2="686" y2="101.58"/><line x1="462.5" y1="122.58" x2="686" y2="122.58"/><line x1="462.5" y1="212.08" x2="686" y2="212.08"/><line x1="462.5" y1="227.58" x2="686" y2="227.58"/><line x1="462.5" y1="233.08" x2="686" y2="233.08"/><line x1="462.5" y1="241.58" x2="686" y2="241.58"/><line x1="462.5" y1="254.08" x2="686" y2="254.08"/><line x1="462.5" y1="275.08" x2="686" y2="275.08"/></g><g class="cs-dot"><circle cx="462.5" cy="101.58" r="1.67"/><circle cx="483.5" cy="101.58" r="1.67"/><circle cx="665" cy="101.58" r="1.67"/><circle cx="686" cy="101.58" r="1.67"/><circle cx="462.5" cy="122.58" r="1.67"/><circle cx="686" cy="122.58" r="1.67"/><circle cx="462.5" cy="212.08" r="1.67"/><circle cx="686" cy="227.58" r="1.67"/><circle cx="462.5" cy="233.08" r="1.67"/><circle cx="686" cy="241.58" r="1.67"/><circle cx="462.5" cy="254.08" r="1.67"/><circle cx="462.5" cy="275.08" r="1.67"/><circle cx="483.5" cy="275.08" r="1.67"/><circle cx="644.24" cy="275.08" r="1.67"/><circle cx="651" cy="275.08" r="1.67"/><circle cx="665" cy="275.08" r="1.67"/><circle cx="686" cy="275.08" r="1.67"/></g><g class="cs-mark"><g transform="translate(483.5 122.58)"><path d="M84.1677 89.5L0 89.5L7.83314e-06 0L84.1677 7.82436e-06L84.1677 89.5Z"/><path d="M136.889 0C161.527 0 181.5 20.0353 181.5 44.75C181.5 69.4647 161.527 89.5 136.889 89.5C112.251 89.5 92.2778 69.4647 92.2778 44.75C92.2778 20.0353 112.251 0 136.889 0ZM133.447 20.8832V41.2982H113.095V48.2018H133.447V68.6168H140.329V48.2018H160.68V41.2982H140.329V20.8832H133.447Z"/></g><g transform="translate(483.5 233.08) scale(0.5)"><path d="M16.56 41.5C11.53 41.5 7.52 40.36 4.53 38.08C1.55 35.77 0.04 32.23 0 27.45H4.87C4.98 33.98 8.88 37.24 16.56 37.24C19.77 37.24 22.25 36.61 24 35.34C25.76 34.07 26.63 32.23 26.63 29.8C26.63 27.9 25.91 26.43 24.45 25.38C23 24.3 20.53 23.5 16.99 22.72L13.47 21.93C9.62 21.07 6.64 19.79 4.51 18.07C2.43 16.32 1.38 13.76 1.38 10.41C1.38 7.24 2.61 4.72 5.07 2.85C7.54 0.95 10.84 0 14.98 0C17.81 0 20.25 0.34 22.31 1.01C24.36 1.68 25.96 2.63 27.12 3.86C28.27 5.05 29.11 6.36 29.64 7.78C30.2 9.19 30.49 10.76 30.53 12.48H25.72C25.5 9.72 24.58 7.67 22.98 6.32C21.41 4.94 18.74 4.25 14.98 4.25C12.14 4.25 9.98 4.81 8.49 5.93C6.99 7.01 6.25 8.5 6.25 10.41C6.25 12.38 6.88 13.91 8.15 14.99C9.46 16.04 11.94 16.97 15.59 17.79L19.12 18.58C23.59 19.55 26.78 20.94 28.68 22.77C30.59 24.6 31.5 27.45 31.5 30.4C31.5 33.98 30.18 36.24 27.53 38.36C24.92 40.45 21.26 41.5 16.56 41.5Z"/><path d="M47.48 16.37H41.55V35.12C41.55 36.76 42.65 37.58 44.85 37.58H47.48V41.33C46.25 41.44 45.19 41.5 44.29 41.5C39.48 41.5 37.08 39.5 37.08 35.51V16.37H32.32V12.46H37.08V4.29H41.55V12.46H47.48V16.37Z"/><path d="M69.72 12.46H74.2V41.33H69.95V37.02C67.78 40.34 64.76 42 60.88 42C57.67 42 55.18 41.12 53.38 39.37C51.59 37.62 50.7 35.16 50.7 31.98V12.46H55.18V31.54C55.18 35.83 57.38 37.97 61.78 37.97C63.87 37.97 65.71 37.19 67.32 35.62C68.92 34.06 69.72 31.78 69.72 28.8V12.46Z"/><path d="M100.51 1.49H104.99V41.33H100.74V36.85C98.46 40.28 95.16 42 90.83 42C86.77 42 83.5 40.64 81.04 37.92C78.62 35.16 77.41 31.48 77.41 26.89C77.41 22.31 78.62 18.65 81.04 15.93C83.5 13.17 86.77 11.79 90.83 11.79C95.01 11.79 98.24 13.39 100.51 16.6V1.49ZM84.62 35.12C86.3 37.02 88.56 37.97 91.39 37.97C94.23 37.97 96.48 37 98.16 35.06C99.84 33.09 100.68 30.36 100.68 26.89C100.68 23.42 99.84 20.72 98.16 18.78C96.48 16.8 94.23 15.81 91.39 15.81C88.6 15.81 86.34 16.84 84.62 18.89C82.94 20.91 82.11 23.65 82.11 27.12C82.11 30.55 82.94 33.22 84.62 35.12Z"/><path d="M110.02 8.09V3.41H114.77V8.09H110.02ZM110.18 41.33V12.46H114.66V41.33H110.18Z"/><path d="M142.53 37.86C139.92 40.62 136.56 42 132.46 42C128.35 42 125 40.62 122.39 37.86C119.78 35.1 118.47 31.44 118.47 26.89C118.47 22.34 119.78 18.69 122.39 15.93C125 13.17 128.35 11.79 132.46 11.79C136.56 11.79 139.92 13.17 142.53 15.93C145.14 18.69 146.45 22.34 146.45 26.89C146.45 31.44 145.14 35.1 142.53 37.86ZM125.69 35.06C127.37 37 129.62 37.97 132.46 37.97C135.29 37.97 137.55 37 139.23 35.06C140.91 33.09 141.75 30.36 141.75 26.89C141.75 23.42 140.91 20.72 139.23 18.78C137.55 16.8 135.29 15.81 132.46 15.81C129.62 15.81 127.37 16.8 125.69 18.78C124.01 20.72 123.17 23.42 123.17 26.89C123.17 30.36 124.01 33.09 125.69 35.06Z"/><path d="M189.17 41.33L184.53 29.75H166.4L161.81 41.33H156.89L172.78 1.49H178.04L194.15 41.33H189.17ZM168.08 25.49H182.85L182.62 24.99C180.83 20.55 178.41 14.42 175.35 6.58C173 12.85 170.63 19 168.24 25.05L168.08 25.49Z"/><path d="M209.47 11.95C210.48 11.86 210.96 11.86 211.85 11.91V16.34H210.74C207.81 16.34 205.52 17.06 203.85 18.52C202.18 19.98 201.35 22.09 201.35 24.85V41.33H196.9V12.41H201.12V17.51C203.09 13.81 205.3 12.3 209.47 11.95Z"/><path d="M228.13 16.37H222.2V35.12C222.2 36.76 223.3 37.58 225.5 37.58H228.13V41.33C226.9 41.44 225.84 41.5 224.94 41.5C220.13 41.5 217.72 39.5 217.72 35.51V16.37H212.97V11.86H217.72V4.29H222.2V11.86H228.13V16.37Z"/><path d="M231.77 8.09V3.21H236.53V8.09H231.77ZM231.94 41.33V12.46H236.42V41.33H231.94Z"/><path d="M243.87 9.49C243.87 4.08 246.55 1.38 251.92 1.38C252.93 1.38 253.88 1.42 254.78 1.49V5.3H252.2C249.63 5.3 248.34 6.66 248.34 9.38V12.46H254.5V16.37H248.34V41.33H243.87V16.37H239.11V12.46H243.87V9.49ZM258.21 3.21H262.96V8.09H258.21V3.21ZM258.38 41.33V12.46H262.85V41.33H258.38Z"/><path d="M280.01 42C276.02 42 272.8 40.64 270.33 37.92C267.87 35.16 266.64 31.48 266.64 26.89C266.64 22.27 267.85 18.59 270.28 15.87C272.74 13.15 275.99 11.79 280.01 11.79C283.45 11.79 286.26 12.74 288.46 14.64C290.66 16.51 291.99 19.04 292.43 22.25H287.79C287.42 20.16 286.5 18.58 285.05 17.49C283.63 16.37 281.95 15.81 280.01 15.81C277.44 15.81 275.35 16.77 273.75 18.67C272.14 20.53 271.34 23.28 271.34 26.89C271.34 30.51 272.14 33.27 273.75 35.17C275.39 37.04 277.48 37.97 280.01 37.97C281.95 37.97 283.65 37.41 285.11 36.29C286.56 35.17 287.47 33.55 287.85 31.43H292.43C291.95 34.71 290.57 37.3 288.29 39.2C286.06 41.07 283.3 42 280.01 42Z"/><path d="M321.48 26.89V28.46H299.54C299.77 31.63 300.64 34 302.17 35.57C303.74 37.13 305.83 37.92 308.44 37.92C312.43 37.92 314.99 36.13 316.11 32.54H320.75C320 35.38 318.57 37.67 316.44 39.43C314.35 41.14 311.65 42 308.33 42C304.34 42 301.09 40.64 298.59 37.92C296.13 35.19 294.9 31.52 294.9 26.89C294.9 22.34 296.11 18.69 298.54 15.93C301 13.17 304.23 11.79 308.22 11.79C312.36 11.79 315.6 13.22 317.95 16.09C320.3 18.97 321.48 22.57 321.48 26.89ZM308.22 15.87C305.9 15.87 303.98 16.6 302.45 18.05C300.96 19.51 300.03 21.63 299.66 24.43H316.67C316.44 21.93 315.58 19.88 314.09 18.28C312.64 16.67 310.68 15.87 308.22 15.87Z"/></g><g transform="translate(651 227.58)"><path d="M7.22021 0.0218506H7.22119C11.0141 0.118196 14.0591 3.2233 14.0591 7.03943L14.0571 7.22009V7.22107C13.9608 11.014 10.8557 14.059 7.03955 14.059L6.85889 14.057H6.85791C3.12535 13.9622 0.116785 10.9536 0.0219727 7.22107V7.22009L0.0200195 7.03943L0.0288086 6.6781C0.216861 2.96915 3.28387 0.0198975 7.03955 0.0198975L7.22021 0.0218506ZM7.03955 1.0072C3.70811 1.0072 1.00732 3.70799 1.00732 7.03943C1.00733 10.3709 3.70812 13.0717 7.03955 13.0717C10.371 13.0717 13.0718 10.3709 13.0718 7.03943C13.0718 3.70799 10.371 1.00721 7.03955 1.0072ZM7.52393 2.94763L7.52881 2.96033L10.4653 10.2191L10.4761 10.2465H9.52588L9.521 10.2338L8.68018 8.13611H5.40381L4.57275 10.2338L4.56787 10.2465H3.62842L3.63916 10.2191L6.53369 2.96033L6.53857 2.94763H7.52393ZM6.39502 5.59998L5.74463 7.26697L5.72412 7.32166H8.35693L8.32861 7.2572C8.00586 6.45703 7.5698 5.35382 7.021 3.94861C6.81269 4.50368 6.60502 5.05452 6.39502 5.59998Z"/></g></g></svg><span style="left:18.44%;top:19.27%">3x</span><span style="left:81.72%;top:19.27%">3x</span><span style="left:18.44%;top:80.83%">3x</span><span style="left:73.01%;top:80.83%">1x</span><span style="left:81.72%;top:80.83%">3x</span><span style="left:10.94%;top:26.17%">3x</span><span style="left:10.94%;top:60.70%">3x</span><span style="left:10.94%;top:67.27%">3x</span><span style="left:10.94%;top:73.83%">3x</span><span style="left:89.06%;top:26.17%">3x</span><span style="left:89.06%;top:64.45%">2x</span></div>
+        <div class="cs cs-m" style="aspect-ratio:413.2/413.2" role="img" aria-label="Monogram clear space: 1x on all sides, where x is one sixth of the Ⓐ."><svg viewBox="367.4 -18.6 413.2 413.2" aria-hidden="true"><g class="cs-sq"><rect x="462" y="76" width="28" height="28"/><rect x="658" y="76" width="28" height="28"/><rect x="462" y="272" width="28" height="28"/><rect x="658" y="272" width="28" height="28"/></g><g class="cs-guide"><line x1="462" y1="76" x2="462" y2="300"/><line x1="490" y1="76" x2="490" y2="300"/><line x1="658" y1="76" x2="658" y2="300"/><line x1="686" y1="76" x2="686" y2="300"/><line x1="462" y1="76" x2="686" y2="76"/><line x1="462" y1="104" x2="686" y2="104"/><line x1="462" y1="272" x2="686" y2="272"/><line x1="462" y1="300" x2="686" y2="300"/></g><g class="cs-dot"><circle cx="462" cy="76" r="2.16"/><circle cx="462" cy="104" r="2.16"/><circle cx="462" cy="272" r="2.16"/><circle cx="462" cy="300" r="2.16"/><circle cx="490" cy="76" r="2.16"/><circle cx="490" cy="104" r="2.16"/><circle cx="490" cy="272" r="2.16"/><circle cx="490" cy="300" r="2.16"/><circle cx="658" cy="76" r="2.16"/><circle cx="658" cy="104" r="2.16"/><circle cx="658" cy="272" r="2.16"/><circle cx="658" cy="300" r="2.16"/><circle cx="686" cy="76" r="2.16"/><circle cx="686" cy="104" r="2.16"/><circle cx="686" cy="272" r="2.16"/><circle cx="686" cy="300" r="2.16"/></g><g class="cs-mark"><g transform="translate(490 104)"><path d="M84.0796 0.0396729L86.2485 0.06604L87.311 0.10022C132.227 1.79892 168.118 38.7475 168.118 84.0787V84.0797L168.091 86.2487C166.94 131.659 129.767 168.118 84.0786 168.118H84.0776L81.9087 168.091C37.5683 166.968 1.76229 131.499 0.0991211 87.2946L0.065918 86.2487L0.0395508 84.0797V84.0787C0.0395508 37.6651 37.665 0.0396729 84.0786 0.0396729H84.0796ZM83.1401 11.5026C43.4867 12.005 11.4966 44.3061 11.4966 84.0787L11.5024 85.0172C12.005 124.671 44.306 156.661 84.0786 156.661L85.0171 156.655C124.67 156.152 156.661 123.851 156.661 84.0787L156.655 83.1403C156.152 43.4868 123.851 11.4968 84.0786 11.4967L83.1401 11.5026ZM89.7573 35.1783L89.7671 35.2028L125 122.308L125.022 122.362H114.05L114.041 122.338L103.898 97.0387H64.313L54.2915 122.338L54.2817 122.362H43.4321L43.4536 122.308L78.1948 35.2028L78.2046 35.1783H89.7573ZM83.8638 46.4625C78.7372 60.1316 73.5656 73.5589 68.3579 86.7408L68.0142 87.6637H100.193L99.7261 86.6139L99.7251 86.6129C95.8177 76.9258 90.5329 63.5414 83.8638 46.4625Z"/></g></g></svg><span style="left:26.28%;top:20.23%">1x</span><span style="left:50.00%;top:20.23%">6x</span><span style="left:73.72%;top:20.23%">1x</span><span style="left:26.28%;top:79.77%">1x</span><span style="left:50.00%;top:79.77%">6x</span><span style="left:73.72%;top:79.77%">1x</span><span style="left:19.75%;top:26.28%">1x</span><span style="left:19.75%;top:50.00%">6x</span><span style="left:19.75%;top:73.72%">1x</span><span style="left:80.25%;top:26.28%">1x</span><span style="left:80.25%;top:50.00%">6x</span><span style="left:80.25%;top:73.72%">1x</span></div>
+      </div>
+      <h3 class="ssh">Incorrect use</h3>
+      <div class="wrongs">
+        <div class="wrong w-color"><figure><div class="tile"><img src="assets/marks/safx-lockup-white.svg" alt="The lockup recolored, which is not permitted" /></div><figcaption><span class="x">✕</span>Recolored</figcaption></figure></div>
+        <div class="wrong w-glow"><figure><div class="tile"><img src="assets/marks/safx-lockup-white.svg" alt="The lockup with an effect applied, which is not permitted" /></div><figcaption><span class="x">✕</span>Effects</figcaption></figure></div>
+        <div class="wrong w-low"><figure><div class="tile"><img src="assets/marks/safx-lockup-white.svg" alt="The lockup in low contrast, which is not permitted" /></div><figcaption><span class="x">✕</span>Low contrast</figcaption></figure></div>
+      </div>
+    </section>
+
+    <!-- 03 · COLOR -->
+    <section class="card" id="color">
+      <h2>Color</h2>
+      <p class="sub">A grayscale ground, and four colors that each name a phase. Hover a swatch to copy its value.</p>
+
+      <h3 class="ssh" id="grayscale">Neutrals</h3>
+      <div class="greys mono">
+        <div class="grey"><div class="chip cpx lt" tabindex="0" style="background:#FCFAF5"><span class="mdl"><button type="button" class="mbtn" data-copy="#FCFAF5" title="Copy Linen, #FCFAF5">Hex</button></span></div><span class="k">Linen</span><span class="v">#FCFAF5</span></div>
+        <div class="grey"><div class="chip cpx lt" tabindex="0" style="background:#F6F6F6"><span class="mdl"><button type="button" class="mbtn" data-copy="#F6F6F6" title="Copy Ground 1, #F6F6F6">Hex</button></span></div><span class="k">Ground 1</span><span class="v">#F6F6F6</span></div>
+        <div class="grey"><div class="chip cpx lt" tabindex="0" style="background:#F4F1EA"><span class="mdl"><button type="button" class="mbtn" data-copy="#F4F1EA" title="Copy Paper, #F4F1EA">Hex</button></span></div><span class="k">Paper</span><span class="v">#F4F1EA</span></div>
+        <div class="grey"><div class="chip cpx lt" tabindex="0" style="background:#EBEBEB"><span class="mdl"><button type="button" class="mbtn" data-copy="#EBEBEB" title="Copy Ground 2, #EBEBEB">Hex</button></span></div><span class="k">Ground 2</span><span class="v">#EBEBEB</span></div>
+        <div class="grey"><div class="chip cpx lt" tabindex="0" style="background:#CACACA"><span class="mdl"><button type="button" class="mbtn" data-copy="#CACACA" title="Copy Ground 3, #CACACA">Hex</button></span></div><span class="k">Ground 3</span><span class="v">#CACACA</span></div>
+        <div class="grey"><div class="chip cpx lt" tabindex="0" style="background:#BFBFBF"><span class="mdl"><button type="button" class="mbtn" data-copy="#BFBFBF" title="Copy Ramp mid, #BFBFBF">Hex</button></span></div><span class="k">Ramp mid</span><span class="v">#BFBFBF</span></div>
+        <div class="grey"><div class="chip cpx lt" tabindex="0" style="background:#9A9A9A"><span class="mdl"><button type="button" class="mbtn" data-copy="#9A9A9A" title="Copy Register, #9A9A9A">Hex</button></span></div><span class="k">Register</span><span class="v">#9A9A9A</span></div>
+        <div class="grey"><div class="chip cpx lt" tabindex="0" style="background:#969696"><span class="mdl"><button type="button" class="mbtn" data-copy="#969696" title="Copy Muted, #969696">Hex</button></span></div><span class="k">Muted</span><span class="v">#969696</span></div>
+        <div class="grey"><div class="chip cpx dk" tabindex="0" style="background:#7A7871"><span class="mdl"><button type="button" class="mbtn" data-copy="#7A7871" title="Copy Warm 06, #7A7871">Hex</button></span></div><span class="k">Warm 06</span><span class="v">#7A7871</span></div>
+        <div class="grey"><div class="chip cpx dk" tabindex="0" style="background:#5C5A54"><span class="mdl"><button type="button" class="mbtn" data-copy="#5C5A54" title="Copy Warm 05, #5C5A54">Hex</button></span></div><span class="k">Warm 05</span><span class="v">#5C5A54</span></div>
+      </div>
+      <div class="pair">
+        <p class="sub">The ground gradient is the one gradient from the masters: a light falloff behind a figure, never under text and never with a hue in it. It reads as lit, not filled.</p>
+        <div class="ggwrap"><div class="groundgrad cpx lt" tabindex="0"><span class="mdl"><button type="button" class="mbtn" data-copy="linear-gradient(180deg,#EBEBEB 0%,#BFBFBF 55%,#EEEEEE 100%)" title="Copy the ground gradient as CSS">CSS</button></span></div><span class="stops"><span>0% · EBEBEB</span><span>55% · BFBFBF</span><span class="fb">100% · EEEEEE</span></span></div>
+      </div>
+      <div class="pair">
+        <p class="sub">The near-blacks, ink, panel and line, sit at L* 4, 8 and 14. A badly set screen merges them, so the black level check is built from exactly these three: if the line and panel steps vanish, the display is crushing blacks.</p>
+        <div class="pluge"><div class="cpx dk" tabindex="0" style="background:#0E0E0E"><span class="fb">Ink · L* 4</span><span class="mdl"><button type="button" class="mbtn" data-copy="#0E0E0E" title="Copy Ink, #0E0E0E">Hex</button></span></div><div class="cpx dk" tabindex="0" style="background:#171717"><span class="fb">Panel · L* 8</span><span class="mdl"><button type="button" class="mbtn" data-copy="#171717" title="Copy Panel, #171717">Hex</button></span></div><div class="cpx dk" tabindex="0" style="background:#242424"><span class="fb">Line · L* 14</span><span class="mdl"><button type="button" class="mbtn" data-copy="#242424" title="Copy Line, #242424">Hex</button></span></div></div>
+      </div>
+
+      <h3 class="ssh" id="color-logic">Color logic</h3>
+      <p class="sub">Four phases, four colors: lime for Strategy, magenta for Identity, cyan for Applications, blue for Production. The set spans print and screen, with three near the process inks and one at the screen’s blue primary, and together they balance to a neutral gray. Each color is a reading on a declared scale, taken from thin-film interference, and appears only next to that scale. The row of four, in phase order and checked against its lightness, is the reference strip for every other color in the system.</p>
+      <figure class="s2s" aria-label="The film scale from 0 to 1000 nm, with the four phase colors read off it and set in phase order below">
+        <div class="s2s-head"><span class="s2s-ord" style="left:20%;width:20%"><span>Second order</span></span><span class="a0" style="left:0%">0</span><span class="" style="left:10%">100</span><span class="" style="left:20%">200</span><span class="" style="left:30%">300</span><span class="" style="left:40%">400</span><span class="" style="left:50%">500</span><span class="" style="left:60%">600</span><span class="" style="left:70%">700</span><span class="" style="left:80%">800</span><span class="" style="left:90%">900</span><span class="a1" style="left:100%">1000 nm</span></div>
+        <div class="s2s-ticks"></div>
+        <div class="s2s-film cpx dk film" tabindex="0"><span class="mdl"><button type="button" class="mbtn" data-copy="linear-gradient(90deg,#000000 0.0%,#020203 0.2%,#4D505F 2.2%,#9395A9 4.6%,#C7C3CF 7.1%,#E6D7CE 9.6%,#F0D3AD 11.8%,#EABC70 13.9%,#D8960E 15.8%,#BC6504 17.5%,#A43C4D 18.6%,#880075 19.6%,#4E00A5 21.2%,#3324B1 21.7%,#003CBB 22.2%,#0091D6 24.8%,#72C5C4 27.5%,#9FD4AA 28.9%,#CCD973 30.8%,#EFCB07 33.0%,#FDAA30 35.0%,#F67088 37.3%,#CF18BF 39.8%,#8C3BD1 42.0%,#6757D1 42.8%,#0075CB 43.8%,#00B89A 46.8%,#53D352 49.7%,#B5CE50 52.0%,#EFB08C 54.6%,#FF7DB9 57.3%,#F154C4 59.8%,#BE63B3 62.3%,#88829B 64.0%,#57958A 65.1%,#03A37D 66.0%,#00BE70 68.6%,#6EC391 71.6%,#C1B1AE 74.4%,#E598B5 76.8%,#EF82AB 79.0%,#E77999 81.1%,#CE8089 83.2%,#8B9E8C 86.8%,#5BB1A2 89.9%,#88B3AA 93.9%,#D6938F 100.0%)" title="Copy the film gradient as CSS">CSS</button></span></div>
+        <div class="s2s-map"><i style="left:30.8%;background:var(--strategy)"></i><i style="left:39.8%;background:var(--identity)"></i><i style="left:27.5%;background:var(--applications)"></i><i style="left:22.2%;background:var(--production)"></i><svg viewBox="0 0 1000 150" preserveAspectRatio="none" aria-hidden="true"><path d="M308 18V46H125V150" /><path d="M398 18V68H375V150" /><path d="M275 18V90H625V150" /><path d="M222 18V112H875V150" /></svg><span style="left:12.5%">308 nm</span><span style="left:37.5%">398 nm</span><span style="left:62.5%">275 nm</span><span style="left:87.5%">222 nm</span></div>
+        <div class="s2s-strip"><div class="s2s-bar"><span class="s2s-c lt cpx" tabindex="0" style="background:var(--strategy)"><span class="s2s-nm"><span class="s2s-i">01</span>Strategy</span><span class="fb">#D2FF1E</span><span class="mdl"><button type="button" class="mbtn" data-copy="#D2FF1E" title="Copy Strategy, #D2FF1E">Hex</button></span></span><span class="s2s-w" style="background:#EEEEEE">L* 94</span></div><div class="s2s-bar"><span class="s2s-c lt cpx" tabindex="0" style="background:var(--identity)"><span class="s2s-nm"><span class="s2s-i">02</span>Identity</span><span class="fb">#FF1BD1</span><span class="mdl"><button type="button" class="mbtn" data-copy="#FF1BD1" title="Copy Identity, #FF1BD1">Hex</button></span></span><span class="s2s-w" style="background:#8E8E8E">L* 59</span></div><div class="s2s-bar"><span class="s2s-c lt cpx" tabindex="0" style="background:var(--applications)"><span class="s2s-nm"><span class="s2s-i">03</span>Applications</span><span class="fb">#00EBEF</span><span class="mdl"><button type="button" class="mbtn" data-copy="#00EBEF" title="Copy Applications, #00EBEF">Hex</button></span></span><span class="s2s-w" style="background:#D5D5D5">L* 85</span></div><div class="s2s-bar"><span class="s2s-c dk cpx" tabindex="0" style="background:var(--production)"><span class="s2s-nm"><span class="s2s-i">04</span>Production</span><span class="fb">#0009FF</span><span class="mdl"><button type="button" class="mbtn" data-copy="#0009FF" title="Copy Production, #0009FF">Hex</button></span></span><span class="s2s-w dk" style="background:#4E4E4E">L* 33</span></div></div>
+      </figure>
+      <p class="note">Read off the film scale, thinnest to thickest: Production, Applications, Strategy, Identity. Set as a strip, they always run in phase order, each over its own lightness.</p>
+      <div class="pair">
+        <p class="sub">The four phase colors, in a flattened, blurred radial gradient, sit on the greyscale ground as a decorative layer.</p>
+        <div class="ggwrap"><div class="phasegrad cpx lt" tabindex="0"><svg viewBox="0 0 1709 622" preserveAspectRatio="none" aria-hidden="true"><defs><radialGradient id="pg-g" gradientUnits="userSpaceOnUse" cx=".5" cy=".5" r=".5" gradientTransform="matrix(2001.46 500.022 -1364.362 659.206 -160.957 -249.176)"><stop offset=".2644" stop-color="#0009FF"/><stop offset=".4872" stop-color="#00EBEF"/><stop offset=".6791" stop-color="#FF1BD1"/><stop offset="1" stop-color="#D2FF1E"/></radialGradient><filter id="pg-b" x="-.5" y="-.5" width="2" height="2"><feGaussianBlur stdDeviation="98"/></filter></defs><rect x="-400" y="-400" width="2509" height="1422" fill="url(#pg-g)" filter="url(#pg-b)"/></svg><span class="mdl"><button type="button" class="mbtn" data-copy="radial-gradient(70% 70% at 9% 53%,#0009FF 26%,#00EBEF 49%,#FF1BD1 68%,#D2FF1E 100%)" title="Copy the phase gradient as CSS">CSS</button></span></div><span class="stops"><span>26% · 0009FF</span><span>49% · 00EBEF</span><span>68% · FF1BD1</span><span>100% · D2FF1E</span></span></div>
+      </div>
+    </section>
+
+    <!-- 04 · TYPOGRAPHY -->
+    <section class="card" id="type">
+      <h2>Typography</h2>
+      <p class="sub">One typeface for everything: Helvetica Now Display.</p>
+      <div class="tspec">
+        <div class="aa"><span class="nm">Helvetica Now Display</span><span class="wt">Regular 400, every size</span></div>
+        <div class="glyphs" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Type to try the face"><span class="fit">ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><br>abcdefghijklmnopqrstuvwxyz<br>0123456789 · &amp; ? ! ( )</div>
+      </div>
+      <div class="tscale">
+        <div class="trow"><div class="tk" tabindex="0"><span>Display</span><span>48 px · Regular</span></div><div class="ts ts-display" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-label="Type to try the face at this size">Durable artifacts</div><span class="mdl"><button type="button" class="mbtn" data-copy="font-family:'Helvetica Now Display'; font-size:48px; font-weight:400; line-height:1.05; letter-spacing:-0.022em;" title="Copy the display style as CSS">CSS</button></span></div>
+        <div class="trow"><div class="tk" tabindex="0"><span>Heading</span><span>27 px · Regular</span></div><div class="ts ts-heading" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-label="Type to try the face at this size">Activations + Experiences</div><span class="mdl"><button type="button" class="mbtn" data-copy="font-family:'Helvetica Now Display'; font-size:27px; font-weight:400; line-height:1.12; letter-spacing:-0.022em;" title="Copy the heading style as CSS">CSS</button></span></div>
+        <div class="trow"><div class="tk" tabindex="0"><span>Lede</span><span>21 px · Regular</span></div><div class="ts ts-lede" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-label="Type to try the face at this size">Across culture and venture.</div><span class="mdl"><button type="button" class="mbtn" data-copy="font-family:'Helvetica Now Display'; font-size:21px; font-weight:400; line-height:1.25; letter-spacing:-0.01em;" title="Copy the lede style as CSS">CSS</button></span></div>
+        <div class="trow"><div class="tk" tabindex="0"><span>Body</span><span>15 px · Regular</span></div><div class="ts ts-body" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-label="Type to try the face at this size">Production needs an approved creative direction and a scope.</div><span class="mdl"><button type="button" class="mbtn" data-copy="font-family:'Helvetica Now Display'; font-size:15px; font-weight:400; line-height:1.5; letter-spacing:-0.01em;" title="Copy the body style as CSS">CSS</button></span></div>
+        <div class="trow"><div class="tk" tabindex="0"><span>Small</span><span>12.5 px · Regular</span></div><div class="ts ts-small" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-label="Type to try the face at this size">Reinforcement-learning environments and evaluations, built for frontier AI labs.</div><span class="mdl"><button type="button" class="mbtn" data-copy="font-family:'Helvetica Now Display'; font-size:12.5px; font-weight:400; line-height:1.45; letter-spacing:-0.01em;" title="Copy the small style as CSS">CSS</button></span></div>
+        <div class="trow"><div class="tk" tabindex="0"><span>Label</span><span>11 px · uppercase</span></div><div class="ts ts-label" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-label="Type to try the face at this size">Project 08 · 2026</div><span class="mdl"><button type="button" class="mbtn" data-copy="font-family:'Helvetica Now Display'; font-size:11px; font-weight:400; line-height:1.55; letter-spacing:0.08em; text-transform:uppercase;" title="Copy the label style as CSS">CSS</button></span></div>
+      </div>
+      <h3 class="ssh">Rules</h3>
+      <div class="trules">
+        <div>No monospace, anywhere.</div>
+        <div>Nothing heavier than weight 500.</div>
+        <div>Lines are 1px. Corners are 2px.</div>
+      </div>
+    </section>
+
+    <!-- 05 · MOTION -->
+    <section class="card" id="motion">
+      <h2>Motion</h2>
+      <p class="sub">Studio Artifice moves on one easing curve: a quick start that eases out in a fifth of a second, with no bounce or overshoot. Below are examples of the brand motion applied.</p>
+      <div class="mo">
+        <div class="mo-uses">
+          <div class="mo-use">
+            <span class="mo-k">Hover</span>
+            <div class="mo-vis"><button type="button" class="mo-crop"><i></i><i></i><i></i><i></i>View work</button></div>
+          </div>
+          <div class="mo-use">
+            <span class="mo-k">Switch</span>
+            <div class="mo-vis">
+              <div class="mo-seg" id="mo-seg" data-on="0" role="group" aria-label="Example switch">
+                <span class="mo-mk"></span>
+                <button type="button" aria-pressed="true">Dark</button>
+                <button type="button" aria-pressed="false">Light</button>
+              </div>
+            </div>
+          </div>
+          <div class="mo-use">
+            <span class="mo-k">Dropdown</span>
+            <div class="mo-vis">
+              <div class="mo-disc" id="mo-disc" data-open="0">
+                <button type="button" aria-expanded="false" aria-controls="mo-disc-body"><span>Easing curve</span><span class="mo-pm" aria-hidden="true"></span></button>
+                <div class="mo-body" id="mo-disc-body"><div><p>cubic-bezier(.22,1,.36,1)</p></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mo-curve cpx" tabindex="0">
+          <svg viewBox="-40 -16 256 252" role="img" aria-label="The brand easing curve, cubic-bezier(.22, 1, .36, 1), over 0.2 seconds, with its two Bezier handles">
+            <path class="mo-grid" d="M0 100H200M50 0V200M100 0V200M150 0V200M0 0H200M200 0V200"/>
+            <path class="mo-ax" d="M0 0V200H200"/>
+            <path class="mo-hd" d="M0 200L44 0M200 0L72 0"/>
+            <path class="mo-c0" id="mo-c0" d=""/>
+            <path class="mo-c1" id="mo-c1" d=""/>
+            <rect class="mo-hp" x="40" y="-4" width="8" height="8" rx="2"/>
+            <rect class="mo-hp" x="68" y="-4" width="8" height="8" rx="2"/>
+            <circle class="mo-ep" cx="0" cy="200" r="2.5"/>
+            <circle class="mo-ep" cx="200" cy="0" r="2.5"/>
+            <text class="mo-hl" x="36" y="16" text-anchor="end">.22, 1</text>
+            <text class="mo-hl" x="72" y="-8" text-anchor="middle">.36, 1</text>
+            <circle class="mo-dot" id="mo-dot" r="4" cx="0" cy="200"/>
+            <g>
+              <text x="0" y="218" text-anchor="start">0s</text>
+              <text x="50" y="218" text-anchor="middle">0.05</text>
+              <text x="100" y="218" text-anchor="middle">0.1</text>
+              <text x="150" y="218" text-anchor="middle">0.15</text>
+              <text x="200" y="218" text-anchor="end">0.2s</text>
+              <text x="-8" y="203" text-anchor="end">0%</text>
+              <text x="-8" y="103" text-anchor="end">50%</text>
+              <text x="-8" y="3" text-anchor="end">100%</text>
+            </g>
+            <text class="mo-rd" id="mo-rd" x="196" y="190" text-anchor="end"></text>
+          </svg>
+          <span class="mdl"><button type="button" class="mbtn" data-copy="cubic-bezier(.22,1,.36,1)" title="Copy the easing curve as CSS">Ease</button><button type="button" class="mbtn" data-copy=".2s" title="Copy the duration as CSS">0.2s</button></span>
+        </div>
+      </div>
+      <h3 class="ssh">Sting</h3>
+      <figure class="sting">
+        <div class="plate"><canvas id="sting" width="1920" height="1080" aria-label="The Studio Artifice sting: crop marks frame the four phase colors, a scope reads them, and they converge into the square, the screw and the wordmark" role="img"></canvas></div>
+      </figure>
+    </section>
+
+    <!-- 06 · ARTIFACT -->
+    <section class="card" id="artifact">
+      <h2>Artifact</h2>
+      <p class="sub">The brand figure is an artist's mannequin: the still-life subject, the proxy a draftsman observes when learning to see. It stands for observation itself.</p>
+      <figure class="artifact">
+        <div class="plate"><iframe src="pages/mannequin-embed.html" title="The brand figure through a heat camera" loading="lazy" allow="fullscreen"></iframe></div>
+        <p class="use">Use the live figure on screens, at full width and always on black with its scale beside it.</p>
+      </figure>
+      <div class="stills">
+        <div>
+          <figure class="mcard dk ph" tabindex="0" aria-label="Thermal mannequin, color: download PNG or JPG">
+            <img src="img/mannequin-thermal-1200.jpg" alt="The thermal mannequin in color" width="1602" height="2402" loading="lazy" />
+            <figcaption>Thermal mannequin · Color</figcaption>
+            <div class="mdl"><a class="mbtn" href="assets/artifact/safx-mannequin-thermal.png" download>PNG</a><a class="mbtn" href="assets/artifact/safx-mannequin-thermal.jpg" download>JPG</a></div>
+          </figure>
+          <p class="use">Use the color photo when the figure is the hero: covers, openings and large single images.</p>
+        </div>
+        <div>
+          <figure class="mcard dk ph" tabindex="0" aria-label="Thermal mannequin, grayscale: download PNG or JPG">
+            <img src="img/mannequin-grey-1200.jpg" alt="The thermal mannequin in grayscale" width="1602" height="2402" loading="lazy" />
+            <figcaption>Thermal mannequin · Grayscale</figcaption>
+            <div class="mdl"><a class="mbtn" href="assets/artifact/safx-mannequin-grey.png" download>PNG</a><a class="mbtn" href="assets/artifact/safx-mannequin-grey.jpg" download>JPG</a></div>
+          </figure>
+          <p class="use">Use the grayscale photo on applications and wherever the figure sits behind type.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 · ORIGINS -->
+    <section class="card" id="origins">
+      <h2>Origins</h2>
+      <p class="sub">Studio Artifice starts every project by looking closely, measuring what it finds and checking the work against something known. The brand identity design comes from tools built for observation.</p>
+      <div class="osteps">
+      <div class="ostep">
+        <a class="ofig" href="https://en.wikipedia.org/wiki/Thin-film_interference" target="_blank" rel="noopener"><span class="oimg"><img loading="lazy" src="img/ext-bubble.jpg" alt="The top of a soap bubble swirling with bands of interference color"></span><span class="t">Thin-film interference<span class="ext" aria-hidden="true">↗</span></span><span class="d">The colors in a soap bubble come from how thin the film is at each spot. Each thickness shows its own color.</span></a>
+        <div class="oarrow" aria-hidden="true">→</div>
+        <figure class="ofig"><div class="oimg"><div class="ofilm"><span class="mk up" style="left:24%"><span><i style="background:var(--production)"></i>Production</span></span><span class="mk dn" style="left:41.67%"><span><i style="background:var(--applications)"></i>Applications</span></span><span class="mk up" style="left:52.67%"><span><i style="background:var(--strategy)"></i>Strategy</span></span><span class="mk dn" style="left:82.67%"><span><i style="background:var(--identity)"></i>Identity</span></span></div><div class="oaxis"><span>Thinner</span><span>Thicker</span></div></div><figcaption class="t">Iridescent gradient</figcaption><p class="d">For Studio Artifice, all four colors sit on that one scale, from thinnest to thickest.</p></figure>
+      </div>
+      <div class="ostep">
+        <a class="ofig" href="https://commons.wikimedia.org/wiki/File:Termografia_kot.jpg" target="_blank" rel="noopener"><span class="oimg"><img loading="lazy" src="img/ext-thermal-cat.jpg" alt="A thermal image of a cat with its temperature scale bar"></span><span class="t">Thermal image reading<span class="ext" aria-hidden="true">↗</span></span><span class="d">A thermal image comes with a bar that reads each color’s temperature. Without the bar, the colors mean nothing.</span></a>
+        <div class="oarrow" aria-hidden="true">→</div>
+        <figure class="ofig"><div class="oimg otherm" tabindex="0" aria-describedby="otherm-d"><img loading="lazy" src="img/mannequin-thermal-1200.jpg" alt="The brand figure seen through a heat camera, with its two scales beside it"><canvas aria-hidden="true"></canvas><span class="vh" aria-live="polite"></span></div><figcaption class="t">The figure</figcaption><p class="d" id="otherm-d">The figure as a heat camera sees it. Point to any spot, by mouse, touch or arrow keys, and the scale beside it marks the reading.</p></figure>
+      </div>
+      <div class="ostep">
+        <a class="ofig" href="https://commons.wikimedia.org/wiki/File:SMPTE_Color_Bars.svg" target="_blank" rel="noopener"><span class="oimg"><img loading="lazy" src="img/ext-bars.svg" alt="SMPTE color bars: seven vertical bars over a row of reverse bars and a black-level strip"></span><span class="t">SMPTE color bars<span class="ext" aria-hidden="true">↗</span></span><span class="d">Before a broadcast, stations send stripes of fixed colors. Anyone down the line can check their screen against them.</span></a>
+        <div class="oarrow" aria-hidden="true">→</div>
+        <figure class="ofig"><div class="oimg"><div class="ostrip"><span><i style="background:var(--strategy)"></i>Strategy</span><span><i style="background:var(--identity)"></i>Identity</span><span><i style="background:var(--applications)"></i>Applications</span><span><i style="background:var(--production)"></i>Production</span></div></div><figcaption class="t">Four phases</figcaption><p class="d">For Studio Artifice, the four squares are the studio’s own test strip. Each one stands for a phase of the work, always in order.</p></figure>
+      </div>
+      <div class="ostep">
+        <a class="ofig" href="https://lastingimpressions.winterthur.org/creating-currier-ives-prints/printing-marks/" target="_blank" rel="noopener"><span class="oimg print"><img loading="lazy" src="img/ext-registration-marks.svg" alt="Printer’s registration marks: circle-and-cross targets, crop marks around a trim box, and color and tone control strips"></span><span class="t">Registration marks<span class="ext" aria-hidden="true">↗</span></span><span class="d">Each ink is printed in its own pass, and a circle with a cross on every sheet shows whether the passes line up. Screens check color on the same circle and cross.</span></a>
+        <div class="oarrow" aria-hidden="true">→</div>
+        <figure class="ofig"><div class="oimg"><span class="omark" role="img" aria-label="The Studio Artifice brand mark"></span></div><figcaption class="t">Brand mark</figcaption><p class="d">For Studio Artifice, the screw, a circle with a cross cut out, comes from that target. The four phases are like four passes that line up into one piece of work, which is what the sting shows.</p></figure>
+      </div>
+      </div>
+    </section>
+
+    <!-- 08 · VOICE -->
+    <section class="card" id="voice">
+      <h2>Voice</h2>
+      <p class="sub">Write like an editor, not a copywriter: assume a peer, state rather than sell.</p>
+      <div class="cols">
+        <div><h3 class="ssh">Do</h3><ul>
+          <li>Flat declarative sentences a reader could check or dispute.</li>
+          <li>Observation over declaration, material before concept.</li>
+          <li>Warmth comes from noticing, not adjectives.</li>
+        </ul></div>
+        <div><h3 class="ssh">Don't</h3><ul>
+          <li><span class="x">✕</span>No exclamation points.</li>
+          <li><span class="x">✕</span>No aphoristic punchlines.</li>
+          <li><span class="x">✕</span>No reversals built for quoting.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Studio Artifice LLC</span>
+      <span>Copyright © 2026 / all rights reserved</span>
+    </footer>
+  </main>
+ </div>
+  <script>
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+    // Theme: system by default; the toggle overrides and is remembered. Marks swap to their black files on light.
+    (() => {
+      const root = document.documentElement, tb = document.getElementById('theme');
+      const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : !matchMedia('(prefers-color-scheme: light)').matches;
+      const sync = () => {
+        const d = isDark(); tb.textContent = d ? 'Light mode' : 'Dark mode';
+        document.querySelectorAll('img[src*="assets/marks/"]:not([data-fixed])').forEach((im) => { const src = im.getAttribute('src'), n = d ? src.replace('-black.', '-white.') : src.replace('-white.', '-black.'); if (n !== src) im.setAttribute('src', n); });
+        dispatchEvent(new Event('resize'));
+      };
+      tb.addEventListener('click', () => { root.dataset.theme = isDark() ? 'light' : 'dark'; try { localStorage.setItem('safx-rnd-theme', root.dataset.theme); } catch (e) {} sync(); });
+      matchMedia('(prefers-color-scheme: light)').addEventListener('change', sync);
+      sync();
+    })();
+
+    // Say Copied only when the write landed: a non-secure context or a denied
+    // permission must not tell a press contact they have text they don't.
+    async function copyTo(el, text, ms) {
+      if (el.dataset.busy) return;
+      let ok = true;
+      try { await navigator.clipboard.writeText(text); } catch (e) { ok = false; }
+      const t = el.textContent;
+      el.dataset.busy = '1';
+      el.textContent = ok ? 'Copied' : 'Copy failed';
+      setTimeout(() => { el.textContent = t; delete el.dataset.busy; }, ms);
+    }
+
+    // copy a boilerplate block (section 01). Paragraphs stay paragraphs; whitespace
+    // inside a paragraph collapses to single spaces.
+    document.querySelectorAll('.copysrc').forEach((el) => {
+      el.addEventListener('click', () => {
+        const src = document.getElementById(el.dataset.src);
+        if (!src) return;
+        const text = [...src.querySelectorAll('p')].map((p) => p.textContent.replace(/\s+/g, ' ').trim()).join('\n\n');
+        copyTo(el, text, 1100);
+      });
+    });
+
+    // copy a value from a hover layer: colors, gradients, type, motion
+    document.addEventListener('click', (ev) => {
+      const b = ev.target.closest('.mbtn[data-copy]');
+      if (b) copyTo(b, b.dataset.copy, 1100);
+    });
+
+    // scroll-spy: highlight the section in view. Reaching the bottom of the
+    // document means the last section, whatever the observer band says.
+    (function () {
+      const links = new Map();
+      document.querySelectorAll('.toc a[href^="#"]').forEach((a) => links.set(a.getAttribute('href').slice(1), a));
+      const sections = [...links.keys()].map((id) => document.getElementById(id)).filter(Boolean);
+      if (!sections.length) return;
+      let active = null;
+      const setActive = (id) => {
+        if (id === active) return;
+        active = id;
+        links.forEach((a, key) => a.classList.toggle('active', key === id));
+      };
+      const lastId = sections[sections.length - 1].id;
+      const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      const io = new IntersectionObserver((entries) => {
+        if (atBottom()) { setActive(lastId); return; }
+        const vis = entries.filter((e) => e.isIntersecting)
+          .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top);
+        if (vis.length) { setActive(vis[0].target.id); return; }
+        let last = sections[0].id;
+        for (const s of sections) { if (s.getBoundingClientRect().top < 120) last = s.id; }
+        setActive(last);
+      }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+      sections.forEach((s) => io.observe(s));
+      const syncEnd = () => { if (atBottom()) setActive(lastId); };
+      window.addEventListener('scroll', syncEnd, { passive: true });
+      window.addEventListener('resize', syncEnd);
+      syncEnd();
+    })();
+
+    // Section snap: a light, damped settle onto a section's top. It only acts
+    // once scrolling has come to rest with a section top in the last 35% of its
+    // travel (the previous section mostly gone), and only in the direction the
+    // reader was already going. Any input during the settle hands control back.
+    // Reduced motion turns it off.
+    (function () {
+      const rm = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const sections = [...document.querySelectorAll('.toc a[href^="#"]')]
+        .map((a) => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+      if (!sections.length) return;
+      const ZONE = 0.35, MIN = 6, DUR = 800;
+      let lastY = window.scrollY, dir = 0, idle = 0, raf = 0, held = false, settling = false;
+      // cubic-bezier(x1,y1,x2,y2) as a function of progress, solved by bisection.
+      const bez = (x1, y1, x2, y2) => (x) => {
+        const c = (t, p1, p2) => 3 * (1 - t) * (1 - t) * t * p1 + 3 * (1 - t) * t * t * p2 + t * t * t;
+        let lo = 0, hi = 1, t = x;
+        for (let i = 0; i < 24; i++) { t = (lo + hi) / 2; if (c(t, x1, x2) < x) lo = t; else hi = t; }
+        return c(t, y1, y2);
+      };
+      // The settle: a soft start, then a long damped landing.
+      const ease = bez(.4, 0, .2, 1);
+      // The brand easing (--ease): leaves at speed, lands soft. Used for nav jumps.
+      const snap = bez(.22, 1, .36, 1);
+      // The glide drives scrollTo itself, so CSS smooth scrolling is parked while it runs. Every exit,
+      // including an interrupted one, puts it back; a stop mid-glide used to leave it parked for good.
+      const html = document.documentElement;
+      const release = () => { html.style.scrollBehavior = ''; settling = false; lastY = window.scrollY; };
+      const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; release(); } };
+      const glide = (to, dur = DUR, fn = ease) => {
+        stop();
+        const from = window.scrollY, d = to - from, t0 = performance.now();
+        settling = true;
+        html.style.scrollBehavior = 'auto';
+        const step = (now) => {
+          const k = Math.min(1, (now - t0) / dur);
+          window.scrollTo(0, from + d * fn(k));
+          if (k < 1) raf = requestAnimationFrame(step);
+          else { raf = 0; release(); }
+        };
+        raf = requestAnimationFrame(step);
+      };
+      const settle = () => {
+        if (rm.matches || held || settling || !dir) return;
+        const vh = window.innerHeight, maxY = document.documentElement.scrollHeight - vh;
+        for (const s of sections) {
+          const off = parseFloat(getComputedStyle(s).scrollMarginTop) || 0;
+          const gap = s.getBoundingClientRect().top - off;
+          const inZone = dir > 0 ? gap > MIN && gap <= vh * ZONE : gap < -MIN && gap >= -vh * ZONE;
+          if (!inZone) continue;
+          const to = Math.max(0, Math.min(maxY, window.scrollY + gap));
+          if (Math.abs(to - window.scrollY) > MIN) glide(to);
+          return;
+        }
+      };
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (!settling && y !== lastY) dir = y > lastY ? 1 : -1;
+        lastY = y;
+        clearTimeout(idle);
+        if (!settling) idle = setTimeout(settle, 180);
+      }, { passive: true });
+      ['wheel', 'touchstart', 'keydown'].forEach((t) => window.addEventListener(t, stop, { passive: true }));
+      window.addEventListener('pointerdown', () => { held = true; stop(); });
+      window.addEventListener('pointerup', () => { held = false; });
+      window.addEventListener('touchend', () => { held = false; }, { passive: true });
+      // Nav jumps: a quick glide onto the section top, 360ms for a short hop up to 620ms across the
+      // page, so long trips don't crawl. The hash still updates. Reduced motion jumps straight there.
+      document.querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener('click', (e) => {
+        dir = 0;
+        const t = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+        if (!t || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+        e.preventDefault();
+        const off = parseFloat(getComputedStyle(t).scrollMarginTop) || 0;
+        const maxY = html.scrollHeight - window.innerHeight;
+        const to = Math.max(0, Math.min(maxY, window.scrollY + t.getBoundingClientRect().top - off));
+        if (location.hash !== '#' + t.id) history.pushState(null, '', '#' + t.id);
+        if (rm.matches) { html.style.scrollBehavior = 'auto'; window.scrollTo(0, to); release(); return; }
+        glide(to, Math.min(620, 360 + Math.abs(to - window.scrollY) * 0.03), snap);
+      }));
+    })();
+
+    // Specimen: size the glyphs so A–Z spans the plate, the Z's ink on the right edge. Text width scales
+    // linearly with font size, so one measurement at 100px gives the answer. The trailing letter-spacing
+    // and the Z's own right sidebearing are measured out, so the ink, not its box, meets the edge.
+    (function () {
+      const g = document.querySelector('.tspec .glyphs');
+      if (!g || !g.querySelector('.fit')) return;
+      const ctx = document.createElement('canvas').getContext('2d');
+      const fit = () => {
+        const avail = g.clientWidth, line = g.querySelector('.fit');
+        // Typing can remove the measured line, and its wrapping is off while focused: hold the size then.
+        if (!avail || !line || document.activeElement === g) return;
+        g.style.fontSize = '100px';
+        const cs = getComputedStyle(line);
+        ctx.font = `${cs.fontWeight} 100px ${cs.fontFamily}`;
+        const z = ctx.measureText('Z');
+        const bearing = Math.max(0, z.width - z.actualBoundingBoxRight);
+        const ink = line.getBoundingClientRect().width - (parseFloat(cs.letterSpacing) || 0) - bearing;
+        g.style.fontSize = (100 * avail / ink).toFixed(3) + 'px';
+      };
+      // a frame later, so resizing the text inside the observer's own callback doesn't loop it
+      new ResizeObserver(() => requestAnimationFrame(fit)).observe(g);
+      if (document.fonts) document.fonts.ready.then(fit);
+      matchMedia('print').addEventListener('change', fit);
+      g.addEventListener('blur', fit);
+      window.addEventListener('glyphs:reset', fit);
+    })();
+
+    // Mobile menu: the button opens the section list; a pick, Escape, a tap outside or widening
+    // past the breakpoint closes it.
+    (function () {
+      const side = document.querySelector('.side'), btn = side && side.querySelector('.burger');
+      if (!btn) return;
+      const set = (open) => { side.classList.toggle('open', open); btn.setAttribute('aria-expanded', open); btn.setAttribute('aria-label', open ? 'Close menu' : 'Menu'); };
+      btn.addEventListener('click', () => set(!side.classList.contains('open')));
+      side.querySelectorAll('.toc a').forEach((a) => a.addEventListener('click', () => set(false)));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && side.classList.contains('open')) { set(false); btn.focus(); } });
+      document.addEventListener('click', (e) => { if (!side.contains(e.target)) set(false); });
+      matchMedia('(min-width:901px)').addEventListener('change', (m) => { if (m.matches) set(false); });
+    })();
+  </script>
+<script>
+  (() => {
+    // Mark cards and copy layers: on touch screens a tap opens one layer at a time (no hover there).
+    const touch = matchMedia('(hover: none)');
+    const cards = document.querySelectorAll('.mcard, .cpx');
+    cards.forEach((c) => c.addEventListener('click', (e) => {
+      if (e.target.closest('.mbtn') || !touch.matches) return;
+      cards.forEach((o) => { if (o !== c) o.classList.remove('open'); });
+      c.classList.toggle('open');
+    }));
+    document.addEventListener('click', (e) => { if (!e.target.closest('.mcard, .cpx')) cards.forEach((o) => o.classList.remove('open')); });
+
+    // Type scale: a tap on a label opens its copy layer on touch screens.
+    const rows = document.querySelectorAll('.trow');
+    rows.forEach((r) => r.querySelector('.tk').addEventListener('click', () => {
+      if (!touch.matches) return;
+      rows.forEach((o) => { if (o !== r) o.classList.remove('open'); });
+      r.classList.toggle('open');
+    }));
+    document.addEventListener('click', (e) => { if (!e.target.closest('.trow .tk, .trow .mdl')) rows.forEach((o) => o.classList.remove('open')); });
+
+    // Type scale samples: one line each. Enter ends the edit; an emptied line returns to its sentence.
+    document.querySelectorAll('.trow .ts[contenteditable]').forEach((t) => {
+      const base = t.textContent;
+      t.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); t.blur(); } if (e.key === 'Escape') { t.textContent = base; t.blur(); } });
+      t.addEventListener('blur', () => { if (!t.textContent.trim()) t.textContent = base; });
+    });
+    // The specimen glyphs: same, but several lines, so Enter breaks a line. Escape or emptying it
+    // brings back the original set, which also re-fits A–Z to the plate.
+    const gl = document.querySelector('.tspec .glyphs[contenteditable]');
+    if (gl) {
+      const base = gl.innerHTML;
+      const reset = () => { gl.innerHTML = base; window.dispatchEvent(new Event('glyphs:reset')); };
+      gl.addEventListener('keydown', (e) => { if (e.key === 'Escape') { reset(); gl.blur(); } });
+      gl.addEventListener('blur', () => { if (!gl.textContent.trim()) reset(); });
+    }
+  })();
+</script>
+<script>
+  // The Rive web runtime, loaded once for every Rive plate on the page (cover board, motion sting).
+  window.loadRive = () => window.__riveLoad || (window.__riveLoad = new Promise((ok, fail) => {
+    const s = document.createElement('script'); s.src = 'assets/motion/rive.js';
+    s.onload = () => { rive.RuntimeLoader.setWasmUrl('assets/motion/rive.wasm'); ok(); };
+    s.onerror = fail;
+    document.head.appendChild(s);
+  }));
+</script>
+<script>
+  // Cover: the board as a live Rive file (study C v2, "Heat pass, low"; Rive file safx-board-heat-pass).
+  // The pointer moves the phase gradient and each colour block stretches when its own colour passes
+  // under it; a click turns the screw a quarter. With no pointer the gradient makes its pass on a loop.
+  // All of that is the file's own script (BoardDriver), signed on publish. Reduced motion turns the
+  // idle pass off through the view model, so the board rests as designed; pointer and click still work.
+  (() => {
+    const cv = document.getElementById('board'); if (!cv) return;
+    const fig = cv.closest('.cover');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let r = null, ready = false, seen = false;
+    function start() {
+      loadRive().then(() => {
+        r = new rive.Rive({
+          src: 'assets/motion/board-heat-pass.riv', canvas: cv, artboard: 'Board', stateMachine: 'State Machine 1',
+          autoplay: true, autoBind: true, isTouchScrollEnabled: true,
+          layout: new rive.Layout({ fit: rive.Fit.Contain, alignment: rive.Alignment.Center }),
+          onLoad: () => {
+            r.resizeDrawingSurfaceToCanvas();
+            const idle = r.viewModelInstance && r.viewModelInstance.boolean('idlePass');
+            if (still && idle) idle.value = false;
+            ready = true;
+            if (!seen) r.pause();
+            requestAnimationFrame(() => fig.classList.add('live'));
+          },
+          onLoadError: () => cv.remove(),
+        });
+      }, () => cv.remove());
+    }
+    new IntersectionObserver((es) => {
+      seen = es[0].isIntersecting;
+      if (seen && !r) start();
+      else if (ready) seen ? r.play() : r.pause();
+    }, { rootMargin: '200px' }).observe(cv);
+    addEventListener('resize', () => { if (r) r.resizeDrawingSurfaceToCanvas(); });
+  })();
+</script>
+<script>
+  // Motion: the sting (Rive file safx-sting-separation), replayed on a loop.
+  // It is seven stage timelines chained by the state machine "Sting Sequence". The last stage holds on
+  // the lockup, then the machine restarts. The runtime loads only when the plate scrolls near, the loop
+  // pauses off screen, and reduced motion shows the settled lockup.
+  (() => {
+    const cv = document.getElementById('sting'); if (!cv) return;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const SM = 'Sting Sequence', LAST = '07 Wordmark', LAST_S = 1.7, HOLD_S = 1.6;
+    let r = null, seen = false, inLast = null, t = 0, prev = 0;
+    function tick(now) {
+      if (r && seen && !still) {
+        t += Math.min(0.1, (now - prev) / 1000);
+        if (inLast !== null && t - inLast > LAST_S + HOLD_S) { inLast = null; r.reset({ stateMachines: SM, autoplay: true }); }
+      }
+      prev = now; requestAnimationFrame(tick);
+    }
+    function start() {
+      loadRive().then(() => {
+        r = new rive.Rive({
+          src: 'assets/motion/sting-separation.riv', canvas: cv, artboard: 'Sting Separation',
+          ...(still ? { animations: LAST } : { stateMachines: SM }), autoplay: !still,
+          layout: new rive.Layout({ fit: rive.Fit.Contain, alignment: rive.Alignment.Center }),
+          onLoad: () => { r.resizeDrawingSurfaceToCanvas(); if (still) r.scrub(LAST, LAST_S - 0.01); },
+          onStateChange: (e) => { if ([].concat(e.data).includes(LAST)) inLast = t; },
+        });
+        requestAnimationFrame((now) => { prev = now; tick(now); });
+      }, () => {});
+    }
+    new IntersectionObserver((es) => {
+      seen = es[0].isIntersecting;
+      if (seen && !r) start();
+      else if (r && !still) seen ? r.play() : r.pause();
+    }, { rootMargin: '200px' }).observe(cv);
+    addEventListener('resize', () => { if (r) r.resizeDrawingSurfaceToCanvas(); });
+  })();
+</script>
+<script>
+(() => {
+  const RAMP = [[0,[0,0,0]],[0.196,[0,9,255]],[0.369,[0,235,239]],[0.597,[210,255,30]],[0.822,[255,27,209]],[1,[255,255,255]]];
+  const FILM_NM = [[0,0],[0.196,222],[0.369,275],[0.597,308],[0.822,398],[1,440]];
+  const FILM = [[0,"#000000"],[2,"#020203"],[22,"#4D505F"],[46,"#9395A9"],[71,"#C7C3CF"],[96,"#E6D7CE"],[118,"#F0D3AD"],[139,"#EABC70"],[158,"#D8960E"],[175,"#BC6504"],[186,"#A43C4D"],[196,"#880075"],[212,"#4E00A5"],[217,"#3324B1"],[222,"#003CBB"],[248,"#0091D6"],[275,"#72C5C4"],[289,"#9FD4AA"],[308,"#CCD973"],[330,"#EFCB07"],[350,"#FDAA30"],[373,"#F67088"],[398,"#CF18BF"],[420,"#8C3BD1"],[428,"#6757D1"],[438,"#0075CB"],[468,"#00B89A"]]
+    .map(([n, h]) => [n, [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16))]);
+  const BANDS = [["#0009FF",0.196],["#00EBEF",0.369],["#D2FF1E",0.597],["#FF1BD1",0.822]];
+  const lerp = (tab, x) => {
+    if (x <= tab[0][0]) return tab[0][1];
+    for (let i = 1; i < tab.length; i++) if (x <= tab[i][0]) {
+      const [x0, a] = tab[i - 1], [x1, b] = tab[i], f = (x - x0) / (x1 - x0);
+      return Array.isArray(a) ? a.map((v, j) => v + (b[j] - v) * f) : a + (b - a) * f;
+    }
+    return tab[tab.length - 1][1];
+  };
+  // nearest point on the thermal ramp, as a reading from 0 to 1
+  const reading = (r, g, b) => {
+    let best = 1e9, out = 0;
+    for (let i = 1; i < RAMP.length; i++) {
+      const [t0, p] = RAMP[i - 1], [t1, q] = RAMP[i], d = q.map((v, j) => v - p[j]);
+      const dd = d[0] * d[0] + d[1] * d[1] + d[2] * d[2];
+      const u = Math.max(0, Math.min(1, ((r - p[0]) * d[0] + (g - p[1]) * d[1] + (b - p[2]) * d[2]) / dd));
+      const e = (r - p[0] - u * d[0]) ** 2 + (g - p[1] - u * d[1]) ** 2 + (b - p[2] - u * d[2]) ** 2;
+      if (e < best) { best = e; out = t0 + (t1 - t0) * u; }
+    }
+    return out;
+  };
+  document.querySelectorAll(".oimg.otherm").forEach(tile => {
+    const img = tile.querySelector("img"), cv = tile.querySelector("canvas");
+    let px = null, at = null, pt = null; // pt: the spot being read, as a fraction of the image
+    const live = tile.querySelector(".vh");
+    // where the image sits in the tile (object-fit cover, positioned 50% 12%)
+    const fit = () => {
+      const W = tile.clientWidth, H = tile.clientHeight, s = Math.max(W / img.naturalWidth, H / img.naturalHeight);
+      const dw = img.naturalWidth * s, dh = img.naturalHeight * s;
+      return { W, H, dw, dh, ox: (W - dw) * 0.5, oy: (H - dh) * 0.12 };
+    };
+    const probe = document.createElement("canvas");
+    const load = () => {
+      const w = 240, h = Math.round(img.naturalHeight * w / img.naturalWidth);
+      probe.width = w; probe.height = h;
+      const x = probe.getContext("2d", { willReadFrequently: true }); x.drawImage(img, 0, 0, w, h);
+      try { px = x.getImageData(0, 0, w, h).data; } catch (e) { px = null; }
+    };
+    const draw = () => {
+      const W = tile.clientWidth, H = tile.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
+      if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+      const x = cv.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, W, H);
+      const bw = W < 320 ? 7 : 9, by = Math.round(H * 0.12), bh = H - 2 * by, bx = W - 2 * bw - 4 - Math.round(W * 0.05);
+      for (let i = 0; i < 120; i++) {
+        const r = i / 119, yy = by + bh - (i + 1) * bh / 120;
+        x.fillStyle = `rgb(${lerp(RAMP, r).map(Math.round)})`; x.fillRect(bx, yy, bw, bh / 120 + .6);
+        x.fillStyle = `rgb(${lerp(FILM, lerp(FILM_NM, r)).map(Math.round)})`; x.fillRect(bx + bw + 4, yy, bw, bh / 120 + .6);
+      }
+      for (const [hex, t] of BANDS) { x.fillStyle = hex; x.fillRect(bx - 6, Math.round(by + bh - t * bh), 4, 1); }
+      if (at != null) { const yy = Math.round(by + bh - at * bh) + .5; x.strokeStyle = "#F4F1EA"; x.lineWidth = 1; x.beginPath(); x.moveTo(bx - 8, yy); x.lineTo(bx + bw * 2 + 6, yy); x.stroke(); }
+      // a small cross on the spot being read, so touch and keyboard can see it
+      if (pt && img.naturalWidth) {
+        const f = fit(), cx = Math.round(f.ox + pt[0] * f.dw) + .5, cy = Math.round(f.oy + pt[1] * f.dh) + .5;
+        x.strokeStyle = "#F4F1EA"; x.lineWidth = 1; x.beginPath();
+        x.moveTo(cx - 6, cy); x.lineTo(cx + 6, cy); x.moveTo(cx, cy - 6); x.lineTo(cx, cy + 6); x.stroke();
+      }
+    };
+    const NAMES = ["Production", "Applications", "Strategy", "Identity"];
+    const readAt = (ix, iy, say) => {
+      if (!px) return;
+      const f = fit();
+      // keep the spot on the visible part of the image
+      ix = Math.max(-f.ox / f.dw, Math.min((f.W - f.ox) / f.dw, ix));
+      iy = Math.max(-f.oy / f.dh, Math.min((f.H - f.oy) / f.dh, iy));
+      pt = [ix, iy];
+      const u = Math.max(0, Math.min(probe.width - 1, Math.floor(ix * probe.width))), v = Math.max(0, Math.min(probe.height - 1, Math.floor(iy * probe.height)));
+      const k = (v * probe.width + u) * 4;
+      at = reading(px[k], px[k + 1], px[k + 2]); draw();
+      if (say) {
+        let near = 0;
+        BANDS.forEach(([, t], i) => { if (Math.abs(t - at) < Math.abs(BANDS[near][1] - at)) near = i; });
+        live.textContent = `Reading ${Math.round(at * 100)} of 100, nearest ${NAMES[near]}`;
+      }
+    };
+    const read = e => {
+      const rc = tile.getBoundingClientRect(), f = fit();
+      readAt((e.clientX - rc.left - f.ox) / f.dw, (e.clientY - rc.top - f.oy) / f.dh, e.type === "pointerdown");
+    };
+    const clear = () => { at = null; pt = null; draw(); };
+    tile.addEventListener("pointermove", read);
+    tile.addEventListener("pointerdown", read);
+    // a tap keeps its reading until the next tap; a mouse reading ends when the pointer leaves
+    tile.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") clear(); });
+    tile.addEventListener("keydown", e => {
+      const d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+      if (e.key === "Escape") { clear(); return; }
+      if (!d) return;
+      e.preventDefault();
+      const [ix, iy] = pt || [0.5, 0.35], step = e.shiftKey ? 0.1 : 0.025;
+      readAt(ix + d[0] * step, iy + d[1] * step * img.naturalWidth / img.naturalHeight, true);
+    });
+    if (img.complete && img.naturalWidth) load(); else img.addEventListener("load", load, { once: true });
+    new ResizeObserver(draw).observe(tile); draw();
+  });
+})();
+</script>
+<script>
+/* Motion: each control redraws the brand curve in real time (0.2s). */
+(() => {
+  const P = [.22, 1, .36, 1];
+  const bx = t => 3*(1-t)*(1-t)*t*P[0] + 3*(1-t)*t*t*P[2] + t*t*t;
+  const by = t => 3*(1-t)*(1-t)*t*P[1] + 3*(1-t)*t*t*P[3] + t*t*t;
+  const ease = x => { if (x <= 0) return 0; if (x >= 1) return 1; let lo = 0, hi = 1, t = x; for (let i = 0; i < 30; i++) { t = (lo + hi) / 2; if (bx(t) < x) lo = t; else hi = t; } return by(t); };
+  const S = 200, gx = u => u * S, gy = v => S - v * S;
+  const pts = []; for (let i = 0; i <= 100; i++) { const u = i / 100; pts.push([gx(u), gy(ease(u))]); }
+  const path = n => pts.slice(0, n + 1).map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join('');
+  const $ = id => document.getElementById(id);
+  const c0 = $('mo-c0'), c1 = $('mo-c1'), dot = $('mo-dot'), rd = $('mo-rd');
+  if (!c0) return;
+  c0.setAttribute('d', path(100));
+  const DUR = 200, HOLD = 900, still = matchMedia('(prefers-reduced-motion: reduce)');
+  let raf = 0, t0 = 0;
+  const draw = u => { c1.setAttribute('d', path(Math.round(u * 100))); dot.setAttribute('cx', gx(u)); dot.setAttribute('cy', gy(ease(u))); rd.textContent = (u * .2).toFixed(2) + 's \u00b7 ' + Math.round(ease(u) * 100) + '%'; };
+  const clear = () => { c1.setAttribute('d', ''); rd.textContent = ''; dot.setAttribute('cx', 0); dot.setAttribute('cy', S); };
+  const frame = t => { const e = t - t0; if (e < DUR) { draw(e / DUR); raf = requestAnimationFrame(frame); return; } draw(1); if (e < DUR + HOLD) { raf = requestAnimationFrame(frame); return; } clear(); raf = 0; };
+  const run = () => { cancelAnimationFrame(raf); if (still.matches) { draw(1); setTimeout(clear, HOLD); return; } t0 = performance.now(); raf = requestAnimationFrame(frame); };
+  const crop = document.querySelector('.mo-crop');
+  ['pointerenter', 'pointerleave', 'focus', 'blur'].forEach(ev => crop.addEventListener(ev, run));
+  const seg = $('mo-seg'), segB = seg.querySelectorAll('button');
+  segB.forEach((b, i) => b.addEventListener('click', () => { if (seg.dataset.on == i) return; seg.dataset.on = i; segB.forEach((o, j) => o.setAttribute('aria-pressed', i === j ? 'true' : 'false')); run(); }));
+  const disc = $('mo-disc'), discB = disc.querySelector('button');
+  discB.addEventListener('click', () => { const o = disc.dataset.open === '1' ? '0' : '1'; disc.dataset.open = o; discB.setAttribute('aria-expanded', o === '1'); run(); });
+})();
+</script>
+</body>
+</html>
